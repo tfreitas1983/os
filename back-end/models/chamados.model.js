@@ -7,13 +7,15 @@ module.exports = mongoose => {
         dt_abertura: { type: Date }, 
         ramal: Number,
         nome: String,
+        username: String,
         setor: String,
         descricao: String,
         status: String,
         responsavel: String,
         solucao: String,
         dt_previsao: { type: Date } ,
-        dt_fechamento: { type: Date } ,
+        dt_fechamento: { type: Date },
+        
         situacao: Boolean,
         foto: {
             type: String,

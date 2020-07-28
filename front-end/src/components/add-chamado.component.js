@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ChamadoDataService from "../services/chamado.service"
+import AuthService from "../services/auth.service"
 import * as moment from 'moment'
 
 export default class AdicionarChamado extends Component {
@@ -18,6 +19,7 @@ export default class AdicionarChamado extends Component {
         this.novoChamado = this.novoChamado.bind(this)
 
         this.state = {
+            currentUser: AuthService.getCurrentUser(),
             id: null,
             nome: "",
             dt_abertura: "",
@@ -112,6 +114,7 @@ export default class AdicionarChamado extends Component {
         var data = {
             
             nome: this.state.nome,
+            username: this.state.currentUser.username,
             dt_abertura: moment.now(),
             unidade: this.state.unidade,
             ramal: this.state.ramal,
@@ -126,6 +129,7 @@ export default class AdicionarChamado extends Component {
                     this.setState({
                         id: response.data.id,
                         nome: response.data.nome,
+                        username: response.data.username,
                         dt_abertura: response.data.dt_abertura,
                         unidade: response.data.unidade,
                         ramal: response.data.ramal,
@@ -147,20 +151,21 @@ export default class AdicionarChamado extends Component {
         this.setState({
         id: null,
         nome: "",
-            dt_abertura: "",
-            unidade: "",
-            descricao: "",
-            ramal: "",
-            setor: "",
-            foto: "default.jpg",
-            imagem: "",
-            url:"",
+        username: "",
+        dt_abertura: "",
+        unidade: "",
+        descricao: "",
+        ramal: "",
+        setor: "",
+        foto: "default.jpg",
+        imagem: "",
+        url:"",
         submitted: false
         })
     }
 
     render() {
-
+        const { currentUser } = this.state
 
         //Monta um array com o nome dos arquivos
         const importAll = require =>
@@ -230,8 +235,8 @@ export default class AdicionarChamado extends Component {
                                 <option value="Queimados"> Queimados </option>
                                 <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                 <option value="Vilar dos Teles">Vilar dos Teles</option>
-                                <option value="cdrio ni"> CDRio Nova Iguaçu </option>
-                                <option value="cdrio sg"> CDRio São Gonçalo </option>
+                                <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
+                                <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                             </select>
                         </div>
 

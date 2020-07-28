@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import ChamadoDataService from "../services/chamado.service"
+import AuthService from "../services/auth.service";
 import * as moment from 'moment'
 
 export default class ChamadosLista extends Component {
@@ -9,14 +10,13 @@ export default class ChamadosLista extends Component {
 
         this.pegaChamados = this.pegaChamados.bind(this)
 
-
-
         this.state = {
             chamados: [],
             info: {},
             page: 1,
             current: null,
             currentIndex: -1,
+            currentUser: AuthService.getCurrentUser(),
             selectedPage: null,
             buscaNome: ""
         }
@@ -45,7 +45,7 @@ export default class ChamadosLista extends Component {
 
     ativaChamado(chamado, index) {
         this.setState({
-            currentMembro: chamado,
+            current: chamado,
             currentIndex: index
         })
     }
@@ -53,7 +53,7 @@ export default class ChamadosLista extends Component {
 
     render() {
 
-        const { chamados, current, currentIndex, page, info} = this.state
+        const { chamados, current, currentUser, currentIndex, page, info} = this.state
 
         let i = 0
         let paginas = []
@@ -75,7 +75,12 @@ export default class ChamadosLista extends Component {
             </div>
         } 
 
-        if (current === null) {            
+        let filtro = null
+        if (chamados) {
+            filtro = chamados.filter((item) => {
+                return item.username === currentUser.username
+            })   
+            console.log(filtro)         
             mostrar = 
             <div className="list-group">
                 <table>
@@ -88,8 +93,8 @@ export default class ChamadosLista extends Component {
                         <th>Visualizar</th>
                         <th>Status</th>
                     </tr>
-           { chamados && chamados.map((chamado, index) => (
-                 <tr>
+           {filtro.map((chamado, index) => (
+                 <tr key={index}>
                     <td>{chamado.numchamado}</td>
                     <td>{chamado.unidade}</td>
                     <td>{chamado.nome}</td>
@@ -97,7 +102,7 @@ export default class ChamadosLista extends Component {
                     <td>{moment(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                     <td>{<Link to={`/chamados/${chamado.id}`} id="view" className="autocomplete-items">Visualizar</Link>}</td>
                     <td>{chamado.status}</td>
-                 </tr>                
+                 </tr> 
             ))}
             </table>
             </div>
@@ -107,7 +112,7 @@ export default class ChamadosLista extends Component {
             <div>
                 <h1>
                     Lista de chamados
-                    <div>
+                    <div style={{backgroundColor: '#00ffdd', borderRadius: 15+'px',color: '#ffffff',textDecoration: 'none'}}>
                         <Link to={`/chamados/adicionar`} className="actions">Novo Chamado</Link>
                     </div>
                 </h1>

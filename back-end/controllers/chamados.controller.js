@@ -14,6 +14,7 @@ exports.cadastrar = (req, res) => {
         dt_abertura: req.body.dt_abertura,
         ramal: req.body.ramal,
         nome: req.body.nome,
+        username: req.body.username,
         setor: req.body.setor,
         descricao: req.body.descricao,
         status: req.body.status,
