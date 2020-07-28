@@ -6,6 +6,7 @@ import AdicionarChamado from "./components/add-chamado.component"
 import ChamadosLista from "./components/list-chamado.component"
 import Chamado from "./components/edit-chamado.component"
 import Caixa from "./components/caixa"
+import Venda from "./components/venda"
 
 class App extends Component {
   render() {
@@ -18,7 +19,8 @@ class App extends Component {
               <Route exact path={"/chamados"} component={ChamadosLista} />
               <Route exact path="/chamados/adicionar" component={AdicionarChamado} />
               <Route exact path="/chamados/atender" component={Chamado} />
-              <Route exact path={"/chamados/caixa"} component={Caixa} />
+              <Route exact path={"/caixa"} component={Caixa} />
+              <Route exact path={"/vendas"} component={Venda} />
             </Switch>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 //import ChamadoDataService from "../services/chamado.service"
 import "bootstrap/dist/css/bootstrap.min.css";
+import * as moment from 'moment'
 
 export default class Caixa extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export default class Caixa extends Component {
         this.estadoTipo = this.estadoTipo.bind(this)
 
         this.state = {
-            tipo: "Analítico"
+            tipo: ""
         }
     }
 
@@ -24,6 +25,14 @@ export default class Caixa extends Component {
         const {tipo} = this.state
 
         let tela = null
+
+            /*********************************************************************
+            *
+            *                   RELATÓRIO ANALÍTICO
+            *
+            **********************************************************************/
+
+
         if(tipo && tipo === 'Analítico') {
            tela = <div style={{width: 109+'%', margin: 0, padding: 0}}>
               <div style={{marginTop: 20+'px'}}>
@@ -32,11 +41,12 @@ export default class Caixa extends Component {
             *                   LISTA DE LANÇAMENTOS WESLEY
             *
             **********************************************************************/} 
-                <div>
+                <div style={{margin: 10+'px'}}>
                     <span><b>Conta: </b> Wesley</span>
                 </div>
                 <div>
                 <table class="table table-dark table-striped" style={{marginTop: 10+'px'}}>
+                    <tbody>
                     <tr>
                         <th>Data</th>
                         <th>Nº entrada</th>
@@ -133,7 +143,8 @@ export default class Caixa extends Component {
                         <td>-</td>
                         <td> - R$ 32,00 </td>
                         <td> - </td>
-                    </tr>                
+                    </tr>  
+                    </tbody>              
                 </table>
 
             {/*********************************************************************
@@ -144,11 +155,14 @@ export default class Caixa extends Component {
                 <div style={{display: 'flex', justifyContent: 'space-around'}}>
                     <div>
                         <table style={{width: 390+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
                             <tr>
                                 <th style={{width: 100+'%', border: 0}}>Receita</th>
                             </tr>
+                            </tbody>
                         </table>
                         <table style={{margin: 0}}>
+                            <tbody>
                             <tr>
                                 <th>Tipo de pagamento</th>
                                 <th>Valor</th>
@@ -158,7 +172,7 @@ export default class Caixa extends Component {
                             <tr>
                                 <td>Dinheiro</td>
                                 <td>R$ 200,00</td>
-                                <td>R$ 10,00</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
                                 <td>2</td>                       
                             </tr>
                             <tr>
@@ -203,6 +217,7 @@ export default class Caixa extends Component {
                                 <td>-</td>
                                 <td>-</td>
                             </tr>
+                            </tbody>
                         </table>
                     </div>
             {/*********************************************************************
@@ -212,11 +227,14 @@ export default class Caixa extends Component {
             **********************************************************************/}
                     <div>
                         <table style={{width: 372+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
                             <tr>
                                 <th style={{width: 100+'%', border: 0}}>Despesa</th>
                             </tr>
+                            </tbody>
                         </table>
                         <table style={{margin: 0}}>
+                            <tbody>
                             <tr>
                                 <th>Tipo de pagamento</th>
                                 <th>Valor</th>
@@ -247,9 +265,37 @@ export default class Caixa extends Component {
                                 <td>-</td>
                                 <td>-</td>
                             </tr>
+                            </tbody>
                         </table>
-                    </div>
-                    
+                    </div>  
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE TRANSFERÊNCIAS WESLEY
+            *
+            **********************************************************************/}  
+                    <div>
+                        <table style={{width: 305+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Transferências</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                                <tr>
+                                    <th>Conta Origem</th>
+                                    <th>Conta Destino</th>
+                                    <th>Valor</th>                                
+                                </tr>
+                                <tr>
+                                    <td>Wesley</td>
+                                    <td>Eliane</td>
+                                    <td>R$ 2.000,00</td>                                                     
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                  
                 </div>
                 </div>
               </div>
@@ -259,12 +305,13 @@ export default class Caixa extends Component {
             *                   LANÇAMENTOS PRISCILA
             *
             **********************************************************************/ }
-              <div style={{marginTop: 20+'px'}}>
-                <div>
+              <div>
+                <div style={{margin: 10+'px'}}>
                     <span><b>Conta: </b> Priscila</span>
                 </div>
                 <div>
                 <table class="table table-dark table-striped" style={{marginTop: 10+'px'}}>
+                    <tbody>
                     <tr>
                         <th>Data</th>
                         <th>Nº entrada</th>
@@ -361,7 +408,8 @@ export default class Caixa extends Component {
                         <td>-</td>
                         <td> - R$ 220,00 </td>
                         <td> - </td>
-                    </tr>                
+                    </tr> 
+                    </tbody>               
                 </table>
 
             {/*********************************************************************
@@ -372,11 +420,14 @@ export default class Caixa extends Component {
                 <div style={{display: 'flex', justifyContent: 'space-around'}}>
                     <div>
                         <table style={{width: 390+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
                             <tr>
                                 <th style={{width: 100+'%', border: 0}}>Receita</th>
                             </tr>
+                            </tbody>
                         </table>
                         <table style={{margin: 0}}>
+                            <tbody>
                             <tr>
                                 <th>Tipo de pagamento</th>
                                 <th>Valor</th>
@@ -386,7 +437,7 @@ export default class Caixa extends Component {
                             <tr>
                                 <td>Dinheiro</td>
                                 <td>R$ 200,00</td>
-                                <td>R$ 10,00</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
                                 <td>2</td>                       
                             </tr>
                             <tr>
@@ -431,6 +482,7 @@ export default class Caixa extends Component {
                                 <td>-</td>
                                 <td>-</td>
                             </tr>
+                            </tbody>
                         </table>
                     </div>
 
@@ -441,11 +493,14 @@ export default class Caixa extends Component {
             **********************************************************************/}                    
                     <div>
                         <table style={{width: 381+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
-                            <tr>
+                            <tbody>
+                                <tr>
                                 <th style={{width: 100+'%', border: 0}}>Despesa</th>
                             </tr>
+                            </tbody>
                         </table>
                         <table style={{margin: 0}}>
+                            <tbody>
                             <tr>
                                 <th>Tipo de pagamento</th>
                                 <th>Valor</th>
@@ -476,8 +531,37 @@ export default class Caixa extends Component {
                                 <td>-</td>
                                 <td>-</td>
                             </tr>
+                            </tbody>
                         </table>
-                    </div>                    
+                    </div> 
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE TRANSFERÊNCIAS PRISCILA
+            *
+            **********************************************************************/}  
+                    <div>
+                        <table style={{width: 305+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Transferências</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                                <tr>
+                                    <th>Conta Origem</th>
+                                    <th>Conta Destino</th>
+                                    <th>Valor</th>                                
+                                </tr>
+                                <tr>
+                                    <td>Priscila</td>
+                                    <td>Eliane</td>
+                                    <td>R$ 1.000,00</td>                                                     
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                                
                 </div>
                 </div>
               </div>
@@ -494,6 +578,7 @@ export default class Caixa extends Component {
                 </div>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     <table>
+                        <tbody>
                         <tr>
                             <th>Conta Origem</th>
                             <th>Conta Destino</th>
@@ -509,6 +594,7 @@ export default class Caixa extends Component {
                             <td>Eliane</td>
                             <td>R$ 1.000,00</td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -519,11 +605,12 @@ export default class Caixa extends Component {
             *
             **********************************************************************/}
 
-              <div style={{display:'flex',justifyContent: 'center', color: '#fafafa',marginTop: 20+'px', marginBottom: 20+'px', backgroundColor: '#454d55',justifyContent: 'center', border: 1+'px solid'}}>
+              <div style={{display:'flex', color: '#fafafa',marginTop: 20+'px', marginBottom: 20+'px', backgroundColor: '#454d55',justifyContent: 'center', border: 1+'px solid'}}>
                 <span style={{backgroundColor: '#454d55'}}><b>FECHAMENTO DO DIA</b></span>                
               </div>
               <div style={{display:'flex',justifyContent: 'center'}}>
                   <table>
+                      <tbody>
                       <tr>
                           <th></th>
                           <th>Valor</th>
@@ -576,7 +663,7 @@ export default class Caixa extends Component {
                       </tr>
 
                       <tr style={{backgroundColor: '#c2c2c2'}}>
-                          <td>Transferências</td>
+                          <td>Transferências Saída</td>
                           <td>R$ 3.000,00</td>
                           <td></td>
                       </tr>
@@ -585,113 +672,449 @@ export default class Caixa extends Component {
                           <td><b>R$ 6.951,00</b></td>
                           <td></td>
                       </tr>
-
+                      </tbody>
                   </table>
               </div>
-             {/* <div style={{display: 'flex', justifyContent: 'space-around'}}>
+        </div>
+    }
+
+         /*********************************************************************
+            *
+            *                   RELATÓRIO SINTÉTICO
+            *
+            **********************************************************************/
+             
+
+        if(tipo && tipo === 'Sintético') {
+           tela = <div style={{width: 109+'%', margin: 0, padding: 0}}>
+              <div style={{marginTop: 20+'px'}}>
+
+                <div style={{margin: 30+'px'}}>
+                    <span><b>Conta: </b> Wesley</span>
+                </div>
                 <div>
-                    <table style={{width: 402+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                  <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                    <div>
+                        <table style={{width: 390+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Receita</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                            <tr>
+                                <th>Tipo de pagamento</th>
+                                <th>Valor</th>
+                                <th>Desconto</th>
+                                <th>Qt Pagto</th>
+                            </tr>
+                            <tr>
+                                <td>Dinheiro</td>
+                                <td>R$ 200,00</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
+                                <td>2</td>                       
+                            </tr>
+                            <tr>
+                                <td>Cartão Crédito - Master</td>
+                                <td>R$ 200,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Crédito - Visa</td>
+                                <td>R$ 90,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Débito - Master</td>
+                                <td>R$ 150,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Débito - Visa</td>
+                                <td>R$ 100,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Total de descontos</td>
+                                <td>-</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
+                                <td>-</td>  
+                            </tr>
+                            <tr>
+                                <td>Total de atendimentos</td>
+                                <td>6</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>R$ 730,00</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE DESPESAS WESLEY
+            *
+            **********************************************************************/}
+                    <div>
+                        <table style={{width: 372+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Despesa</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                            <tr>
+                                <th>Tipo de pagamento</th>
+                                <th>Valor</th>
+                                <th>Desconto</th>
+                                <th>Qt Pagto</th>
+                            </tr>
+                            <tr>
+                                <td>Dinheiro</td>
+                                <td>R$ 32,00</td>
+                                <td>-</td>
+                                <td>1</td>                       
+                            </tr>
+                            <tr>
+                                <td>Total de descontos</td>
+                                <td>-</td>
+                                <td style={{color: 'red'}}> - </td>
+                                <td>-</td>  
+                            </tr>
+                            <tr>
+                                <td>Total de atendimentos</td>
+                                <td>1</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>R$ 32,00</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>  
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE TRANSFERÊNCIAS WESLEY
+            *
+            **********************************************************************/}  
+                    <div>
+                        <table style={{width: 305+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Transferências</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                                <tr>
+                                    <th>Conta Origem</th>
+                                    <th>Conta Destino</th>
+                                    <th>Valor</th>                                
+                                </tr>
+                                <tr>
+                                    <td>Wesley</td>
+                                    <td>Eliane</td>
+                                    <td>R$ 2.000,00</td>                                                     
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                               
+                </div>
+                </div>
+              </div>
+
+            {/*********************************************************************
+            *
+            *                   LANÇAMENTOS PRISCILA
+            *
+            **********************************************************************/ }
+              <div >
+                <div style={{margin: 30+'px'}}>
+                    <span ><b>Conta: </b> Priscila</span>
+                </div>
+                <div >
+                
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE RECEITAS PRISCILA
+            *
+            **********************************************************************/} 
+                <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                    <div>
+                        <table style={{width: 390+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Receita</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                            <tr>
+                                <th>Tipo de pagamento</th>
+                                <th>Valor</th>
+                                <th>Desconto</th>
+                                <th>Qt Pagto</th>
+                            </tr>
+                            <tr>
+                                <td>Dinheiro</td>
+                                <td>R$ 200,00</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
+                                <td>2</td>                       
+                            </tr>
+                            <tr>
+                                <td>Cartão Crédito - Master</td>
+                                <td>R$ 200,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Crédito - Visa</td>
+                                <td>R$ 90,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Débito - Master</td>
+                                <td>R$ 150,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Cartão Débito - Visa</td>
+                                <td>R$ 100,00</td>
+                                <td>-</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Total de descontos</td>
+                                <td>-</td>
+                                <td style={{color: 'red'}}> - R$ 10,00</td>
+                                <td>-</td>  
+                            </tr>
+                            <tr>
+                                <td>Total de atendimentos</td>
+                                <td>6</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>R$ 730,00</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE DESPESAS PRISCILA
+            *
+            **********************************************************************/}                    
+                    <div>
+                        <table style={{width: 381+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Despesa</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                            <tr>
+                                <th>Tipo de pagamento</th>
+                                <th>Valor</th>
+                                <th>Desconto</th>
+                                <th>Qt Pagto</th>
+                            </tr>
+                            <tr>
+                                <td>Dinheiro</td>
+                                <td>R$ 220,00</td>
+                                <td>-</td>
+                                <td>1</td>                       
+                            </tr>
+                            <tr>
+                                <td>Total de descontos</td>
+                                <td>-</td>
+                                <td style={{color: 'red'}}> - </td>
+                                <td>-</td>  
+                            </tr>
+                            <tr>
+                                <td>Total de atendimentos</td>
+                                <td>1</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>R$ 220,00</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE TRANSFERÊNCIAS PRISCILA
+            *
+            **********************************************************************/}  
+                    <div>
+                        <table style={{width: 305+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
+                            <tbody>
+                            <tr>
+                                <th style={{width: 100+'%', border: 0}}>Transferências</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style={{margin: 0}}>
+                            <tbody>
+                                <tr>
+                                    <th>Conta Origem</th>
+                                    <th>Conta Destino</th>
+                                    <th>Valor</th>                                
+                                </tr>
+                                <tr>
+                                    <td>Priscila</td>
+                                    <td>Eliane</td>
+                                    <td>R$ 1.000,00</td>                                                     
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                                
+                </div>
+                </div>
+              </div>
+
+            {/*********************************************************************
+            *
+            *                   TOTAL DE TRANSFERÊNCIAS
+            *
+            **********************************************************************/}
+
+            <div>
+                <div style={{display: 'flex', justifyContent: 'center',color: '#f2f2f2', marginTop: 20+'px', marginBottom: 20+'px',backgroundColor: '#454d55', width: 100+'%'}}>
+                  <span> TRANSFERÊNCIAS</span>
+                </div>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <table>
+                        <tbody>
                         <tr>
-                            <th style={{width: 100+'%', border: 0}}>Receita</th>
-                        </tr>
-                    </table>
-                    <table style={{margin: 0}}>
-                        <tr>
-                            <th>Tipo de pagamento</th>
+                            <th>Conta Origem</th>
+                            <th>Conta Destino</th>
                             <th>Valor</th>
-                            <th>Desconto</th>
-                            <th>Qt Pagto</th>
                         </tr>
                         <tr>
-                            <td>Dinheiro</td>
-                            <td>R$ 400,00</td>
-                            <td>R$ 20,00</td>
-                            <td>4</td>                       
+                            <td>Wesley</td>
+                            <td>Eliane</td>
+                            <td>R$ 2.000,00</td>
                         </tr>
                         <tr>
-                            <td>Cartão Crédito - Master</td>
-                            <td>R$ 400,00</td>
-                            <td>-</td>
-                            <td>2</td>
+                            <td>Priscila</td>
+                            <td>Eliane</td>
+                            <td>R$ 1.000,00</td>
                         </tr>
-                        <tr>
-                            <td>Cartão Crédito - Visa</td>
-                            <td>R$ 180,00</td>
-                            <td>-</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Cartão Débito - Master</td>
-                            <td>R$ 300,00</td>
-                            <td>-</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Cartão Débito - Visa</td>
-                            <td>R$ 200,00</td>
-                            <td>-</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Total de descontos</td>
-                            <td>-</td>
-                            <td style={{color: 'red'}}> - R$ 20,00</td>
-                            <td>-</td>  
-                        </tr>
-                        <tr>
-                            <td>Total de atendimentos</td>
-                            <td>12</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>R$ 1.460,00</td>
-                            <td>-</td>
-                            <td>-</td>
-                        </tr>
+                        </tbody>
                     </table>
                 </div>
-              <div>
-                <table style={{width: 381+'px', margin: 0, display: 'flex', justifyContent: 'center'}}>
-                    <tr>
-                        <th style={{width: 100+'%', border: 0}}>Despesa</th>
-                    </tr>
-                </table>
-                <table style={{margin: 0}}>
-                    <tr>
-                        <th>Tipo de pagamento</th>
-                        <th>Valor</th>
-                        <th>Desconto</th>
-                        <th>Qt Pagto</th>
-                    </tr>
-                    <tr>
-                        <td>Dinheiro</td>
-                        <td>R$ 252,00</td>
-                        <td>-</td>
-                        <td>2</td>                       
-                    </tr>
-                    <tr>
-                        <td>Total de descontos</td>
-                        <td>-</td>
-                        <td style={{color: 'red'}}> - </td>
-                        <td>-</td>  
-                    </tr>
-                    <tr>
-                        <td>Total de atendimentos</td>
-                        <td>2</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td>R$ 252,00</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                </table>
-            </div>   
-        </div> */} 
+            </div>
+
+            {/*********************************************************************
+            *
+            *                   FECHAMENTO TOTAL DE OPERADORES
+            *
+            **********************************************************************/}
+
+              <div style={{display:'flex', color: '#fafafa',marginTop: 20+'px', marginBottom: 20+'px', backgroundColor: '#454d55',justifyContent: 'center', border: 1+'px solid'}}>
+                <span style={{backgroundColor: '#454d55'}}><b>FECHAMENTO DO DIA</b></span>                
+              </div>
+              <div style={{display:'flex',justifyContent: 'center'}}>
+                  <table>
+                      <tbody>
+                      <tr>
+                          <th></th>
+                          <th>Valor</th>
+                          <th>Qtd</th>
+                      </tr>
+                      <tr>
+                          <td>Saldo Anterior</td>
+                          <td> R$ 8.723,00</td>
+                          <td></td>
+                      </tr>
+                      <tr style={{backgroundColor: '#c2c2c2'}}>
+                          <td >Receitas</td>
+                          <td></td>
+                          <td></td>
+                      </tr>
+                      <tr>
+                          <td>Dinheiro</td>
+                          <td>R$ 380,00</td>
+                          <td>4</td>
+                      </tr>
+                      <tr>
+                          <td>Cartão Crédito - Master</td>
+                          <td>R$ 400,00</td>
+                          <td>2</td>
+                      </tr>
+                      <tr>
+                          <td>Cartão Crédito - Visa</td>
+                          <td>R$ 180,00</td>
+                          <td>2</td>
+                      </tr>
+                      <tr>
+                          <td>Cartão Débito - Master</td>
+                          <td>R$ 300,00</td>
+                          <td>2</td>
+                      </tr>
+                      <tr>
+                          <td>Cartão Débito - Visa</td>
+                          <td>R$ 200,00</td>
+                          <td>2</td>
+                      </tr>
+                      <tr style={{backgroundColor: '#c2c2c2'}}>
+                          <td>Despesas</td>
+                          <td></td>
+                          <td></td>
+                      </tr>
+                      <tr >
+                          <td>Dinheiro</td>
+                          <td style={{color: 'red'}}> -R$ 232,00</td>
+                          <td></td>
+                      </tr>
+
+                      <tr style={{backgroundColor: '#c2c2c2'}}>
+                          <td>Transferências Saída</td>
+                          <td>R$ 3.000,00</td>
+                          <td></td>
+                      </tr>
+                      <tr style={{backgroundColor: '#454d55', color: '#f2f2f2'}}>
+                          <td>Total do dia</td>
+                          <td><b>R$ 6.951,00</b></td>
+                          <td></td>
+                      </tr>
+                      </tbody>
+                  </table>
+              </div>
            </div>
         }
 
@@ -735,7 +1158,7 @@ export default class Caixa extends Component {
                     </div>
                     <div>
                         <span><b>Unidade: </b>Nova Iguaçu</span>
-                        <span style={{marginLeft: 15+'px'}}><b>Data de impresão: </b>27/07/2020</span>
+                        <span style={{marginLeft: 15+'px'}}><b>Data de impresão: </b> {moment().format('DD/MM/YYYY')} </span>
                     </div>
                 </div>
                     {tela}
