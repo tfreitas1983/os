@@ -17,6 +17,10 @@ class ChamadoDataService {
         return http.put(`/chamados/${id}`, data)
     }
 
+    email(id) {
+        return http.get(`/chamados/envio/${id}`)
+    }
+
     apagar(id) {
         return http.delete(`/chamados/${id}`)
     }
@@ -27,6 +31,26 @@ class ChamadoDataService {
 
     buscarNome(nome, page) {
         return http.get(`/chamados?nome=${nome}&page=${page}`)
+    }
+
+    buscarChamado(num, page) {
+        return http.get(`/chamados?numchamado=${num}&page=${page}`)
+    }
+
+    buscarData(dt, page) {
+        return http.get(`/chamados?dt_abertura=${dt}&page=${page}`)
+    }
+
+    buscarArea(area, page) {
+        return http.get(`/chamados?area=${area}&page=${page}`)
+    }
+
+    buscarUnidade(unidade, page) {
+        return http.get(`/chamados?unidade=${unidade}&page=${page}`)
+    }
+
+    buscarStatus(status, page) {
+        return http.get(`/chamados?status=${status}&page=${page}`)
     }
 
     cadastrarImagem(file) {

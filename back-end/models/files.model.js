@@ -22,13 +22,13 @@ module.exports = mongoose => {
 
     schemaFiles.pre("save", function() {
         if (this.foto.split('.').pop() === 'pdf') {
-          this.url = "http://localhost:8080/files/pdf.png"
+          this.url = "http://localhost:8089/files/pdf.png"
         }
         if ((this.foto.split('.').pop() === 'docx') || (this.foto.split('.').pop() === 'doc')  ) {
-            this.url = "http://localhost:8080/files/doc.png"
+            this.url = "http://localhost:8089/files/doc.png"
         }
         if ((this.foto.split('.').pop() !== 'pdf') && (this.foto.split('.').pop() !== 'doc') && (this.foto.split('.').pop() !== 'docx') ) {
-            this.url = `http://localhost:8080/files/${this.foto}`
+            this.url = `http://localhost:8089/files/${this.foto}`
           }
       })
 

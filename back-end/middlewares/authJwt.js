@@ -75,7 +75,7 @@ isModerator = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Acesso de TI requerido!" });
+        res.status(403).send({ message: "Acesso de Diretor requerido!" });
         return;
       }
     );

@@ -14,6 +14,7 @@ module.exports = app => {
     router.get("/chamados/files/:id", chamados.buscarImagem)
     router.get("/chamados/:id", chamados.buscarUm)
     router.put("/chamados/:id", chamados.editar)
+    router.get("/chamados/envio/:id", chamados.email)
     router.delete("/chamados/:id", chamados.apagar)
     router.delete("/chamados", chamados.apagarTodos)
     router.post("/chamados/files", upload.single('file'), chamados.cadastrarImagem)  

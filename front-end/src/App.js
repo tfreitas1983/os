@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
+import logo from './images/logo.png'
 
+import ListarUsuario from "./components/user-list.component"
 import AdicionarChamado from "./components/add-chamado.component"
 import ChamadosLista from "./components/list-chamado.component"
-import Chamado from "./components/edit-chamado.component"
+import EditarChamado from "./components/edit-chamado.component"
+import ReabrirChamado from "./components/reabrir-chamado.component"
+import Atender from "./components/solve-chamado.component"
+import VisualizarChamado from "./components/view-chamado.component"
+import VisualizarAtendente from "./components/view-atendente.component"
+import VisualizarDiretor from "./components/view-diretor.component"
 
 import AuthService from "./services/auth.service";
 
@@ -15,7 +22,11 @@ import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
-import BoardAdmin from "./components/board-admin.component";
+import BoardAdmin from "./components/board-admin.component"
+import ResumeModerator from "./components/resume-moderator.component"
+import ResumeAdmin from './components/resume-admin.component';
+import ResumeUser from './components/resume-user.component';
+
 
 class App extends Component {
   constructor(props) {
@@ -50,40 +61,56 @@ class App extends Component {
 
     return (
       <Router>
-        <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <div style={{padding: 0, margin: 0}}>
+        <nav className="navbar navbar-expand" style={{backgroundColor: '#2E8B57', padding: 0, margin: 0}}>
             <Link to={"/"} className="navbar-brand">
-              Chamados
+              <img src={logo} alt={logo} style={{height: 50+'px', padding: 0, margin: 0}}/>
             </Link>
-            <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/lista"} className="nav-link">
-                  Chamados
-                </Link>
-              </li>
+            <div className="navbar-nav mr-auto">              
 
               {showModeratorBoard && (
-                <li className="nav-item">
-                  <Link to={"/mod"} className="nav-link">
-                    Moderator Board
-                  </Link>
-                </li>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <li className="nav-item">
+                    <Link to={"/mod"} className="nav-link">
+                      Chamados
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to={"/usuarios"} className="nav-link">
+                      Usuários
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to={"/resumo"} className="nav-link">
+                      Resumo
+                    </Link>
+                  </li>
+                </div>
               )}
 
               {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Admin Board
-                  </Link>
-                </li>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <li className="nav-item">
+                    <Link to={"/admin"} className="nav-link">
+                      Atender
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to={"/resumo-atendente"} className="nav-link">
+                      Resumo
+                    </Link>
+                  </li>
+                </div>
               )}
 
               {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/user"} className="nav-link">
-                    User
-                  </Link>
-                </li>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <li className="nav-item">
+                    <Link to={"/lista"} className="nav-link">
+                      Meus Chamados
+                    </Link>
+                  </li>                                   
+                </div>
               )}
             </div>
 
@@ -91,7 +118,7 @@ class App extends Component {
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
+                    {currentUser.nome}
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -106,13 +133,7 @@ class App extends Component {
                   <Link to={"/login"} className="nav-link">
                     Login
                   </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link to={"/register"} className="nav-link">
-                    Sign Up
-                  </Link>
-                </li>
+                </li>                
               </div>
             )}
           </nav>
@@ -126,11 +147,19 @@ class App extends Component {
               <Route path="/user" component={BoardUser} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
+              <Route path="/resumo" component={ResumeModerator} />
+              <Route path="/resumo-atendente" component={ResumeAdmin} />
+              <Route path="/resumo-usuario" component={ResumeUser} />
+              <Route exact path={"/usuarios"} component={ListarUsuario} />
               <Route exact path={"/lista"} component={ChamadosLista} />
               <Route exact path={"/chamados"} component={ChamadosLista} />
-              <Route exact path="/chamados/adicionar" component={AdicionarChamado} />
-              <Route exact path="/chamados/atender" component={Chamado} />
-
+              <Route exact path={"/chamados/adicionar"} component={AdicionarChamado} />
+              <Route exact path={"/chamados/visualizar/:id"} component={VisualizarChamado} />
+              <Route exact path={"/chamados/view-atendente/:id"} component={VisualizarAtendente} />
+              <Route exact path={"/chamados/view-diretor/:id"} component={VisualizarDiretor} />
+              <Route exact path={"/chamados/editar/:id"} component={EditarChamado} />
+              <Route exact path={"/chamados/reabrir/:id"} component={ReabrirChamado} />
+              <Route exact path={"/chamados/atender/:id"} component={Atender} />
             </Switch>
           </div>
         </div>

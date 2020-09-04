@@ -5,12 +5,16 @@ const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { user } = require("../models");
 
 exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    area: req.body.area,
+    nome: req.body.nome,
+    unidade: req.body.unidade
   });
 
   user.save((err, user) => {
@@ -101,9 +105,79 @@ exports.signin = (req, res) => {
       res.status(200).send({
         id: user._id,
         username: user.username,
+        nome: user.nome,
         email: user.email,
+        unidade: user.unidade,
+        area: user.area,
         roles: authorities,
         accessToken: token
       });
     });
 };
+
+exports.change = (req, res) => {
+  const username = {username: req.body.username}
+  const password = {password: bcrypt.hashSync(req.body.password, 8) }
+
+  User.findOneAndUpdate( username, password, {new: true})
+  .then(data => {
+    if (!data) {
+        res.status(404).send({
+            message: `Não foi possível encontrar e/ou alterar o usuário ${username}. `
+        })
+    } else res.send({
+            message: "Senha alterada com sucesso!"                
+        })    
+  })
+  .catch(err => {
+      res.status(500).send({
+          message: "Erro ao alterar a senha do usuário " + username
+      })
+  })
+}
+
+exports.buscarTodos = (req, res) => {   
+  
+  User.find()   
+      .then(data => {
+          res.send(data)
+      })
+      .catch(err => {
+          res.status(500).send({
+              message: err.message || "Um erro ocorreu ao buscar o usuários"
+          })
+      })
+}
+
+exports.buscarUm = (req, res) => { 
+
+  User.find({username: req.body.username})   
+      .then(data => {
+          res.send(data)
+      })
+      .catch(err => {
+          res.status(500).send({
+              message: err.message || `Um erro ocorreu ao buscar o usuário ${username}`
+          })
+      })
+}
+
+exports.editar = (req, res) => {   
+  const username = {username: req.body.username}
+
+  User.findOneAndUpdateind(username, req.body)   
+  .then(data => {
+    if (!data) {
+        res.status(404).send({
+            message: `Não foi possível encontrar e/ou alterar o usuário ${username}. `
+        })
+    } else res.send({
+            message: "Usuário alterado com sucesso!"                
+        })    
+  })
+  .catch(err => {
+      res.status(500).send({
+          message: "Erro ao alterar o usuário " + username
+      })
+  })
+}

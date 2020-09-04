@@ -307,7 +307,7 @@ table, th, td {
 
 .submit-form {  
   max-width: 600px;
-  margin: 10% 15% 0% 15%;
+  margin: 0 15% 0% 15%;
 }
 
 .edit-form {
@@ -447,3 +447,52 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.navbar-expand .navbar-nav .nav-link  {
+  color: #f2f2f2;
+  text-decoration: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
+}
+
+[aria-label] {
+  position: relative;
+  }
+  
+  [aria-label]::after {
+  content: attr(aria-label);
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0px;
+  z-index: 5000;
+  pointer-events: none;
+  padding: 8px 10px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
+  color: #264918;
+  background-color: #f0f0f0;
+  }
+  
+  [aria-label]:hover::after {
+  display: block;
+  }
+
+  .resumo {
+    height: 180px;
+    box-shadow:inset 0 0 1em rgb(186, 240, 240), 0 0 1em #50a3aa;
+  }
+
+  .caixa {
+    border: 2px solid #61dafb;
+    padding: 5px;
+    box-shadow:inset 0 0 1em rgb(65, 160, 97);
+    height: 300px;
+  }

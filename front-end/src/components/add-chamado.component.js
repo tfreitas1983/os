@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ChamadoDataService from "../services/chamado.service"
 import AuthService from "../services/auth.service"
 import * as moment from 'moment'
+import {Link} from 'react-router-dom'
 
 export default class AdicionarChamado extends Component {
     constructor(props) {
@@ -11,22 +12,32 @@ export default class AdicionarChamado extends Component {
         this.estadoRamal = this.estadoRamal.bind(this)
         this.estadoDescricao = this.estadoDescricao.bind(this)        
         this.estadoSetor = this.estadoSetor.bind(this)       
+        this.estadoArea = this.estadoArea.bind(this) 
+        this.estadoAtendente = this.estadoAtendente.bind(this)
+        this.estadoEquipamento = this.estadoEquipamento.bind(this)
+        this.estadoIP = this.estadoIP.bind(this)
                 
         this.estadoUpload = this.estadoUpload.bind(this)
        
         this.salvarImagem = this.salvarImagem.bind(this)
         this.salvarChamado = this.salvarChamado.bind(this)
         this.novoChamado = this.novoChamado.bind(this)
+        this.enviarEmail = this.enviarEmail.bind(this)
 
         this.state = {
             currentUser: AuthService.getCurrentUser(),
             id: null,
             nome: "",
+            email: "",
+            atendente: "",
             dt_abertura: "",
             unidade: "",
             descricao: "",
             ramal: "",
             setor: "",
+            area: "",
+            equipamento: "",
+            ip: "",
             foto: "default.jpg",
             imagem: "",
             url:"",
@@ -58,7 +69,7 @@ export default class AdicionarChamado extends Component {
 
     estadoNome(e) {
         this.setState({
-            nome: e.target.value
+            nome: this.state.currentUser.nome
         })
     }
 
@@ -76,13 +87,67 @@ export default class AdicionarChamado extends Component {
 
     estadoDescricao(e) {
         this.setState({
-            descricao: e.target.value
+            descricao: e.target.value,
+            nome: this.state.currentUser.nome,
+            email: this.state.currentUser.email,
+            unidade: this.state.currentUser.unidade,
         })
     }
 
     estadoSetor(e) {
         this.setState({
             setor: e.target.value
+        })
+    }
+
+    estadoAtendente() {
+        if (this.state.area === "Alarme/CFTV/Rede/Telefonia") {
+            this.setState({
+                atendente: "maxlyra8@gmail.com"
+            })
+        }
+
+        if (this.state.area === "Compras" || this.state.area === "Gráfica" ) {
+            this.setState({
+                atendente: "centro@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.area === "Financeiro") {
+            this.setState({
+                atendente: "financeiro@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.area === "Recursos Humanos" || this.state.area === "Manutenção" || this.state.area === "Transporte" || this.state.area === "Ar Condicionado") {
+            this.setState({
+                atendente: "rh@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.area === "TI") {
+            this.setState({
+                atendente: "ti@clinicariodejaneiro.com.br"
+            })
+        }
+    }
+
+    estadoArea(e) {
+        this.setState({
+            area: e.target.value
+        })
+        this.estadoAtendente()        
+    }
+
+    estadoEquipamento(e) {
+        this.setState({
+            equipamento: e.target.value
+        })
+    }
+
+    estadoIP(e) {
+        this.setState({
+            ip: e.target.value
         })
     }
 
@@ -97,54 +162,95 @@ export default class AdicionarChamado extends Component {
             data.append('file', this.state.imagem)
         
             ChamadoDataService.cadastrarImagem(data)
-                            .then(response => {
-                                this.setState({
-                                    foto: response.data.foto
-                                })
-                                this.salvarChamado()
-                            })
-                            .catch(e => {
-                                console.log(e)
-                            })
+            .then(response => {
+                this.setState({
+                    foto: response.data.foto
+                })
+                this.salvarChamado()
+            })
+            .catch(e => {
+                console.log(e)
+            })
         }
     }
 
     salvarChamado() {
 
         var data = {
-            
-            nome: this.state.nome,
+            nome: this.state.currentUser.nome,
             username: this.state.currentUser.username,
+            email: this.state.currentUser.email,
+            atendente: this.state.atendente,
             dt_abertura: moment.now(),
             unidade: this.state.unidade,
             ramal: this.state.ramal,
             setor: this.state.setor,
+            area: this.state.area,
+            equipamento: this.state.equipamento,
+            ip: this.state.ip,
             descricao: this.state.descricao,
             foto: this.state.foto,
             status: "Pendente"
         }
 
         ChamadoDataService.cadastrar(data)
-                .then(response => {
-                    this.setState({
-                        id: response.data.id,
-                        nome: response.data.nome,
-                        username: response.data.username,
-                        dt_abertura: response.data.dt_abertura,
-                        unidade: response.data.unidade,
-                        ramal: response.data.ramal,
-                        setor: response.data.setor,
-                        descricao: response.data.descricao,
-                        foto: response.data.foto,
-                        status: response.data.status,
-                        situacao: response.data.situacao,
-                        submitted: true
-                    })
-                    console.log(response.data)
-                })
-                .catch(e => {
-                    console.log(e)
-                })
+        .then(response => {
+            this.setState({
+                id: response.data.id,
+                nome: response.data.nome,
+                username: response.data.username,
+                email: response.data.email,
+                atendente: response.data.atendente,
+                dt_abertura: response.data.dt_abertura,
+                unidade: response.data.unidade,
+                ramal: response.data.ramal,
+                setor: response.data.setor,
+                area: response.data.area,
+                equipamento: response.data.equipamento,
+                ip: response.data.ip,
+                descricao: response.data.descricao,
+                foto: response.data.foto,
+                status: response.data.status,
+                situacao: response.data.situacao,
+                submitted: true
+            })  
+            this.enviarEmail()          
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
+    enviarEmail() {
+
+        ChamadoDataService.email(this.state.id)
+        .then(response => {
+            this.setState({
+                id: response.data.id,
+                nome: response.data.nome,
+                username: response.data.username,
+                email: response.data.email,
+                atendente: response.data.atendente,
+                dt_abertura: response.data.dt_abertura,
+                unidade: response.data.unidade,
+                equipamento: response.data.equipamento,
+                ramal: response.data.ramal,
+                setor: response.data.setor,
+                area: response.data.area,
+                descricao: response.data.descricao,
+                foto: response.data.foto,
+                status: response.data.status,
+                solucao: response.data.solucao,
+                responsavel: response.data.responsavel, 
+                dt_previsao: response.data.dt_previsao,
+                dt_fechamento: response.data.dt_fechamento,
+                situacao: response.data.situacao,
+                submitted: true
+            })                    
+        })
+        .catch(e => {
+            console.log(e)
+        })        
     }
 
     novoChamado() {
@@ -157,6 +263,8 @@ export default class AdicionarChamado extends Component {
         descricao: "",
         ramal: "",
         setor: "",
+        area: "",
+        equipamento: "",
         foto: "default.jpg",
         imagem: "",
         url:"",
@@ -165,8 +273,9 @@ export default class AdicionarChamado extends Component {
     }
 
     render() {
-        const { currentUser } = this.state
 
+        const {currentUser} = this.state
+     
         //Monta um array com o nome dos arquivos
         const importAll = require =>
           require.keys().reduce((acc, next) => {
@@ -193,6 +302,67 @@ export default class AdicionarChamado extends Component {
         if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
             alert('Somente imagens podem ser enviadas')
         } 
+
+        let unidade = null
+        if (currentUser && currentUser.unidade.length > 0) {
+            unidade = 
+            <div className="form-group">
+                <label htmlFor="unidade" hidden> Unidade </label>
+                <select 
+                    className="form-control" 
+                    id="unidade" 
+                    name="unidade"
+                    value={currentUser.unidade}                                    
+                    onChange={this.estadoUnidade}
+                    disabled 
+                    hidden>                                                                            
+                    <option value="1">Selecione</option>
+                    <option value="Caxias">Caxias</option>  
+                    <option value="Nilópolis">Nilópolis</option> 
+                    <option value="Nova Iguacu"> Nova Iguaçu </option>
+                    <option value="Queimados"> Queimados </option>
+                    <option value="Rio de Janeiro"> Rio de Janeiro </option>
+                    <option value="Vilar dos Teles">Vilar dos Teles</option>
+                    <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
+                    <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
+                </select>
+            </div>
+        }
+
+        let equipamento = null
+        if(this.state.area === "Ar Condicionado" || this.state.area === "Alarme/CFTV/Rede/Telefonia") {
+            equipamento = 
+            <div>
+                <div className="form-group">
+                    <label htmlFor="equipamento"> Equipamento </label>
+                    <input 
+                    type="text" 
+                    className="form-control" 
+                    id="equipamento" 
+                    value={this.state.equipamento} 
+                    onChange={this.estadoEquipamento} 
+                    name="equipamento" />
+                </div>
+            </div>
+        }
+
+        let ip = null
+        if(this.state.area === "TI") {
+            ip = 
+            <div>
+                <div className="form-group">
+                    <label htmlFor="ip"> IP </label>
+                    <input 
+                    type="text" 
+                    className="form-control" 
+                    id="ip" 
+                    value={this.state.ip} 
+                    onChange={this.estadoIP} 
+                    name="ip" />
+                </div>
+            </div>
+        }
+
     
 
         return (
@@ -200,45 +370,28 @@ export default class AdicionarChamado extends Component {
                 { this.state.submitted ? (
                     <div>
                         <h4> Envio completado com sucesso!</h4>
-                        <button className="btn btn-success" onClick={this.novoMembro}>
-                            Adicionar
-                        </button>
+                        <Link to={"/lista"} className="btn btn-info">
+                            Voltar
+                        </Link>
                     </div>
                 ) : (
                 
                     <div>
 
                         <div className="form-group">
-                            <label htmlFor="nome"> Nome </label>
+                            <label htmlFor="nome" hidden> Nome </label>
                             <input 
                             type="text" 
                             className="form-control" 
                             id="nome" 
                             required 
-                            value={this.state.nome} 
+                            value={currentUser.nome} 
                             onChange={this.estadoNome} 
-                            name="nome" />
+                            name="nome"
+                            hidden />
                         </div>
                     
-                        <div className="form-group">
-                            <label htmlFor="unidade"> Unidade </label>
-                            <select 
-                                className="form-control" 
-                                id="unidade" 
-                                name="unidade"
-                                value={this.state.unidade}                                    
-                                onChange={this.estadoUnidade} >                                    
-                                <option value="1">Selecione</option>
-                                <option value="Caxias">Caxias</option>  
-                                <option value="Nilopolis">Nilópolis</option> 
-                                <option value="Nova Iguacu"> Nova Iguaçu </option>
-                                <option value="Queimados"> Queimados </option>
-                                <option value="Rio de Janeiro"> Rio de Janeiro </option>
-                                <option value="Vilar dos Teles">Vilar dos Teles</option>
-                                <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                                <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
-                            </select>
-                        </div>
+                        {unidade}
 
                         <div className="form-group">
                             <label htmlFor="ramal"> Ramal </label>
@@ -252,7 +405,7 @@ export default class AdicionarChamado extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="setor"> Setor </label>
+                            <label htmlFor="setor"> Setor Solicitante </label>
                             <input 
                             type="text" 
                             className="form-control" 
@@ -261,16 +414,40 @@ export default class AdicionarChamado extends Component {
                             onChange={this.estadoSetor} 
                             name="setor" />
                         </div>
+
+                        <div className="form-group">
+                            <label htmlFor="area"> Área Requisitada </label>
+                            <select 
+                                className="form-control" 
+                                id="area" 
+                                name="area"
+                                value={this.state.area}                                    
+                                onChange={this.estadoArea}
+                                onClick={this.estadoAtendente}
+                                required >                                    
+                                <option value="1">Selecione</option>
+                                <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
+                                <option value="Ar Condicionado"> Ar Condicionado </option>
+                                <option value="Compras"> Compras </option>  
+                                <option value="Financeiro"> Financeiro </option>  
+                                <option value="Gráfica"> Gráfica </option>  
+                                <option value="Manutenção"> Manutenção </option> 
+                                <option value="Recursos Humanos"> Recursos Humanos </option>                                 
+                                <option value="TI"> TI </option>
+                                <option value="Transporte"> Transporte </option>
+                            </select>
+                        </div>
+                        {equipamento} {ip}
                     
                         <div className="form-group">
                             <label htmlFor="descricao"> Descrição </label>
-                            <input 
-                            type="text" 
+                            <textarea 
                             className="form-control" 
                             id="descricao" 
                             value={this.state.descricao} 
                             onChange={this.estadoDescricao} 
-                            name="descricao" />
+                            name="descricao"
+                            required />
                         </div>
                     
                         <div className="image-container">
@@ -290,7 +467,7 @@ export default class AdicionarChamado extends Component {
                             </div>
                         </div>
                     
-                        <button onClick={this.salvarImagem} className="envio">
+                        <button onClick={this.salvarImagem} className="btn btn-success">
                             Adicionar
                         </button>
                     </div>
