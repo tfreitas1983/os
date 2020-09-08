@@ -150,8 +150,9 @@ exports.buscarTodos = (req, res) => {
 }
 
 exports.buscarUm = (req, res) => { 
+  const username = {username: req.params.username}
 
-  User.find({username: req.body.username})   
+  User.find(username)   
       .then(data => {
           res.send(data)
       })
@@ -163,7 +164,7 @@ exports.buscarUm = (req, res) => {
 }
 
 exports.editar = (req, res) => {   
-  const username = {username: req.body.username}
+  const username = {username: req.params.username}
 
   User.findOneAndUpdateind(username, req.body)   
   .then(data => {

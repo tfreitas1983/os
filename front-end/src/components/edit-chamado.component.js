@@ -7,6 +7,7 @@ import Form from "react-validation/build/form"
 import Textarea from "react-validation/build/textarea"
 import Input from "react-validation/build/input"
 import CheckButton from "react-validation/build/button"
+import blocked from "../images/blocked.png"
 
 
 const required = value => {
@@ -53,7 +54,9 @@ export default class EditarChamado extends Component {
         this.estadoDtFechamento = this.estadoDtFechamento.bind(this)
         this.estadoDtFechamentoNovo = this.estadoDtFechamentoNovo.bind(this)
 
+        this.estadoUpload = this.estadoUpload.bind(this)
         this.salvarChamado = this.salvarChamado.bind(this)
+        this.salvarImagem = this.salvarImagem.bind(this)
         
 
         this.state = {
@@ -70,7 +73,7 @@ export default class EditarChamado extends Component {
                 setor: "",
                 area: "",
                 selectedArea: "",
-                equipamento: "",
+                equipamento: "",    
                 responsavel: "",
                 solucao: "",
                 reaberto: "",
@@ -135,19 +138,31 @@ export default class EditarChamado extends Component {
             const imagem = {name: "default.jpg", type: "image/jpeg"}
             const foto = "default.jpg"
             const url = ""
-            this.setState({
-                imagem: imagem,
-                url: url,
-                foto: foto
-            })
+            this.setState(prevState=>({
+                current: {
+                    ...prevState.current,
+                    imagem: imagem,
+                    url: url,
+                    foto: foto
+                }
+            }))
         }
+
         //Quando o usuário escolhe uma imagem a ser enviada
         else {
+            const upload = e.target.files[0]
             const imagem = e.target.files[0]
-            this.setState({
-                imagem: imagem,
-                url: URL.createObjectURL(imagem)          
-            })
+            const foto =  e.target.files[0].name
+            //const url = ""
+            this.setState(prevState=>({  
+                upload: upload,                            
+                current: {
+                    ...prevState.current,
+                    foto: foto,
+                    imagem: imagem,
+                    url: URL.createObjectURL(upload)                    
+                }                        
+            }))
         }
     }
 
@@ -323,20 +338,24 @@ export default class EditarChamado extends Component {
 
    salvarImagem() {
     
-        if(this.state.foto === "default.jpg") {
+        if (this.state.current.foto === "default.jpg") {
             this.salvarChamado()  
             return false
-        } if(this.state.foto !== "default.jpg") {
+
+        } else {
         
             var data = new FormData()
-            data.append('file', this.state.imagem)
+            data.append('file', this.state.upload)
         
             ChamadoDataService.cadastrarImagem(data)
             .then(response => {
-                this.setState({
-                    foto: response.data.foto
-                })
-                this.salvarChamado()
+                this.setState(prevState => ({
+                    current: {
+                        ...prevState.current,
+                        foto: response.data.foto
+                    }
+                }))
+               // this.salvarChamado()
             })
             .catch(e => {
                 console.log(e)
@@ -368,33 +387,38 @@ export default class EditarChamado extends Component {
             dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
             dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
             foto: this.state.current.foto,
+            url: this.state.current.url,
             status: this.state.current.status
         }
         if (this.checkBtn.context._errors.length === 0) {
             ChamadoDataService.editar(this.state.current.id ,data)
             .then(response => {
-                this.setState({
-                    id: this.state.current.id,
-                    nome: this.state.current.nome,
-                    unidade: this.state.current.unidade,
-                    email: this.state.current.email,
-                    dt_abertura: moment(this.state.current.dt_abertura, 'DD-MM-YYYY'),
-                    ramal: this.state.current.ramal,
-                    setor: this.state.current.setor,
-                    area: this.state.current.area,
-                    descricao: this.state.current.descricao,
-                    responsavel: this.state.current.responsavel,
-                    solucao: this.state.current.solucao,
-                    reaberto: this.state.current.reaberto,
-                    dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
-                    dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
-                    foto: this.state.current.foto,
-                    status: this.state.current.status,                                      
-                    situacao: this.state.current.situacao,
-                    submitted: true,
-                    message: response.data.message,           
-                    successful: true
-                })                    
+                this.setState(prevState => ({
+                    current: {
+                        ...prevState.current,
+                        id: response.data.id,
+                        nome: response.data.nome,
+                        unidade: response.data.unidade,
+                        email: response.data.email,
+                        dt_abertura: moment(response.data.dt_abertura, 'DD-MM-YYYY'),
+                        ramal: response.data.ramal,
+                        setor: response.data.setor,
+                        area: response.data.area,
+                        descricao: response.data.descricao,
+                        responsavel: response.data.responsavel,
+                        solucao: response.data.solucao,
+                        reaberto: response.data.reaberto,
+                        dt_previsao: moment(response.data.dt_previsao, 'DD-MM-YYYY'),
+                        dt_fechamento: moment(response.data.dt_fechamento, 'DD-MM-YYYY'),
+                        foto: response.data.foto,
+                        url: response.data.url,
+                        status: response.data.status,                                      
+                        situacao: response.data.situacao,
+                        submitted: true,
+                        message: response.data.message,           
+                        successful: true
+                    }
+                }))                    
             },
             error => {
                 const resMessage =
@@ -535,6 +559,44 @@ export default class EditarChamado extends Component {
             </div>
         }
 
+        //Monta um array com o nome dos arquivos
+        const importAll = require =>
+          require.keys().reduce((acc, next) => {
+            acc[next.replace("./", "")] = require(next);
+            return acc;
+          }, {});
+        //No array somente aceita as extensões de imagens
+        const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
+        
+        //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
+        let $imagePreview = null;
+        if (current.url) {
+            $imagePreview = 
+            <div className="preview">
+                <img alt="upload" src={current.url} />
+            </div>
+        }
+
+        if (!current.url) {
+            $imagePreview = <img alt="" src={images[current.foto]} />
+        }
+
+        //Verifica se a imagem possui mais de 2 MB
+        if(this.state.upload && (this.state.upload.size > 2 * 1024 * 1024)){
+            alert('Somente arquivos até 2MB.')
+            $imagePreview = 
+            <div className="preview">
+                <img alt="upload" src={blocked} />
+            </div>
+            
+        }
+
+        //Verifica se é uma imagem
+        if(this.state.upload && this.state.upload.type.substr(0,6) !== "image/" && this.state.upload.type !== "") {
+            alert('Somente imagens podem ser enviadas')
+        } 
+
+
         
         return(
             <div className="submit-form">
@@ -548,11 +610,7 @@ export default class EditarChamado extends Component {
                 ) : (
                 
                     <div>
-                        <Form 
-                        onSubmit={this.handleRegister} 
-                        ref={c => {
-                            this.form = c
-                        }}>
+                        <Form ref={c => {this.form = c}} onSubmit={this.salvarImagem}>
 
                         {!this.state.successful && (
                             <div>
@@ -679,15 +737,13 @@ export default class EditarChamado extends Component {
                                 </div>
                                 
                                 <div className="form-group">
-                                    <label htmlFor="responsavel"> Responsável </label>
-                                    <Input 
+                                    <label htmlFor="responsavel"> Responsável </label>                                    
+                                    <input 
                                     type="text" 
+                                    disabled
                                     className="form-control" 
-                                    id="responsavel"                             
-                                    value={current.responsavel} 
-                                    onChange={this.estadoResponsavel} 
-                                    name="responsavel"
-                                    disabled/>
+                                    value={current.responsavel}  
+                                    name="responsavel" />
                                 </div>
 
                                 <div>
@@ -700,7 +756,7 @@ export default class EditarChamado extends Component {
                             
                                 <div className="image-container">
                                     <div className="upload">
-                                    
+                                        {$imagePreview}
                                     </div>
 
                                     <div className="envio">
@@ -714,7 +770,7 @@ export default class EditarChamado extends Component {
                                     </div>
                                 </div>
                             
-                                <button onClick={this.salvarChamado} className="btn btn-success" style={{marginBottom: 15+'px'}}>
+                                <button onClick={this.salvarImagem} className="btn btn-success" style={{marginBottom: 15+'px'}}>
                                     Editar
                                 </button>
 

@@ -259,7 +259,7 @@ export default class BoardModerator extends Component {
   }
 
   render() {
-    const { chamados, current, page, info, className, buscaUnidade, buscaStatus} = this.state
+    const { chamados, page, info, className, buscaUnidade, buscaStatus} = this.state
 
     let i = 0
     let paginas = []
@@ -291,6 +291,7 @@ export default class BoardModerator extends Component {
               <th style={{width: 7+'%', textAlign: 'center'}}>Ações</th>                  
             </tr>
             {chamados.map((chamado, index) => {
+              
                 if (chamado.status === "Pendente") { 
                     if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_abertura).businessAdd(3)._d).format())  ) { 
                         return ( 
@@ -408,9 +409,7 @@ export default class BoardModerator extends Component {
                         </td>                                
                     </tr> 
                     )
-                }
-
-                if (chamado.status !== "Pendente" && chamado.status !== "Agendado" && chamado.status !== "Finalizado" && chamado.status !== "Reaberto"  ) { 
+                } else  { 
                     return ( <tr key={index}>
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                         <td>{chamado.unidade}</td>                                                              
@@ -427,7 +426,7 @@ export default class BoardModerator extends Component {
                         </td>                                
                     </tr> 
                     )
-                }
+                }            
             })}
           </tbody>
         </table>

@@ -21,7 +21,7 @@ module.exports = mongoose => {
         reaberto: String,
         dt_previsao: { type: Date } ,
         dt_fechamento: { type: Date },
-        
+        url: String,
         situacao: Boolean,
         foto: {
             type: String,

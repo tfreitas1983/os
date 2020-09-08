@@ -78,7 +78,7 @@ export default class VisualizarChamado extends Component {
     render() {
         const { current, currentUser } = this.state
 
-     /*   //Monta um array com o nome dos arquivos
+        //Monta um array com o nome dos arquivos
         const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
@@ -104,7 +104,7 @@ export default class VisualizarChamado extends Component {
         if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
             alert('Somente imagens podem ser enviadas')
         } 
-*/
+
         let agendado = null
         if (current.status === "Agendado") {
             agendado = <div className="form-group">
@@ -350,11 +350,12 @@ export default class VisualizarChamado extends Component {
 
                         {solucao} {reaberto}
 
-                        {/* <div className="image-container">
+                        <div className="image-container">
                             <div className="upload">
                                 {$imagePreview}
                             </div>
-
+                        </div>
+{/* 
                             <div className="envio">
                                 <input 
                                     type="file" 

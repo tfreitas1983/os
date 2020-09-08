@@ -3,6 +3,7 @@ import ChamadoDataService from "../services/chamado.service"
 import AuthService from "../services/auth.service"
 import * as moment from 'moment'
 import {Link} from 'react-router-dom'
+import blocked from "../images/blocked.png"
 
 export default class AdicionarChamado extends Component {
     constructor(props) {
@@ -38,6 +39,11 @@ export default class AdicionarChamado extends Component {
             area: "",
             equipamento: "",
             ip: "",
+            responsavel:"",
+            solucao: "",
+            reaberto: "",
+            dt_previsao: "",
+            dt_fechamento: "",
             foto: "default.jpg",
             imagem: "",
             url:"",
@@ -157,7 +163,21 @@ export default class AdicionarChamado extends Component {
             this.salvarChamado()  
             return false
         } if(this.state.foto !== "default.jpg") {
-        
+            if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
+                this.setState({
+                    foto: "",
+                    imagem: "",
+                    url: ""
+                })                
+            }
+            if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
+                this.setState({
+                    foto: "",
+                    imagem: "",
+                    url: ""
+                })  
+            } 
+
             var data = new FormData()
             data.append('file', this.state.imagem)
         
@@ -189,6 +209,11 @@ export default class AdicionarChamado extends Component {
             equipamento: this.state.equipamento,
             ip: this.state.ip,
             descricao: this.state.descricao,
+            responsavel:this.state.responsavel,
+            solucao: this.state.solucao,
+            reaberto: this.state.reaberto,
+            dt_previsao: this.state.dt_previsao,
+            dt_fechamento: this.state.dt_fechamento,
             foto: this.state.foto,
             status: "Pendente"
         }
@@ -288,7 +313,10 @@ export default class AdicionarChamado extends Component {
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (this.state.url) {
-            $imagePreview = <img alt="" src={this.state.url} />
+            $imagePreview = 
+            <div className="preview">
+                <img alt="upload" src={this.state.url} />
+            </div>
         }
         if(!this.state.url) {
             $imagePreview = <img alt="" src={images[this.state.foto]} />
@@ -296,8 +324,14 @@ export default class AdicionarChamado extends Component {
 
         //Verifica se a imagem possui mais de 2 MB
         if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
-            alert('Somente arquivos até 2MB')
+            alert('Somente arquivos até 2MB.')
+            $imagePreview = 
+            <div className="preview">
+                <img alt="upload" src={blocked} />
+            </div>
+            
         }
+
         //Verifica se é uma imagem
         if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
             alert('Somente imagens podem ser enviadas')

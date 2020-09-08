@@ -40,9 +40,16 @@ class AuthService {
   }
 
   buscarTodos() {   
-      return http.get(`/auth/lista`)
+      return http.get("/auth/usuarios")
   }
-  
+
+  buscarUm(username) {
+    return http.get(`/auth/usuarios/${username}`)
+  }
+
+  editar(username, data) {
+    return http.put(`/auth/usuarios/${username}`, data)
+  }  
 
   changePassword(username, password) {
     return axios

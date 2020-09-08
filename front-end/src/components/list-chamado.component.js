@@ -383,9 +383,7 @@ export default class ChamadosLista extends Component {
                                     </td>                                
                                 </tr> 
                                 )
-                            }
-
-                            if (chamado.status !== "Pendente" && chamado.status !== "Agendado" && chamado.status !== "Finalizado" && chamado.status !== "Reaberto") { 
+                            } else { 
                                 return ( <tr key={index}>
                                     <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>                                                                
                                     <td>{chamado.descricao}</td>

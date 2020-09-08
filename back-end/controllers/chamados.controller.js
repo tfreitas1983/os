@@ -196,7 +196,8 @@ exports.email = (req, res) => {
                 from: 'cmedrjchamados@gmail.com',
                 subject: `Você tem um novo chamado para atender sob nº ${data.numchamado}`,
                 text: `O chamado ${data.descricao}, sob número ${data.numchamado} foi criado e precisa ser analisado.`,
-                html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi criado e precisa ser analisado.`,
+                html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi criado e precisa ser analisado.
+                <p>Por favor, entre na plataforma para atendê-lo.</p>`,
             } 
             sgMail.send(msgeditar)             
         }
@@ -232,8 +233,8 @@ exports.email = (req, res) => {
                 text: `O chamado ${data.descricao} sob número ${data.numchamado} foi finalizado por ${data.responsavel}.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi finalizado por <strong>${data.responsavel}</strong>, que
                 registrou a seguinte resposta à sua solicitação: 
-                <strong><i>${data.solucao}</i></strong>. 
-                Verifique, por favor, se foi atendido corretamente. Caso contrário clique no botão reabrir chamado na plataforma.`,
+                <p><strong><i>${data.solucao}</i></strong>. </p>
+                <p>Verifique, por favor, se foi atendido corretamente. Caso contrário clique no botão reabrir chamado na plataforma.</p>`,
             } 
             sgMail.send(msgeditar)             
         }
@@ -333,7 +334,7 @@ exports.cadastrarImagem = (req, res) => {
         res.status(400).send({ message: "A imagem deve ser enviada"})
         return
     }
-
+   
     const file = new Files ({
        original,
        foto,

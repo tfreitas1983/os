@@ -6,6 +6,7 @@ const db = {}
 db.mongoose = mongoose
 db.url = dbConfig.url
 db.chamados = require('./chamados.model')(mongoose)
+db.files = require('./files.model')(mongoose)
 db.user = require("./user.model");
 db.role = require("./role.model");
 

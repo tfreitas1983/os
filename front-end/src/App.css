@@ -299,6 +299,12 @@ table, th, td {
 }
 
 .preview img {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;  
+  margin-right: 10px;  
+}
+.previewMin img {
   width: 50px;
   height: 50px;
   border-radius: 5px;  

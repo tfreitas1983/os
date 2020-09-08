@@ -57,8 +57,8 @@ export default class ListarUsuario extends Component {
                             <td>{usuario.area}</td>
                             <td style={{textAlign: 'center'}}>
                                 <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
-                                    {<Link to={`/usuarios/visualizar/${usuario.id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}
-                                    {<Link to={`/usuarios/editar/${usuario.id}`} aria-label={"Editar"} id="edit" style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}}> <FaEdit /> </Link>}
+                                    {<Link to={`/usuarios/visualizar/${usuario.username}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}
+                                    {<Link to={`/usuarios/editar/${usuario.username}`} aria-label={"Editar"} id="edit" style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}}> <FaEdit /> </Link>}
                                 </IconContext.Provider>
                             </td>                                
                         </tr> 
