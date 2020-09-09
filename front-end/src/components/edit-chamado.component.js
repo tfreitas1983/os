@@ -3,11 +3,12 @@ import ChamadoDataService from "../services/chamado.service"
 import AuthService from "../services/auth.service"
 import {Link} from 'react-router-dom'
 import * as moment from 'moment'
-import Form from "react-validation/build/form"
+import blocked from "../images/blocked.png"
+/*import Form from "react-validation/build/form"
 import Textarea from "react-validation/build/textarea"
 import Input from "react-validation/build/input"
 import CheckButton from "react-validation/build/button"
-import blocked from "../images/blocked.png"
+
 
 
 const required = value => {
@@ -29,7 +30,7 @@ const vreaberto = value => {
         )
     }
 }
-
+*/
 
 export default class EditarChamado extends Component {
     constructor(props) {
@@ -83,10 +84,11 @@ export default class EditarChamado extends Component {
                 dt_fechamento_novo: "",
                 foto: "",
                 imagem: "",
-                url:"",
+                url: "",
                 status: "",
                 selectedStatus: "",
-                situacao: false
+                situacao: false,
+                submitted: false
             },
             currentUser: AuthService.getCurrentUser(),
             message: "",            
@@ -122,6 +124,7 @@ export default class EditarChamado extends Component {
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD/MM/YYYY'),
                     status: response.data.status,
                     foto: response.data.foto,
+                    url: response.data.url,
                     situacao: response.data.situacao                     
                 }
             })
@@ -155,12 +158,11 @@ export default class EditarChamado extends Component {
             const foto =  e.target.files[0].name
             //const url = ""
             this.setState(prevState=>({  
-                upload: upload,                            
+                upload: upload,   
+                url: URL.createObjectURL(upload),                         
                 current: {
                     ...prevState.current,
-                    foto: foto,
-                    imagem: imagem,
-                    url: URL.createObjectURL(upload)                    
+                    foto: foto,                                  
                 }                        
             }))
         }
@@ -336,26 +338,24 @@ export default class EditarChamado extends Component {
         }))
     }
 
-   salvarImagem() {
-    
+   async salvarImagem() {
+        
         if (this.state.current.foto === "default.jpg") {
             this.salvarChamado()  
             return false
-
-        } else {
+        } 
         
-            var data = new FormData()
-            data.append('file', this.state.upload)
+        if (this.state.current.foto !== "default.jpg") {
         
-            ChamadoDataService.cadastrarImagem(data)
+            const img = new FormData()
+            img.append('file', this.state.upload)
+        
+          await  ChamadoDataService.cadastrarImagem(img)
             .then(response => {
-                this.setState(prevState => ({
-                    current: {
-                        ...prevState.current,
-                        foto: response.data.foto
-                    }
-                }))
-               // this.salvarChamado()
+                this.setState({                    
+                    foto: response.data.foto     
+                }) 
+                this.salvarChamado()               
             })
             .catch(e => {
                 console.log(e)
@@ -363,20 +363,19 @@ export default class EditarChamado extends Component {
         }
     }
 
-    salvarChamado(e) {
-        e.preventDefault()
+    salvarChamado() {
+       
 
-        this.setState({
+        /*this.setState({
             message: "",
             successful: false
-          })
-      
-         this.form.validateAll()
+        })
+      */
+     //   this.form.validateAll()
 
         var data = {
+            id: this.state.currentUser.id,
             nome: this.state.current.nome,
-            unidade: this.state.current.unidade,
-            email: this.state.current.email,
             ramal: this.state.current.ramal,
             setor: this.state.current.setor,
             area: this.state.current.area,
@@ -386,53 +385,39 @@ export default class EditarChamado extends Component {
             reaberto: this.state.current.reaberto,
             dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
             dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
-            foto: this.state.current.foto,
-            url: this.state.current.url,
-            status: this.state.current.status
+            foto: this.state.foto,
+            url: this.state.url,
+            status: this.state.current.status,
+            submitted: true
         }
-        if (this.checkBtn.context._errors.length === 0) {
-            ChamadoDataService.editar(this.state.current.id ,data)
+        
+            ChamadoDataService.editar(this.state.current.id, data)
             .then(response => {
-                this.setState(prevState => ({
-                    current: {
-                        ...prevState.current,
-                        id: response.data.id,
-                        nome: response.data.nome,
-                        unidade: response.data.unidade,
-                        email: response.data.email,
-                        dt_abertura: moment(response.data.dt_abertura, 'DD-MM-YYYY'),
-                        ramal: response.data.ramal,
-                        setor: response.data.setor,
-                        area: response.data.area,
-                        descricao: response.data.descricao,
-                        responsavel: response.data.responsavel,
-                        solucao: response.data.solucao,
-                        reaberto: response.data.reaberto,
-                        dt_previsao: moment(response.data.dt_previsao, 'DD-MM-YYYY'),
-                        dt_fechamento: moment(response.data.dt_fechamento, 'DD-MM-YYYY'),
-                        foto: response.data.foto,
-                        url: response.data.url,
-                        status: response.data.status,                                      
-                        situacao: response.data.situacao,
-                        submitted: true,
-                        message: response.data.message,           
-                        successful: true
-                    }
-                }))                    
-            },
-            error => {
-                const resMessage =
-                  (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                  error.message ||
-                  error.toString();
-      
                 this.setState({
-                  successful: false,
-                  message: resMessage
-                })
-              })
+                    id: response.data.id,
+                    numchamado: response.data.numchamado,
+                    nome: response.data.nome,
+                    username: response.data.username,
+                    email: response.data.email,
+                    dt_abertura: response.data.dt_abertura,
+                    unidade: response.data.unidade,
+                    ramal: response.data.ramal,
+                    setor: response.data.setor,
+                    area: response.data.area,
+                    descricao: response.data.descricao,
+                    foto: response.data.foto,
+                    url: response.data.url,
+                    status: response.data.status,
+                    solucao: response.data.solucao,
+                    reaberto: response.data.reaberto,
+                    responsavel: response.data.responsavel, 
+                    dt_previsao: response.data.dt_previsao,
+                    dt_fechamento: response.data.dt_fechamento,
+                    situacao: response.data.situacao,
+                    submitted: true,
+                    message: "Chamado alterado com sucesso"                
+                })                
+            })
             .catch(e => {
                 console.log(e)
             })
@@ -452,6 +437,7 @@ export default class EditarChamado extends Component {
                     area: response.data.area,
                     descricao: response.data.descricao,
                     foto: response.data.foto,
+                    url: response.data.url,
                     status: response.data.status,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
@@ -464,8 +450,7 @@ export default class EditarChamado extends Component {
             })
             .catch(e => {
                 console.log(e)
-            })
-        }
+            })        
     }  
 
     render() {
@@ -489,7 +474,7 @@ export default class EditarChamado extends Component {
         if (current.status === "Finalizado") {
             finalizado = <div className="form-group">
                 <label htmlFor="finalizado">Finalizado em: </label>
-                <Input 
+                <input
                 type="text" 
                 className="form-control" 
                 value={current.dt_fechamento} 
@@ -520,7 +505,7 @@ export default class EditarChamado extends Component {
            solucao =  
            <div className="form-group">
                 <label htmlFor="solucao"> Solução </label>
-                <Textarea                                           
+                <textarea                                           
                 className="form-control" 
                 id="solucao"                                             
                 value={current.solucao} 
@@ -534,11 +519,11 @@ export default class EditarChamado extends Component {
         if (current.status === "Reaberto") {
             reaberto = <div className="form-group">
                 <label htmlFor="reaberto"> Motivo da reabertura </label>
-                <Textarea                  
+                <textarea                  
                 className="form-control" 
                 value={current.reaberto} 
                 onChange={this.estadoReaberto}
-                validations={[required, vreaberto]} />
+               /* validations={[required, vreaberto]} */ />
             </div>
         }
 
@@ -570,15 +555,19 @@ export default class EditarChamado extends Component {
         
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
-        if (current.url) {
+        if (current.url && current.foto !== "default.jpg") {
             $imagePreview = 
             <div className="preview">
-                <img alt="upload" src={current.url} />
+                <img alt="upload" src={this.state.url} />
             </div>
         }
 
-        if (!current.url) {
-            $imagePreview = <img alt="" src={images[current.foto]} />
+        if (current.foto.length > 30) {
+            $imagePreview = <div>
+                <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>       
+                <a href={current.url} alt="upload" />
+                </div>
+            
         }
 
         //Verifica se a imagem possui mais de 2 MB
@@ -610,8 +599,7 @@ export default class EditarChamado extends Component {
                 ) : (
                 
                     <div>
-                        <Form ref={c => {this.form = c}} onSubmit={this.salvarImagem}>
-
+                        
                         {!this.state.successful && (
                             <div>
                                 <div>
@@ -796,13 +784,7 @@ export default class EditarChamado extends Component {
                                 </div>
                             </div>
                             )}
-                            <CheckButton
-                            style={{ display: "none" }}
-                            ref={c => {
-                                this.checkBtn = c;
-                            }}
-                            />
-                        </Form>
+                        
                     </div>
                 )}
             </div>

@@ -66,6 +66,7 @@ export default class VisualizarAtendente extends Component {
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD/MM/YYYY'),
                     status: response.data.status,
                     foto: response.data.foto,
+                    url: response.data.url,
                     situacao: response.data.situacao                     
                 }
             })
@@ -78,12 +79,13 @@ export default class VisualizarAtendente extends Component {
     render() {
         const { current, currentUser } = this.state
 
-       /* //Monta um array com o nome dos arquivos
+        //Monta um array com o nome dos arquivos
         const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
             return acc;
-          }, {});
+          }, {})
+
         //No array somente aceita as extensões de imagens
         const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
         
@@ -92,8 +94,12 @@ export default class VisualizarAtendente extends Component {
         if (this.state.url) {
             $imagePreview = <img alt="" src={this.state.url} />
         }
-        if(!this.state.url) {
-            $imagePreview = <img alt="" src={images[this.state.foto]} />
+
+        if(current.foto) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://localhost:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                </div>
         }
 
         //Verifica se a imagem possui mais de 2 MB
@@ -105,7 +111,7 @@ export default class VisualizarAtendente extends Component {
             alert('Somente imagens podem ser enviadas')
         } 
 
-        */
+        
 
         let agendado = null
         if (current.status === "Agendado") {
@@ -349,11 +355,12 @@ export default class VisualizarAtendente extends Component {
 
                         {solucao}     {reaberto}
                     
-                       {/* <div className="image-container">
+                        <div className="image-container">
                             <div className="upload">
                                 {$imagePreview}
                             </div>
-
+                        </div>
+                        {/*
                             <div className="envio">
                                 <input 
                                     type="file" 
@@ -363,7 +370,7 @@ export default class VisualizarAtendente extends Component {
                                     id="file"
                                     name="file" /> 
                             </div>
-                        </div>
+                        
                         */}
                     
                         <Link to={"/admin"} className="btn btn-info" style={{marginLeft: 20+'px', marginBottom: 15+'px'}}> Voltar</Link>

@@ -66,6 +66,7 @@ export default class VisualizarChamado extends Component {
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD/MM/YYYY'),
                     status: response.data.status,
                     foto: response.data.foto,
+                    url: response.data.url,
                     situacao: response.data.situacao                     
                 }
             })
@@ -88,12 +89,16 @@ export default class VisualizarChamado extends Component {
         const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
         
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
-        let $imagePreview = null;
+        let $imagePreview = null
         if (this.state.url) {
             $imagePreview = <img alt="" src={this.state.url} />
         }
-        if(!this.state.url) {
-            $imagePreview = <img alt="" src={images[this.state.foto]} />
+
+        if(current.foto) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://localhost:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                </div>
         }
 
         //Verifica se a imagem possui mais de 2 MB

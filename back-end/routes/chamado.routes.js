@@ -17,6 +17,8 @@ module.exports = app => {
     router.get("/chamados/envio/:id", chamados.email)
     router.delete("/chamados/:id", chamados.apagar)
     router.delete("/chamados", chamados.apagarTodos)
+    router.get("/chamados/files", chamados.buscarImagens)
+    router.get("/chamados/files/:id", chamados.buscarImagem)
     router.post("/chamados/files", upload.single('file'), chamados.cadastrarImagem)  
     
     app.use('/api', router)

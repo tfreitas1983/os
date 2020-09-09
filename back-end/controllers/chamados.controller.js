@@ -326,6 +326,32 @@ exports.buscarImagens = (req, res) => {
         })
 }
 
+exports.buscarImagem = (req, res) => {
+    const id = req.params.id
+
+    Files.findById(id)   
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Um erro ocorreu ao buscar a imagem"
+            })
+        })
+}
+
+exports.buscarImagens = (req, res) => {   
+
+    Files.find()   
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Um erro ocorreu ao buscar as imagens"
+            })
+        })
+}
 
 
 exports.cadastrarImagem = (req, res) => {
