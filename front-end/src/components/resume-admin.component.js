@@ -15,6 +15,7 @@ export default class ResumeAdmin extends Component {
         this.totalPendentes = this.totalPendentes.bind(this)
         this.totalFinalizados = this.totalFinalizados.bind(this)
         this.totalAtrasados = this.totalAtrasados.bind(this)
+        this.intervalo = this.intervalo.bind(this)
 
         this.state = {
             chamados: [],
@@ -27,19 +28,29 @@ export default class ResumeAdmin extends Component {
     }
 
     componentDidMount() {
-        this.timerID = setInterval(      
-            () => this.pegaChamados(),1000
-        )  
-        this.timerID = setInterval(      
-            () => this.totalPendentes(),1000
-        ) 
-        this.timerID = setInterval(      
-            () => this.totalFinalizados(),1000
-        ) 
-        this.timerID = setInterval(      
-            () => this.totalAtrasados(),1000
-        )                       
+        this.pegaChamados()
+        
+        this.intervalo()               
     }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return
+        }
+    }
+
+     intervalo(){
+       this.timerID = setInterval(      
+           () => this.totalPendentes(),1500
+       ) 
+       this.timerID = setInterval(      
+           () => this.totalFinalizados(),1500
+       ) 
+       this.timerID = setInterval(      
+           () => this.totalAtrasados(),1500
+       )    
+     }
   
     pegaChamados(page = 1) {        
         ChamadoDataService.buscarTodos(page)

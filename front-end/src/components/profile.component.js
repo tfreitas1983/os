@@ -18,6 +18,7 @@ export default class Profile extends Component {
     this.handleSalvar = this.handleSalvar.bind(this)
 
     this.pegaChamados = this.pegaChamados.bind(this)
+    this.intervalo = this.intervalo.bind(this)
     this.totalGeral = this.totalGeral.bind(this)
     this.totalPendentes = this.totalPendentes.bind(this)
     this.totalFinalizados = this.totalFinalizados.bind(this)
@@ -41,12 +42,30 @@ export default class Profile extends Component {
   }
 
   componentDidMount() {
+    this.pegaChamados()
     this.timerID = setInterval(      
-        () => this.pegaChamados(),1000
-    )  
-    this.timerID = setInterval(      
+      () => this.intervalo(),1000
+    )
+                 
+  } 
+
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state,callback)=>{
+        return
+    }
+  
+  }
+  intervalo(){
+    this.totalGeral()
+    this.totalPendentes()
+    this.totalFinalizados()
+    this.totalAtrasados()
+
+    /*
+     this.timerID = setInterval(      
       () => this.totalGeral(),1000
-  )
+    )
     this.timerID = setInterval(      
         () => this.totalPendentes(),1000
     ) 
@@ -55,8 +74,8 @@ export default class Profile extends Component {
     ) 
     this.timerID = setInterval(      
         () => this.totalAtrasados(),1000
-    )                       
-}
+    ) */   
+  }
 
   handlePassword(e) {
       this.setState({
@@ -122,67 +141,67 @@ export default class Profile extends Component {
                 chamados: docs,
                 info: info,
                 page: page
-            })                
+            })  
         })
         .catch(e => {
             console.log(e)
         })           
 }
 
-totalGeral() {
-  const total = (this.state.chamados).filter((item) => {
-    return (this.state.currentUser.username === item.username)
-})
-this.setState({
-    total: total.length
-})
-}
-
-totalPendentes () {
-    const pendentes = (this.state.chamados).filter((item) => {
-        return (item.status === "Pendente" && this.state.currentUser.username === item.username)
+  totalGeral() {
+    const total = (this.state.chamados).filter((item) => {
+      return (this.state.currentUser.username === item.username)
     })
-    this.setState({
-        pendentes: pendentes.length
+     this.setState({
+        total: total.length
     })
-}
+  }
 
-totalFinalizados () {
-    const finalizados = (this.state.chamados).filter((item) => {
-        return (item.status === "Finalizado" && this.state.currentUser.username === item.username)
-    })
-    this.setState({
-        finalizados: finalizados.length
-    })
-}
+  totalPendentes () {
+      const pendentes = (this.state.chamados).filter((item) => {
+          return (item.status === "Pendente" && this.state.currentUser.username === item.username)
+      })
+      this.setState({
+          pendentes: pendentes.length
+      })
+  }
 
-totalAtrasados() {
-    const pendentes = (this.state.chamados).filter((item) => {
-        return (item.status === "Pendente" && this.state.currentUser.username === item.username)
-    })
+  totalFinalizados () {
+      const finalizados = (this.state.chamados).filter((item) => {
+          return (item.status === "Finalizado" && this.state.currentUser.username === item.username)
+      })
+      this.setState({
+          finalizados: finalizados.length
+      })
+  }
 
-    const agendados = (this.state.chamados).filter((item) => {
-        return (item.status === "Agendado" && this.state.currentUser.username === item.username)
-    })
+  totalAtrasados() {
+      const pendentes = (this.state.chamados).filter((item) => {
+          return (item.status === "Pendente" && this.state.currentUser.username === item.username)
+      })
 
-    if (pendentes && agendados) {
+      const agendados = (this.state.chamados).filter((item) => {
+          return (item.status === "Agendado" && this.state.currentUser.username === item.username)
+      })
 
-        if (pendentes.length > 0 || agendados.length > 0 ) {
-            const atrasadosA = pendentes.filter((pendente) => {
-                return  ( (momentjs(new Date()).format()) > (momentjs(moment(pendente.dt_abertura).businessAdd(3)._d).format()) )
-            })
+      if (pendentes && agendados) {
 
-            const atrasadosP = agendados.filter((agendado) => {
-                return ((momentjs(new Date()).format()) > (momentjs(moment(agendado.dt_previsao).businessAdd(1)._d).format()))     
-            })               
+          if (pendentes.length > 0 || agendados.length > 0 ) {
+              const atrasadosA = pendentes.filter((pendente) => {
+                  return  ( (momentjs(new Date()).format()) > (momentjs(moment(pendente.dt_abertura).businessAdd(3)._d).format()) )
+              })
 
-            this.setState({
-                atrasados: atrasadosA.length + atrasadosP.length
-            }) 
-        }
-    }
-}
-  
+              const atrasadosP = agendados.filter((agendado) => {
+                  return ((momentjs(new Date()).format()) > (momentjs(moment(agendado.dt_previsao).businessAdd(1)._d).format()))     
+              })               
+
+              this.setState({
+                  atrasados: atrasadosA.length + atrasadosP.length
+              }) 
+          }
+      }
+  }
+    
 
   render() {
 
