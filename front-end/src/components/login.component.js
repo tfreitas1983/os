@@ -103,6 +103,7 @@ export default class Login extends Component {
                 name="username"
                 value={this.state.username}
                 onChange={this.onChangeUsername}
+                autoFocus
                 validations={[required]}
               />
             </div>

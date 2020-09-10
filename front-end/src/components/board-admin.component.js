@@ -349,12 +349,12 @@ export default class BoardAdmin extends Component {
                     
                         return ( <tr key={index}>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>  
-                            <td  aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.unidade}</td>                                                              
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.unidade}</td>                                                              
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.nome}</td>                                                              
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}</td>
                             <td style={{textAlign: 'center'}}>
                                 <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                     {<Link to={`/chamados/view-atendente/${chamado.id}`} aria-label={"Visualizar"} id="view" style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
@@ -366,12 +366,12 @@ export default class BoardAdmin extends Component {
                     } else {
                         return ( <tr key={index}>
                             <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
-                            <td>{chamado.unidade}</td>                                                              
-                            <td>{chamado.nome}</td>                                                              
-                            <td>{chamado.descricao}</td>
-                            <td>{chamado.area}</td>
-                            <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                            <td>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.unidade}</td>                                                              
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.nome}</td>                                                              
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.descricao}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}</td>
                             <td style={{textAlign: 'center'}}>
                                 <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                     {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}

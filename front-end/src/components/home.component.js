@@ -17,8 +17,8 @@ export default class Home extends Component {
     return (
       <div className="container">
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <img src={home} alt="Home" style={{height: 480 + 'px'}} />
-          <img src={home2} alt="banner" style={{height: 580 + 'px', marginTop: 1+'%'}} />
+          <img src={home} alt="Home" style={{height: 35 + 'em'}} />
+          <img src={home2} alt="banner" style={{height: 36 + 'em', marginTop: 1+'%'}} />
         </div>
        
       </div>

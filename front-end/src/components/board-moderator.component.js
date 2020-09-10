@@ -393,12 +393,12 @@ export default class BoardModerator extends Component {
                     } else {
                         return ( <tr key={index}>
                             <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
-                            <td>{chamado.unidade}</td>                                                              
-                            <td>{chamado.nome}</td>                                                              
-                            <td>{chamado.descricao}</td>
-                            <td>{chamado.area}</td>
-                            <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                            <td>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.unidade}</td>                                                              
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.nome}</td>                                                              
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.descricao}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
                             <td style={{textAlign: 'center'}}>
                                 <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                     {<Link to={`/chamados/view-diretor/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}

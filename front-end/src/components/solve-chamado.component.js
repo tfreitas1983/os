@@ -71,6 +71,8 @@ export default class Atender extends Component {
         this.estadoDtFechamentoNovo = this.estadoDtFechamentoNovo.bind(this)
         this.estadoReaberto = this.estadoReaberto.bind(this)
 
+        this.inputPrevisao = React.createRef()
+
         this.enviaEmail = this.enviaEmail.bind(this)
         this.salvarChamado = this.salvarChamado.bind(this)
         
@@ -111,7 +113,7 @@ export default class Atender extends Component {
     }
 
     componentDidMount() {
-        this.buscaChamado(this.props.match.params.id)
+        this.buscaChamado(this.props.match.params.id)        
     }
 
     buscaChamado(id) {
@@ -140,11 +142,22 @@ export default class Atender extends Component {
                     foto: response.data.foto,
                     situacao: response.data.situacao                     
                 }
-            })
+            }) 
+            
+            if (this.state.current.dt_previsao === "Invalid date") {
+                this.setState(prevState=> ({
+                    current: {
+                        ...prevState.current,
+                        dt_previsao: ""
+                    }                    
+                }))
+                this.inputPrevisao.current.value = ""
+            }
+
             })
             .catch(e => {
                 console.log(e)
-            })    
+            })            
     }
 
 
@@ -473,11 +486,13 @@ export default class Atender extends Component {
 
         let agendado = null
         if (current.status === "Agendado") {
+           
             agendado = <div className="form-group">
                 <label htmlFor="agendado">Previsão</label>
                 <input 
                 type="text" 
                 className="form-control" 
+                ref={this.inputPrevisao}
                 value={current.dt_previsao} 
                 onChange={this.estadoDtPrevisaoNovo}
                 validations={[required, vdt_fechamento]} />

@@ -336,10 +336,10 @@ export default class ChamadosLista extends Component {
                                 } else {
                                     return ( <tr key={index}>
                                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>                                                                
-                                        <td>{chamado.descricao}</td>
-                                        <td>{chamado.area}</td>
-                                        <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                                        <td>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.descricao}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
                                         <td style={{textAlign: 'center'}}>
                                             <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                                 {<Link to={`/chamados/visualizar/${chamado.id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}

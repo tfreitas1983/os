@@ -9,7 +9,7 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-    origin: ["http://10.1.1.26:3001"]
+    origin: ["http://10.1.1.26:3001", "http://chamadosrj.ddns.net:3001"]
 }
 /*
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
