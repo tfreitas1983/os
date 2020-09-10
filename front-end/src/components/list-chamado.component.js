@@ -409,7 +409,7 @@ export default class ChamadosLista extends Component {
         return(
             <div>
                 <h1>
-                    Lista de chamados
+                    Meus chamados
                 </h1>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import home from "../images/home.png"
 import UserService from "../services/user.service";
 
 export default class BoardUser extends Component {
@@ -11,33 +11,13 @@ export default class BoardUser extends Component {
     };
   }
 
-  componentDidMount() {
-    UserService.getUserBoard().then(
-      response => {
-        this.setState({
-          content: response.data
-        });
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
-  }
+  
 
   render() {
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
+        <img src={home} alt="Home" />
       </div>
-    );
+    )
   }
 }

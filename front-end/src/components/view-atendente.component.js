@@ -98,7 +98,13 @@ export default class VisualizarAtendente extends Component {
         if(current.foto) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
                     <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
-                    <a href={`http://localhost:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                </div>
+        }
+
+        if(current.foto === 'default.jpg') {
+            $imagePreview = <div>                
+                    
                 </div>
         }
 

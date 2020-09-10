@@ -16,12 +16,14 @@ export default class BoardModerator extends Component {
     this.estadoBuscaChamado = this.estadoBuscaChamado.bind(this)
     this.estadoBuscaData = this.estadoBuscaData.bind(this)
     this.estadoBuscaUnidade = this.estadoBuscaUnidade.bind(this)
+    this.estadoBuscaArea = this.estadoBuscaArea.bind(this)
     this.estadoBuscaStatus = this.estadoBuscaStatus.bind(this)
     this.buscarNome = this.buscarNome.bind(this)
     this.buscarChamado = this.buscarChamado.bind(this)
     this.buscarData = this.buscarData.bind(this)
     this.buscarUnidade = this.buscarUnidade.bind(this)
     this.buscarStatus = this.buscarStatus.bind(this)
+    this.buscarArea = this.buscarArea.bind(this)
     this.toggleFiltro = this.toggleFiltro.bind(this)
 
 
@@ -36,6 +38,7 @@ export default class BoardModerator extends Component {
       buscaNome: "",
       buscaChamado: "",
       buscaUnidade: "",
+      buscaArea: "",
       buscaStatus: "",
       mostraFiltro: true,
       className: 'hidden'
@@ -159,6 +162,23 @@ export default class BoardModerator extends Component {
         )        
   }
 
+  estadoBuscaArea(e) {
+    const buscaArea = e.target.value        
+    this.setState({
+        buscaArea: buscaArea,
+        buscaChamado: "",
+        buscaData: "",
+        buscaStatus: "",
+        buscaUnidade: ""
+    })
+    this.inputData.value = ""
+    this.inputNum.value = ""
+    this.inputNome.value = ""
+    this.timerID = setTimeout(      
+        () => this.buscarArea(),1000
+    )
+}
+
   limpaCurrent() {
       this.setState({
           current: null,
@@ -242,6 +262,20 @@ export default class BoardModerator extends Component {
           })
   }
 
+  buscarArea(page = 1) {
+    ChamadoDataService.buscarArea(this.state.buscaArea, page)
+        .then(response => {
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: response.data.docs,
+                info: info                                 
+            })    
+        })
+        .catch(e => {
+            console.log(e)
+        })
+}
+
   toggleFiltro() {
       this.setState(state=> ({
         mostraFiltro: !state.mostraFiltro
@@ -259,7 +293,7 @@ export default class BoardModerator extends Component {
   }
 
   render() {
-    const { chamados, page, info, className, buscaUnidade, buscaStatus} = this.state
+    const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus} = this.state
 
     let i = 0
     let paginas = []
@@ -464,6 +498,23 @@ export default class BoardModerator extends Component {
                   <option value="Vilar dos Teles">Vilar dos Teles</option>
                   <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
                   <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
+              </select>
+              <select 
+                className="form-control" 
+                id="area" 
+                name="area"                        
+                value={buscaArea}                                    
+                onChange={this.estadoBuscaArea} >                    
+                <option value="">Filtre por área</option>
+                <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
+                <option value="Ar Condicionado"> Ar Condicionado </option>
+                <option value="Compras"> Compras </option>  
+                <option value="Financeiro"> Financeiro </option>  
+                <option value="Gráfica"> Gráfica </option>  
+                <option value="Manutenção"> Manutenção </option> 
+                <option value="Recursos Humanos"> Recursos Humanos </option>                                                                
+                <option value="TI"> TI </option>
+                <option value="Transporte"> Transporte </option>
               </select>
               <select 
                   className="form-control" 

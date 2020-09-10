@@ -9,7 +9,7 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-    origin: "http://localhost:3001"
+    origin: ["http://localhost:3001", "http://10.1.1.26:3001"]
 }
 /*
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -97,6 +97,6 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 
 const PORT = process.env.PORT || 8089
-app.listen(PORT, 'localhost', () => {
+app.listen(PORT, ['10.1.1.26', 'localhost'], () => {
     console.log(`Servidor rodando na porta ${PORT}.`)
 })

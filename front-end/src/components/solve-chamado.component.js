@@ -541,6 +541,45 @@ export default class Atender extends Component {
             </div>            
         }
 
+        //Monta um array com o nome dos arquivos
+        const importAll = require =>
+          require.keys().reduce((acc, next) => {
+            acc[next.replace("./", "")] = require(next);
+            return acc;
+          }, {})
+
+        //No array somente aceita as extensões de imagens
+        const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
+        
+        //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
+        let $imagePreview = null;
+        if (this.state.url) {
+            $imagePreview = <img alt="" src={this.state.url} />
+        }
+
+        if(current.foto) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                </div>
+        }
+
+        if(current.foto === 'default.jpg') {
+            $imagePreview = <div>                
+                    
+                </div>
+        }
+
+        //Verifica se a imagem possui mais de 2 MB
+        if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
+            alert('Somente arquivos até 2MB')
+        }
+        //Verifica se é uma imagem
+        if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
+            alert('Somente imagens podem ser enviadas')
+        } 
+        
+
         return(
             <div className="submit-form">
                 { this.state.submitted ? (
@@ -699,17 +738,7 @@ export default class Atender extends Component {
                             
                                 <div className="image-container">
                                     <div className="upload">
-                                    
-                                    </div>
-
-                                    <div className="envio">
-                                        <input 
-                                            type="file" 
-                                            accept="image/*" 
-                                            className="file"
-                                            onChange={this.estadoUpload}
-                                            id="file"
-                                            name="file" /> 
+                                        {$imagePreview}
                                     </div>
                                 </div>
                             
