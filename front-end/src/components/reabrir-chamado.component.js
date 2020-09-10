@@ -521,6 +521,28 @@ export default class ReabrirChamado extends Component {
             </div>            
         }
 
+        //Monta um array com o nome dos arquivos
+        const importAll = require =>
+          require.keys().reduce((acc, next) => {
+            acc[next.replace("./", "")] = require(next);
+            return acc;
+          }, {});
+        //No array somente aceita as extensões de imagens
+        const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
+        
+        //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
+        let $imagePreview = null;
+        if (this.state.url) {
+            $imagePreview = <img alt="" src={this.state.url} />
+        }
+
+       if (current.foto.length > 30) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
+                </div>
+        }
+
         
         return(
             <div className="submit-form">
@@ -688,17 +710,7 @@ export default class ReabrirChamado extends Component {
                             
                                 <div className="image-container">
                                     <div className="upload">
-                                    
-                                    </div>
-
-                                    <div className="envio">
-                                        <input 
-                                            type="file" 
-                                            accept="image/*" 
-                                            className="file"
-                                            onChange={this.estadoUpload}
-                                            id="file"
-                                            name="file" /> 
+                                        {$imagePreview}
                                     </div>
                                 </div>
                             

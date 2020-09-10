@@ -475,7 +475,7 @@ label {
   content: attr(aria-label);
   display: none;
   position: absolute;
-  top: 110%;
+  top: 95%;
   left: 0px;
   z-index: 5000;
   pointer-events: none;

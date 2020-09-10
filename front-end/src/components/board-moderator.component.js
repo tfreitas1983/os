@@ -25,6 +25,7 @@ export default class BoardModerator extends Component {
     this.buscarStatus = this.buscarStatus.bind(this)
     this.buscarArea = this.buscarArea.bind(this)
     this.toggleFiltro = this.toggleFiltro.bind(this)
+    this.limpaCurrent = this.limpaCurrent.bind(this)
 
 
     this.state = {
@@ -183,13 +184,19 @@ export default class BoardModerator extends Component {
       this.setState({
           current: null,
           currentIndex: -1,
-          selectedPage: null,
+          selectedPage: null,          
           buscaNome: "",
           buscaChamado: "",
           buscaSetor: "",
+          buscaData: "",
           buscaArea: "",
+          buscaUnidade: "",
           buscaStatus: ""          
       })
+      this.inputData.value = ""
+      this.inputNum.value = ""
+      this.inputNome.value = ""
+      this.pegaChamados()
   }
 
   buscarNome(page = 1) {
@@ -311,7 +318,7 @@ export default class BoardModerator extends Component {
     
     if (chamados) { 
       mostrar = 
-      <div className="list-group" style={{width: 100+'%'}}>
+      <div style={{width: 100+'%'}}>
         <table style={{width: 100+'%'}}>
           <tbody>
             <tr>
@@ -469,7 +476,7 @@ export default class BoardModerator extends Component {
 
     return (
       <div>
-        <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10+'px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 1+'%'}}>
           <h1> Lista de Chamados </h1>
           <div>
             <button type="button" onClick={this.toggleFiltro} className="btn btn-info">
@@ -532,6 +539,9 @@ export default class BoardModerator extends Component {
                   <option value="Cancelado"> Cancelado </option>
                   <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
               </select>
+              <button type="button" className="btn btn-danger" onClick={this.limpaCurrent}>
+                Limpar
+              </button>
           </div>       
          </div>     
         <div>

@@ -153,8 +153,7 @@ export default class EditarChamado extends Component {
 
         //Quando o usuário escolhe uma imagem a ser enviada
         else {
-            const upload = e.target.files[0]
-            const imagem = e.target.files[0]
+            const upload = e.target.files[0]           
             const foto =  e.target.files[0].name
             //const url = ""
             this.setState(prevState=>({  
@@ -562,12 +561,11 @@ export default class EditarChamado extends Component {
             </div>
         }
 
-        if (current.foto.length > 30) {
-            $imagePreview = <div>
-                <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>       
-                <a href={current.url} alt="upload" />
+        if(current.foto.length > 30) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
                 </div>
-            
         }
 
         //Verifica se a imagem possui mais de 2 MB

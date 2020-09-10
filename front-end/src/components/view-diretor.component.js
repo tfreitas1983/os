@@ -78,7 +78,7 @@ export default class VisualizarDiretor extends Component {
     render() {
         const { current, currentUser } = this.state
 
-       /* //Monta um array com o nome dos arquivos
+        //Monta um array com o nome dos arquivos
         const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
@@ -92,20 +92,24 @@ export default class VisualizarDiretor extends Component {
         if (this.state.url) {
             $imagePreview = <img alt="" src={this.state.url} />
         }
-        if(!this.state.url) {
-            $imagePreview = <img alt="" src={images[this.state.foto]} />
+
+       if (current.foto.length > 30) {
+            $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
+                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
+                </div>
         }
 
         //Verifica se a imagem possui mais de 2 MB
-        if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
+        if (this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
             alert('Somente arquivos até 2MB')
         }
         //Verifica se é uma imagem
-        if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
+        if (this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
             alert('Somente imagens podem ser enviadas')
         } 
 
-        */
+        
 
         let agendado = null
         if (current.status === "Agendado") {
@@ -347,11 +351,12 @@ export default class VisualizarDiretor extends Component {
 
                         {solucao}     {reaberto}
                     
-                       {/* <div className="image-container">
+                        <div className="image-container">
                             <div className="upload">
                                 {$imagePreview}
                             </div>
-
+                          </div>
+                          {/*
                             <div className="envio">
                                 <input 
                                     type="file" 

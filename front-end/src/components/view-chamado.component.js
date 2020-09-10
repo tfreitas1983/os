@@ -94,10 +94,10 @@ export default class VisualizarChamado extends Component {
             $imagePreview = <img alt="" src={this.state.url} />
         }
 
-        if(current.foto) {
+        if(current.foto.length > 30) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
                     <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
-                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank">Visualizar</a>
+                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
                 </div>
         }
 

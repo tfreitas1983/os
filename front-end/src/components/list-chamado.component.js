@@ -320,11 +320,11 @@ export default class ChamadosLista extends Component {
                             if(chamado.status === "Agendado") {
                                 if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_previsao).businessAdd(1)._d).format())  ) {                                    
                                     return ( <tr key={index}>
-                                        <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>                                                                
-                                        <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
-                                        <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
-                                        <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                                    <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}-{momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>                                                                
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}</td>
                                         <td style={{textAlign: 'center'}}>
                                             <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                                 {<Link to={`/chamados/visualizar/${chamado.id}`} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} aria-label={"Visualizar"} id="view"> <FaEye /> </Link>}
