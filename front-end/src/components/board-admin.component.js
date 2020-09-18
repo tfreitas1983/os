@@ -453,6 +453,28 @@ export default class BoardAdmin extends Component {
         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10+'px'}}>
           <h1> Chamados a atender </h1>
           <div>
+            <div style={{
+                backgroundColor: '#339b44', 
+                borderRadius: 15+'px', 
+                width: 102+'%', 
+                height: 40+'%', 
+                marginTop: 10+'px',
+                marginBottom: 5+'%',
+                padding:0
+                }}>
+                <Link to={`/chamados/addterceiros`} 
+                    style={{
+                        color: '#f2f2f2', 
+                        fontSize: 24+'px', 
+                        marginLeft: 10+'px', 
+                        textDecoration: 'none',     
+                        marginTop: -4+'px',
+                        padding:0
+                    }} 
+                    className="actions" >
+                    Chamado para terceiros
+                </Link>                            
+            </div>
             <button type="button" onClick={this.toggleFiltro} className="btn btn-info">
                 {this.state.mostraFiltro ?  'Filtros': 'Esconder' }
             </button>

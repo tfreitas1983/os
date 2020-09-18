@@ -5,7 +5,7 @@ import * as moment from 'moment'
 import {Link} from 'react-router-dom'
 import blocked from "../images/blocked.png"
 
-export default class AdicionarChamado extends Component {
+export default class AdicionarChamadoTerceiros extends Component {
     constructor(props) {
         super(props)
         this.estadoNome = this.estadoNome.bind(this)       
@@ -75,13 +75,19 @@ export default class AdicionarChamado extends Component {
 
     estadoNome(e) {
         this.setState({
-            nome: this.state.currentUser.nome
+            nome: e.target.value
         })
     }
 
     estadoUnidade(e) {
         this.setState({
             unidade: e.target.value
+        })
+    }
+    
+    estadoEmail(e) {
+        this.setState({
+            email: e.target.value
         })
     }
 
@@ -93,10 +99,7 @@ export default class AdicionarChamado extends Component {
 
     estadoDescricao(e) {
         this.setState({
-            descricao: e.target.value,
-            nome: this.state.currentUser.nome,
-            email: this.state.currentUser.email,
-            unidade: this.state.currentUser.unidade,
+            descricao: e.target.value
         })
     }
 
@@ -196,10 +199,46 @@ export default class AdicionarChamado extends Component {
 
     salvarChamado() {
 
+        if (this.state.unidade === "Caxias") {
+            this.setState({
+                email: "caxias@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Nilópolis") {
+            this.setState({
+                email: "nilopolis@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Nova Iguaçu") {
+            this.setState({
+                email: "novaiguacu@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Queimados") {
+            this.setState({
+                email: "queimados@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Rio de Janeiro") {
+            this.setState({
+                email: "centro@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Vilar dos Teles") {
+            this.setState({
+                email: "vilardosteles@clinicariodejaneiro.com.br"
+            })
+        }
+
         var data = {
-            nome: this.state.currentUser.nome,
-            username: this.state.currentUser.username,
-            email: this.state.currentUser.email,
+            nome: this.state.nome,
+            username: this.state.username,
+            email: this.state.email,
             atendente: this.state.atendente,
             dt_abertura: moment.now(),
             unidade: this.state.unidade,
@@ -341,16 +380,15 @@ export default class AdicionarChamado extends Component {
         if (currentUser && currentUser.unidade.length > 0) {
             unidade = 
             <div className="form-group">
-                <label htmlFor="unidade" hidden> Unidade </label>
+                <label htmlFor="unidade"> Unidade </label>
                 <select 
                     className="form-control" 
                     id="unidade" 
                     name="unidade"
-                    value={currentUser.unidade}                                    
-                    onChange={this.estadoUnidade}
-                    disabled 
-                    hidden>                                                                            
-                    <option value="1">Selecione</option>
+                    value={this.state.unidade}                                    
+                    onChange={this.estadoUnidade} >                  
+                                                                                                
+                    <option value="" disabled> ---Selecione--- </option>
                     <option value="Caxias">Caxias</option>  
                     <option value="Nilópolis">Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
@@ -397,13 +435,11 @@ export default class AdicionarChamado extends Component {
             </div>
         }
 
-        
-
         return (
             <div className="submit-form">
                 { this.state.submitted ? (
                     <div>
-                        <h4> Envio completado com sucesso!</h4>
+                        <h4> Chamado criado com sucesso!</h4>
                         <Link to={"/lista"} className="btn btn-info">
                             Voltar
                         </Link>
@@ -413,16 +449,15 @@ export default class AdicionarChamado extends Component {
                     <div>
 
                         <div className="form-group">
-                            <label htmlFor="nome" hidden> Nome </label>
+                            <label htmlFor="nome"> Nome </label>
                             <input 
                             type="text" 
                             className="form-control" 
                             id="nome" 
                             required 
-                            value={currentUser.nome} 
+                            value={this.state.nome} 
                             onChange={this.estadoNome} 
-                            name="nome"
-                            hidden />
+                            name="nome"  />
                         </div>
                     
                         {unidade}

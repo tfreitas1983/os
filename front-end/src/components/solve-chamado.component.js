@@ -72,6 +72,7 @@ export default class Atender extends Component {
         this.estadoReaberto = this.estadoReaberto.bind(this)
 
         this.inputPrevisao = React.createRef()
+        this.inputFechamento = React.createRef()
 
         this.enviaEmail = this.enviaEmail.bind(this)
         this.salvarChamado = this.salvarChamado.bind(this)
@@ -153,6 +154,17 @@ export default class Atender extends Component {
                 }))
                 this.inputPrevisao.current.value = ""
             }
+
+            if (this.state.current.dt_fechamento === "Invalid date") {
+                this.setState(prevState=> ({
+                    current: {
+                        ...prevState.current,
+                        dt_fechamento: ""
+                    }                    
+                }))
+                this.inputFechamento.current.value = ""
+            }
+
 
             })
             .catch(e => {
@@ -507,6 +519,7 @@ export default class Atender extends Component {
                 type="text" 
                 className="form-control" 
                 value={current.dt_fechamento} 
+                ref={this.inputFechamento}
                 onChange={this.estadoDtFechamentoNovo}
                 validations={[required, vdt_fechamento]} />
             </div>
@@ -763,7 +776,7 @@ export default class Atender extends Component {
 
                                 <Link to={"/admin"} className="btn btn-info" style={{marginLeft: 20+'px', marginBottom: 15+'px'}}> Voltar</Link>
                                 <div style={{display: 'grid'}}>
-                                    <span> <b>Criado por: </b> {current.username}</span>
+                                    <span> <b>Criado por: </b> {current.nome}</span>
                                     <span><b>Atendido por: </b>{current.responsavel}</span>
                                 </div>
                             </div>

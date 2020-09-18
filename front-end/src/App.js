@@ -6,6 +6,7 @@ import logo from './images/logo.png'
 
 import ListarUsuario from "./components/user-list.component"
 import AdicionarChamado from "./components/add-chamado.component"
+import AdicionarChamadoTerceiros from './components/add-chamado-terceiros.component'
 import ChamadosLista from "./components/list-chamado.component"
 import EditarChamado from "./components/edit-chamado.component"
 import ReabrirChamado from "./components/reabrir-chamado.component"
@@ -26,6 +27,7 @@ import BoardAdmin from "./components/board-admin.component"
 import ResumeModerator from "./components/resume-moderator.component"
 import ResumeAdmin from './components/resume-admin.component';
 import ResumeUser from './components/resume-user.component';
+
 
 
 class App extends Component {
@@ -154,6 +156,7 @@ class App extends Component {
               <Route exact path={"/lista"} component={ChamadosLista} />
               <Route exact path={"/chamados"} component={ChamadosLista} />
               <Route exact path={"/chamados/adicionar"} component={AdicionarChamado} />
+              <Route exact path={"/chamados/addterceiros"} component={AdicionarChamadoTerceiros} />
               <Route exact path={"/chamados/visualizar/:id"} component={VisualizarChamado} />
               <Route exact path={"/chamados/view-atendente/:id"} component={VisualizarAtendente} />
               <Route exact path={"/chamados/view-diretor/:id"} component={VisualizarDiretor} />
