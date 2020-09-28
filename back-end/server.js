@@ -9,7 +9,7 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-    origin: ["http://10.1.1.26:3001", "http://chamadosrj.ddns.net:3001"]
+    origin: ["http://chamadosrj.ddns.net:3002","http://chamadosrj.ddns.net:8089","http://191.240.159.170:3002"]
 }
 /*
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -84,6 +84,21 @@ function initial() {
 
 app.use("/files", express.static(path.resolve(__dirname, '..', 'front-end', 'src', 'images')))
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+})
+
+/*app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}) */
+
+
 app.get("/", (req, res) => {
 res.json({ message: "Hello World"})
 })
@@ -97,6 +112,9 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 
 const PORT = process.env.PORT || 8089
-app.listen(PORT, '10.1.1.26', () => {
-    console.log(`Servidor rodando na porta ${PORT}.`)
-})
+app.listen(PORT)//, corsOptions.origin, () => {
+console.log(`Servidor rodando na porta ${PORT}.`)
+//})
+
+
+

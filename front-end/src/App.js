@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import logo from './images/logo.png'
@@ -55,7 +55,9 @@ class App extends Component {
   }
 
   logOut() {
-    AuthService.logout();
+    AuthService.logout()
+    this.props.history.push("/login")
+    window.location.reload()
   }
 
   render() {
@@ -124,7 +126,7 @@ class App extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                  <a href={"/login"} className="nav-link" onClick={this.logOut}>
                     Sair
                   </a>
                 </li>
@@ -149,9 +151,9 @@ class App extends Component {
               <Route path="/user" component={BoardUser} />
               <Route path="/mod" component={BoardModerator} />
               <Route path="/admin" component={BoardAdmin} />
-              <Route path="/resumo" component={ResumeModerator} />
-              <Route path="/resumo-atendente" component={ResumeAdmin} />
-              <Route path="/resumo-usuario" component={ResumeUser} />
+              <Route exact path="/resumo" component={ResumeModerator} />
+              <Route exact path="/resumo-atendente" component={ResumeAdmin} />
+              <Route exact path="/resumo-usuario" component={ResumeUser} />
               <Route exact path={"/usuarios"} component={ListarUsuario} />
               <Route exact path={"/lista"} component={ChamadosLista} />
               <Route exact path={"/chamados"} component={ChamadosLista} />

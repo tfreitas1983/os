@@ -588,7 +588,7 @@ export default class Atender extends Component {
         if(current.foto.length > 30) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
                     <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
-                    <a href={`http://10.1.1.26:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
+                    <a href={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
                 </div>
         }
 

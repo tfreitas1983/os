@@ -1,3 +1,3 @@
 module.exports = {
-    url: "mongodb://10.1.1.26:27017/chamados"
+    url: "mongodb://chamadosrj.ddns.net:27017/chamados"
 }
