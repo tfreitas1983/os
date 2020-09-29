@@ -68,7 +68,8 @@ export default class AdicionarChamado extends Component {
             const imagem = e.target.files[0]
             this.setState({
                 imagem: imagem,
-                url: URL.createObjectURL(imagem)          
+                url: URL.createObjectURL(imagem) ,
+                foto: imagem.name       
             })
         }
     }

@@ -56,7 +56,7 @@ class App extends Component {
 
   logOut() {
     AuthService.logout()
-    this.props.history.push("/login")
+    this.props.history.push("/")
     window.location.reload()
   }
 
@@ -126,7 +126,7 @@ class App extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a href={"/login"} className="nav-link" onClick={this.logOut}>
+                  <a href={"/"} className="nav-link" onClick={this.logOut}>
                     Sair
                   </a>
                 </li>

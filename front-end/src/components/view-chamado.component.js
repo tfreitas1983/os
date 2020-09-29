@@ -87,7 +87,7 @@ export default class VisualizarChamado extends Component {
           }, {});
         //No array somente aceita as extensões de imagens
         const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
-        
+    
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null
         if (this.state.url) {
@@ -96,7 +96,7 @@ export default class VisualizarChamado extends Component {
 
         if(current.foto.length > 30) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
-                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <img alt="" src={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} style={{height: 200+'px'}}/>
                     <a href={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
                 </div>
         }

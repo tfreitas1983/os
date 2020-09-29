@@ -82,7 +82,7 @@ function initial() {
 }
 
 
-app.use("/files", express.static(path.resolve(__dirname, '..', 'front-end', 'src', 'images')))
+app.use("/files", express.static(path.resolve(__dirname, '..', '..', '..', '..','..', '..','..', 'xampp' ,'htdocs', 'chamados', 'static','media')))
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
