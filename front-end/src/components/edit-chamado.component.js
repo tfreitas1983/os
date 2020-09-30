@@ -563,7 +563,7 @@ export default class EditarChamado extends Component {
 
         if(current.foto.length > 30) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
-                    <img alt="" src={images[current.foto]} style={{height: 200+'px'}}/>
+                    <img alt="" src={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} style={{height: 200+'px'}}/>
                     <a href={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
                 </div>
         }
@@ -650,13 +650,22 @@ export default class EditarChamado extends Component {
 
                                 <div className="form-group">
                                     <label htmlFor="setor"> Setor Solicitante </label>
-                                    <input 
-                                    type="text" 
+                                    <select                             
                                     className="form-control" 
-                                    id="setor"                             
+                                    id="setor" 
                                     value={current.setor} 
                                     onChange={this.estadoSetor} 
-                                    name="setor" />
+                                    required
+                                    name="setor">
+                                        <option value="" disabled> --Selecione-- </option>
+                                        <option value="Caixa"> Caixa </option>
+                                        <option value="Consultório"> Consultório </option>
+                                        <option value="Cozinha"> Cozinha </option>  
+                                        <option value="Enfermaria"> Enfermaria </option>
+                                        <option value="Escritório"> Escritório </option> 
+                                        <option value="Recepção"> Recepção </option>  
+                                        <option value="Sala de Espera"> Sala de Espera </option>
+                                    </select>
                                 </div>
 
                                 <div className="form-group">
@@ -668,7 +677,7 @@ export default class EditarChamado extends Component {
                                         value={current.area}                                    
                                         onChange={this.estadoSelectArea}
                                         disabled >                                    
-                                        <option value="1">Selecione</option>
+                                        <option value="" disabled> --Selecione--</option>
                                         <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
                                         <option value="Ar Condicionado"> Ar Condicionado </option>
                                         <option value="Compras"> Compras </option>  
@@ -705,6 +714,7 @@ export default class EditarChamado extends Component {
                                         name="status"                                
                                         value={current.status}                                    
                                         onChange={this.estadoSelectStatus} 
+                                        disabled
                                         >                                 
                                         <option value="Pendente"> Pendente </option>
                                         <option value="Cancelado"> Cancelado </option>

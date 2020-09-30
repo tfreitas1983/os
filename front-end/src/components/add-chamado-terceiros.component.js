@@ -475,13 +475,22 @@ export default class AdicionarChamadoTerceiros extends Component {
 
                         <div className="form-group">
                             <label htmlFor="setor"> Setor Solicitante </label>
-                            <input 
-                            type="text" 
+                            <select                             
                             className="form-control" 
                             id="setor" 
                             value={this.state.setor} 
                             onChange={this.estadoSetor} 
-                            name="setor" />
+                            required
+                            name="setor">
+                                <option value="" disabled> --Selecione-- </option>
+                                <option value="Caixa"> Caixa </option>
+                                <option value="Consultório"> Consultório </option>
+                                <option value="Cozinha"> Cozinha </option>  
+                                <option value="Enfermaria"> Enfermaria </option>
+                                <option value="Escritório"> Escritório </option> 
+                                <option value="Recepção"> Recepção </option>  
+                                <option value="Sala de Espera"> Sala de Espera </option>
+                            </select>
                         </div>
 
                         <div className="form-group">

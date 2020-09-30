@@ -4,6 +4,21 @@ import AuthService from "../services/auth.service"
 import * as moment from 'moment'
 import {Link} from 'react-router-dom'
 import blocked from "../images/blocked.png"
+import Form from "react-validation/build/form"
+import Input from "react-validation/build/input"
+import CheckButton from "react-validation/build/button"
+import Select from "react-validation/build/select"
+import Textarea from "react-validation/build/textarea"
+
+const required = value => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          Este campo é obrigatório!
+        </div>
+      )
+    }
+  }
 
 export default class AdicionarChamado extends Component {
     constructor(props) {
@@ -158,41 +173,70 @@ export default class AdicionarChamado extends Component {
         })
     }
 
-   salvarImagem() {
-    
-        if(this.state.foto === "default.jpg") {
-            this.salvarChamado()  
-            return false
-        } if(this.state.foto !== "default.jpg") {
-            if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
-                this.setState({
-                    foto: "",
-                    imagem: "",
-                    url: ""
-                })                
-            }
-            if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
-                this.setState({
-                    foto: "",
-                    imagem: "",
-                    url: ""
-                })  
-            } 
+   salvarImagem(e) {
+        e.preventDefault();
 
-            var data = new FormData()
-            data.append('file', this.state.imagem)
+        this.setState({
+        message: "",
+        loading: true
+        })
+
+        this.form.validateAll()
+
+        if (this.checkBtn.context._errors.length === 0) {
+            if(this.state.foto === "default.jpg") {
+                this.salvarChamado()  
+                return false
+            } 
+            
+            if(this.state.foto !== "default.jpg") {
+                if(this.state.imagem && (this.state.imagem.size > 2 * 1024 * 1024)){
+                    this.setState({
+                        foto: "",
+                        imagem: "",
+                        url: ""
+                    })                
+                }
+                if(this.state.imagem && this.state.imagem.type.substr(0,6) !== "image/" && this.state.imagem.type !== "") {
+                    this.setState({
+                        foto: "",
+                        imagem: "",
+                        url: ""
+                    })  
+                } 
+
+                var data = new FormData()
+                data.append('file', this.state.imagem)
+            
+                ChamadoDataService.cadastrarImagem(data)
+                .then(response => {
+                    this.setState({
+                        foto: response.data.foto
+                    })
+                    this.salvarChamado()
+                },
+                error => {
+                  const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
         
-            ChamadoDataService.cadastrarImagem(data)
-            .then(response => {
-                this.setState({
-                    foto: response.data.foto
+                  this.setState({
+                    loading: false,
+                    message: resMessage
+                  });
                 })
-                this.salvarChamado()
+                .catch(e => {
+                    console.log(e)
+                })
+            }
+        } else {
+            this.setState({
+              loading: false
             })
-            .catch(e => {
-                console.log(e)
-            })
-        }
+          }
     }
 
     salvarChamado() {
@@ -412,99 +456,129 @@ export default class AdicionarChamado extends Component {
                 ) : (
                 
                     <div>
-
-                        <div className="form-group">
-                            <label htmlFor="nome" hidden> Nome </label>
-                            <input 
-                            type="text" 
-                            className="form-control" 
-                            id="nome" 
-                            required 
-                            value={currentUser.nome} 
-                            onChange={this.estadoNome} 
-                            name="nome"
-                            hidden />
-                        </div>
-                    
-                        {unidade}
-
-                        <div className="form-group">
-                            <label htmlFor="ramal"> Ramal </label>
-                            <input 
-                            type="number" 
-                            className="form-control" 
-                            id="ramal" 
-                            value={this.state.ramal} 
-                            onChange={this.estadoRamal} 
-                            name="ramal" />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="setor"> Setor Solicitante </label>
-                            <input 
-                            type="text" 
-                            className="form-control" 
-                            id="setor" 
-                            value={this.state.setor} 
-                            onChange={this.estadoSetor} 
-                            name="setor" />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="area"> Área Requisitada </label>
-                            <select 
-                                className="form-control" 
-                                id="area" 
-                                name="area"
-                                value={this.state.area}                                    
-                                onChange={this.estadoArea}
-                                onClick={this.estadoAtendente}
-                                required >                                    
-                                <option value="1">Selecione</option>
-                                <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
-                                <option value="Ar Condicionado"> Ar Condicionado </option>
-                                <option value="Compras"> Compras </option>  
-                                <option value="Financeiro"> Financeiro </option>  
-                                <option value="Gráfica"> Gráfica </option>  
-                                <option value="Manutenção"> Manutenção </option> 
-                                <option value="Recursos Humanos"> Recursos Humanos </option>                                 
-                                <option value="TI"> TI </option>
-                                <option value="Transporte"> Transporte </option>
-                            </select>
-                        </div>
-                        {equipamento} {ip}
-                    
-                        <div className="form-group">
-                            <label htmlFor="descricao"> Descrição </label>
-                            <textarea 
-                            className="form-control" 
-                            id="descricao" 
-                            value={this.state.descricao} 
-                            onChange={this.estadoDescricao} 
-                            name="descricao"
-                            required />
-                        </div>
-                    
-                        <div className="image-container">
-
-                            <div className="upload">
-                                {$imagePreview}
-                            </div>
-
-                            <div className="envio">
+                        <Form onSubmit={this.handleLogin} ref={c => {this.form = c;}}  >
+                            <div className="form-group">
+                                <label htmlFor="nome" hidden> Nome </label>
                                 <input 
-                                    type="file" 
-                                    accept="image/*" 
-                                    className="file"
-                                    onChange={this.estadoUpload}
-                                    id="file"
-                                    name="file" /> 
+                                type="text" 
+                                className="form-control" 
+                                id="nome" 
+                                required 
+                                value={currentUser.nome} 
+                                onChange={this.estadoNome} 
+                                name="nome"
+                                hidden />
                             </div>
-                        </div>
+                        
+                            {unidade}
+
+                            <div className="form-group">
+                                <label htmlFor="ramal"> Ramal </label>
+                                <Input 
+                                type="number" 
+                                className="form-control" 
+                                id="ramal" 
+                                value={this.state.ramal} 
+                                onChange={this.estadoRamal} 
+                                name="ramal"
+                                validations={[required]} />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="setor"> Setor Solicitante </label>
+                                <Select                             
+                                className="form-control" 
+                                id="setor" 
+                                value={this.state.setor} 
+                                onChange={this.estadoSetor} 
+                                validations={[required]}
+                                name="setor">
+                                    <option value="" disabled> --Selecione-- </option>
+                                    <option value="Administração"> Administração </option>
+                                    <option value="Caixa"> Caixa </option>
+                                    <option value="Consultório"> Consultório </option>
+                                    <option value="Cozinha"> Cozinha </option>  
+                                    <option value="Enfermaria"> Enfermaria </option>
+                                    <option value="Escritório"> Escritório </option> 
+                                    <option value="Recepção"> Recepção </option>  
+                                    <option value="Sala de Espera"> Sala de Espera </option>
+                                </Select>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="area"> Área Requisitada </label>
+                                <Select 
+                                    className="form-control" 
+                                    id="area" 
+                                    name="area"
+                                    required
+                                    value={this.state.area}                                    
+                                    onChange={this.estadoArea}
+                                    onClick={this.estadoAtendente}
+                                    validations={[required]} >                                    
+                                    <option value="" disabled> --Selecione-- </option>
+                                    <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
+                                    <option value="Ar Condicionado"> Ar Condicionado </option>
+                                    <option value="Compras"> Compras </option>  
+                                    <option value="Financeiro"> Financeiro </option>  
+                                    <option value="Gráfica"> Gráfica </option>  
+                                    <option value="Manutenção"> Manutenção </option> 
+                                    <option value="Recursos Humanos"> Recursos Humanos </option>                                 
+                                    <option value="TI"> TI </option>
+                                    <option value="Transporte"> Transporte </option>
+                                </Select>
+                            </div>
+                            {equipamento} {ip}
                     
-                        <button onClick={this.salvarImagem} className="btn btn-success">
-                            Adicionar
-                        </button>
+                            <div className="form-group">
+                                <label htmlFor="descricao"> Descrição </label>
+                                <Textarea 
+                                className="form-control" 
+                                id="descricao" 
+                                value={this.state.descricao} 
+                                onChange={this.estadoDescricao} 
+                                name="descricao"
+                                validations={[required]}>
+
+                                </Textarea>
+                                
+                            </div>
+                        
+                            <div className="image-container">
+
+                                <div className="upload">
+                                    {$imagePreview}
+                                </div>
+
+                                <div className="envio">
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        className="file"
+                                        onChange={this.estadoUpload}
+                                        id="file"
+                                        name="file" /> 
+                                </div>
+                            </div>
+                        
+                            <button onClick={this.salvarImagem} className="btn btn-success">
+                                Adicionar
+                            </button>
+
+                            {this.state.message && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                {this.state.message}
+                                </div>
+                            </div>
+                            )}
+                            <CheckButton
+                            style={{ display: "none" }}
+                            ref={c => {
+                                this.checkBtn = c;
+                            }}
+                            />
+                        </Form>
                     </div>
                 )}
             </div>
