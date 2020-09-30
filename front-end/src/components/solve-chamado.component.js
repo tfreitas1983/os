@@ -137,39 +137,17 @@ export default class Atender extends Component {
                     responsavel: response.data.responsavel,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
-                    dt_previsao: moment(response.data.dt_previsao).format('DD/MM/YYYY'),
-                    dt_fechamento: moment(response.data.dt_fechamento).format('DD/MM/YYYY'),
+                    dt_previsao: moment(response.data.dt_previsao).format('YYYY-MM-DD'),
+                    dt_fechamento: moment(response.data.dt_fechamento).format('DD-MM-YYYY'),
                     status: response.data.status,
                     foto: response.data.foto,
                     situacao: response.data.situacao                     
                 }
-            }) 
-            
-            if (this.state.current.dt_previsao === "Invalid date") {
-                this.setState(prevState=> ({
-                    current: {
-                        ...prevState.current,
-                        dt_previsao: ""
-                    }                    
-                }))
-                this.inputPrevisao.current.value = ""
-            }
-
-            if (this.state.current.dt_fechamento === "Invalid date") {
-                this.setState(prevState=> ({
-                    current: {
-                        ...prevState.current,
-                        dt_fechamento: ""
-                    }                    
-                }))
-                this.inputFechamento.current.value = ""
-            }
-
-
-            })
-            .catch(e => {
-                console.log(e)
-            })            
+            })             
+        })
+        .catch(e => {
+            console.log(e)
+        })            
     }
 
 
@@ -440,8 +418,8 @@ export default class Atender extends Component {
             responsavel: this.state.current.responsavel,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
-            dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
-            dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
+            dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
+            dt_fechamento: moment(this.state.current.dt_fechamento, 'YYYY-MM-DD'),
             foto: this.state.current.foto,
             status: this.state.current.status
         }
@@ -450,23 +428,23 @@ export default class Atender extends Component {
             ChamadoDataService.editar(this.state.current.id, data)
             .then(response => {
                 this.setState({
-                    id: this.state.current.id,
-                    nome: this.state.current.nome,
-                    unidade: this.state.current.unidade,
-                    email: this.state.current.email,
-                    dt_abertura: moment(this.state.current.dt_abertura, 'DD-MM-YYYY'),
-                    ramal: this.state.current.ramal,
-                    setor: this.state.current.setor,
-                    area: this.state.current.area,
-                    descricao: this.state.current.descricao,
-                    responsavel: this.state.current.responsavel,
-                    solucao: this.state.current.solucao,
-                    reaberto: this.state.current.reaberto,
-                    dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
-                    dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
-                    foto: this.state.current.foto,
-                    status: this.state.current.status,                                      
-                    situacao: this.state.current.situacao,
+                    id: response.data.id,
+                    nome: response.data.nome,
+                    unidade: response.data.unidade,
+                    email: response.data.email,
+                    dt_abertura: moment(response.data.dt_abertura, 'DD-MM-YYYY'),
+                    ramal: response.data.ramal,
+                    setor: response.data.setor,
+                    area: response.data.area,
+                    descricao: response.data.descricao,
+                    responsavel: response.data.responsavel,
+                    solucao: response.data.solucao,
+                    reaberto: response.data.reaberto,
+                    dt_previsao: moment(response.data.dt_previsao).format('DD-MM-YYYY'),
+                    dt_fechamento: moment(response.data.dt_fechamento).format('DD-MM-YYYY'),
+                    foto: response.data.foto,
+                    status: response.data.status,                                      
+                    situacao: response.data.situacao,
                     submitted: true,
                     message: response.data.message,           
                     successful: true
@@ -502,7 +480,7 @@ export default class Atender extends Component {
             agendado = <div className="form-group">
                 <label htmlFor="agendado">Previsão</label>
                 <input 
-                type="text" 
+                type="date" 
                 className="form-control" 
                 ref={this.inputPrevisao}
                 value={current.dt_previsao} 
@@ -516,7 +494,7 @@ export default class Atender extends Component {
             finalizado = <div className="form-group">
                 <label htmlFor="finalizado">Finalizado em: </label>
                 <Input 
-                type="text" 
+                type="date" 
                 className="form-control" 
                 value={current.dt_fechamento} 
                 ref={this.inputFechamento}
@@ -565,7 +543,8 @@ export default class Atender extends Component {
                 id="solucao"                                             
                 value={current.solucao} 
                 onChange={this.estadoSolucao} 
-                name="solucao" />
+                name="solucao"
+                validations={[required]}  />
             </div>            
         }
 
@@ -620,11 +599,7 @@ export default class Atender extends Component {
                 ) : (
                 
                     <div>
-                        <Form 
-                        onSubmit={this.handleRegister} 
-                        ref={c => {
-                            this.form = c
-                        }}>
+                        <Form onSubmit={this.handleRegister} ref={c => {this.form = c}}>
 
                         {!this.state.successful && (
                             <div>
@@ -690,6 +665,7 @@ export default class Atender extends Component {
                                         <option value="Escritório"> Escritório </option> 
                                         <option value="Recepção"> Recepção </option>  
                                         <option value="Sala de Espera"> Sala de Espera </option>
+                                        <option value="Telefonia"> Telefonia </option>
                                     </select>
                                 </div>
 

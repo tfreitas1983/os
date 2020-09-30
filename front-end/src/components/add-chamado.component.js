@@ -18,7 +18,7 @@ const required = value => {
         </div>
       )
     }
-  }
+}
 
 export default class AdicionarChamado extends Component {
     constructor(props) {
@@ -57,8 +57,8 @@ export default class AdicionarChamado extends Component {
             responsavel:"",
             solucao: "",
             reaberto: "",
-            dt_previsao: "",
-            dt_fechamento: "",
+            dt_previsao: moment(),
+            dt_fechamento: moment(),
             foto: "default.jpg",
             imagem: "",
             url:"",
@@ -257,8 +257,8 @@ export default class AdicionarChamado extends Component {
             responsavel:this.state.responsavel,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
-            dt_previsao: this.state.dt_previsao,
-            dt_fechamento: this.state.dt_fechamento,
+            dt_previsao: moment(),
+            dt_fechamento: moment(),
             foto: this.state.foto,
             status: "Pendente"
         }
@@ -280,6 +280,8 @@ export default class AdicionarChamado extends Component {
                 ip: response.data.ip,
                 descricao: response.data.descricao,
                 foto: response.data.foto,
+                dt_previsao: response.data.dt_previsao,
+                dt_fechamento: response.data.dt_fechamento,
                 status: response.data.status,
                 situacao: response.data.situacao,
                 submitted: true
@@ -502,6 +504,7 @@ export default class AdicionarChamado extends Component {
                                     <option value="Escritório"> Escritório </option> 
                                     <option value="Recepção"> Recepção </option>  
                                     <option value="Sala de Espera"> Sala de Espera </option>
+                                    <option value="Telefonia"> Telefonia </option>
                                 </Select>
                             </div>
 

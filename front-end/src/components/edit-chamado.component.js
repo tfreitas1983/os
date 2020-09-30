@@ -665,6 +665,7 @@ export default class EditarChamado extends Component {
                                         <option value="Escritório"> Escritório </option> 
                                         <option value="Recepção"> Recepção </option>  
                                         <option value="Sala de Espera"> Sala de Espera </option>
+                                        <option value="Telefonia"> Telefonia </option>
                                     </select>
                                 </div>
 

@@ -287,10 +287,10 @@ export default class Register extends Component {
                     value={this.state.unidade}                                    
                     onChange={this.onChangeUnidade}                   
                     >                                                                            
-                    <option value="1"> Selecione</option>
+                    <option value="0" disabled> -- Selecione -- </option>
                     <option value="Caxias"> Caxias</option>  
                     <option value="Nilópolis"> Nilópolis</option> 
-                    <option value="Admin"> Nova Iguaçu </option>
+                    <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
                     <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles"> Vilar dos Teles</option>

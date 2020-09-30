@@ -118,6 +118,19 @@ export default class VisualizarChamado extends Component {
             </div>
         }
 
+        let finalizado = null
+        if (current.status === "Finalizado") {
+            finalizado = <div className="form-group">
+                <label htmlFor="finalizado">Finalizado em: </label>
+                <input 
+                type="text" 
+                className="form-control" 
+                value={current.dt_fechamento} 
+                ref={this.inputFechamento}
+                disabled />
+            </div>
+        }
+
         let unidade = null
         if (currentUser.unidade.length > 0) {
             unidade = 
@@ -337,7 +350,7 @@ export default class VisualizarChamado extends Component {
                                 <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
                             </select>
                         </div>
-                        {agendado}
+                        {agendado} {finalizado}
                         
                         {solucao} {reaberto}
                         
