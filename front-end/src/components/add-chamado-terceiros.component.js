@@ -57,6 +57,7 @@ export default class AdicionarChamadoTerceiros extends Component {
             ip: "",
             responsavel:"",
             solucao: "",
+            visita: false,
             reaberto: "",
             dt_previsao: moment(),
             dt_fechamento: moment(),
@@ -117,6 +118,54 @@ export default class AdicionarChamadoTerceiros extends Component {
         this.setState({
             descricao: e.target.value
         })
+
+        if (this.state.unidade === "Caxias") {
+            this.setState({
+                email: "caxias@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Nilópolis") {
+            this.setState({
+                email: "nilopolis@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Nova Iguaçu") {
+            this.setState({
+                email: "novaiguacu@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Queimados") {
+            this.setState({
+                email: "queimados@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Rio de Janeiro") {
+            this.setState({
+                email: "centro@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "Vilar dos Teles") {
+            this.setState({
+                email: "vilardosteles@clinicariodejaneiro.com.br"
+            })
+        }
+
+        if (this.state.unidade === "CDRio Nova Iguaçu") {
+            this.setState({
+                email: "cdriodiagnosticos@gmail.com"
+            })
+        }
+
+        if (this.state.unidade === "CDRio São Gonçalo") {
+            this.setState({
+                email: "cdriosaogoncalo@gmail.com"
+            })
+        }
     }
 
     estadoSetor(e) {
@@ -278,6 +327,18 @@ export default class AdicionarChamadoTerceiros extends Component {
             })
         }
 
+        if (this.state.unidade === "CDRio Nova Iguaçu") {
+            this.setState({
+                email: "cdriodiagnosticos@gmail.com"
+            })
+        }
+
+        if (this.state.unidade === "CDRio São Gonçalo") {
+            this.setState({
+                email: "cdriosaogoncalo@gmail.com"
+            })
+        }
+
         var data = {
             nome: this.state.nome,
             username: this.state.username,
@@ -290,12 +351,13 @@ export default class AdicionarChamadoTerceiros extends Component {
             area: this.state.area,
             equipamento: this.state.equipamento,
             ip: this.state.ip,
+            visita: this.state.visita,
             descricao: this.state.descricao,
             responsavel:this.state.responsavel,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
-            dt_previsao: this.state.dt_previsao,
-            dt_fechamento: this.state.dt_fechamento,
+            dt_previsao: moment(),
+            dt_fechamento: moment(),
             foto: this.state.foto,
             status: "Pendente"
         }
@@ -315,6 +377,7 @@ export default class AdicionarChamadoTerceiros extends Component {
                 area: response.data.area,
                 equipamento: response.data.equipamento,
                 ip: response.data.ip,
+                visita: response.data.visita,
                 descricao: response.data.descricao,
                 foto: response.data.foto,
                 status: response.data.status,
@@ -529,11 +592,14 @@ export default class AdicionarChamadoTerceiros extends Component {
                                 validations={[required]}
                                 name="setor">
                                     <option value="" disabled> --Selecione-- </option>
+                                    <option value="Administração"> Administração </option>
                                     <option value="Caixa"> Caixa </option>
                                     <option value="Consultório"> Consultório </option>
                                     <option value="Cozinha"> Cozinha </option>  
                                     <option value="Enfermaria"> Enfermaria </option>
-                                    <option value="Escritório"> Escritório </option> 
+                                    <option value="Escritório"> Escritório </option>                                     
+                                    <option value="Laboratório"> Laboratório </option>
+                                    <option value="Medicina Ocupacional"> Medicina Ocupacional </option> 
                                     <option value="Recepção"> Recepção </option>  
                                     <option value="Sala de Espera"> Sala de Espera </option>
                                     <option value="Telefonia"> Telefonia </option>  

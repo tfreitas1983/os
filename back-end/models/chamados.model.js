@@ -14,6 +14,7 @@ module.exports = mongoose => {
         area: String,
         equipamento: String,
         ip: String,
+        visita: Boolean,
         descricao: String,
         status: String,
         responsavel: String,

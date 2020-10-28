@@ -544,14 +544,14 @@ export default class EditarChamado extends Component {
         }
 
         //Monta um array com o nome dos arquivos
-        const importAll = require =>
+      /*  const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
             return acc;
           }, {});
         //No array somente aceita as extensões de imagens
         const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
-        
+        */
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (current.url && current.foto !== "default.jpg") {

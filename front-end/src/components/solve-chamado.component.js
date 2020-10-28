@@ -6,6 +6,7 @@ import * as moment from 'moment'
 import Form from "react-validation/build/form"
 import Textarea from "react-validation/build/textarea"
 import Input from "react-validation/build/input"
+import Select from "react-validation/build/select"
 import CheckButton from "react-validation/build/button"
 
 const required = value => {
@@ -59,6 +60,7 @@ export default class Atender extends Component {
         this.estadoRamal = this.estadoRamal.bind(this)
         this.estadoSetor = this.estadoSetor.bind(this)
         this.estadoArea = this.estadoArea.bind(this)
+        this.estadoIP = this.estadoIP.bind(this)
         this.estadoEquipamento = this.estadoEquipamento.bind(this)
         this.estadoSelectArea = this.estadoSelectArea.bind(this)
         this.estadoResponsavel = this.estadoResponsavel.bind(this)
@@ -70,6 +72,7 @@ export default class Atender extends Component {
         this.estadoDtFechamento = this.estadoDtFechamento.bind(this)
         this.estadoDtFechamentoNovo = this.estadoDtFechamentoNovo.bind(this)
         this.estadoReaberto = this.estadoReaberto.bind(this)
+        this.estadoVisita = this.estadoVisita.bind(this)
 
         this.inputPrevisao = React.createRef()
         this.inputFechamento = React.createRef()
@@ -92,7 +95,9 @@ export default class Atender extends Component {
                 setor: "",
                 area: "",
                 selectedArea: "",
+                ip:"",
                 equipamento: "",
+                visita: false,
                 responsavel: "",
                 solucao: "",
                 dt_previsao: "",
@@ -133,6 +138,7 @@ export default class Atender extends Component {
                     setor: response.data.setor,
                     descricao: response.data.descricao,
                     area: response.data.area,
+                    ip: response.data.ip,
                     equipamento: response.data.equipamento,
                     responsavel: response.data.responsavel,
                     solucao: response.data.solucao,
@@ -141,6 +147,7 @@ export default class Atender extends Component {
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD-MM-YYYY'),
                     status: response.data.status,
                     foto: response.data.foto,
+                    visita: response.data.visita,
                     situacao: response.data.situacao                     
                 }
             })             
@@ -243,6 +250,17 @@ export default class Atender extends Component {
         }))
     }
 
+    estadoIP(e) {
+        const ip = e.target.value
+        this.setState(prevState => ({
+            current: {
+                ...prevState.current,
+                 ip: ip
+            }
+        }))
+    }
+
+
     estadoEquipamento(e) {
         const equipamento = e.target.value
         this.setState(prevState => ({
@@ -309,6 +327,16 @@ export default class Atender extends Component {
             current: {
                 ...prevState.current,
                 dt_previsao: dt_previsao_novo
+            }
+        }))
+    }
+
+    estadoVisita(e) {
+        const visita = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+        this.setState(prevState => ({
+            current: {
+                ...prevState.current,
+                visita: visita
             }
         }))
     }
@@ -380,9 +408,11 @@ export default class Atender extends Component {
                 ramal: this.state.current.ramal,
                 setor: this.state.current.setor,
                 area: this.state.current.area,
+                ip: this.state.current.ip,
                 descricao: this.state.current.descricao,
                 foto: this.state.current.foto,
                 status: this.state.current.status,
+                visita: this.state.current.visita,
                 solucao: this.state.current.solucao,
                 reaberto: this.state.current.reaberto,
                 responsavel: this.state.current.responsavel, 
@@ -416,6 +446,8 @@ export default class Atender extends Component {
             area: this.state.current.area,
             descricao: this.state.current.descricao,
             responsavel: this.state.current.responsavel,
+            visita: this.state.current.visita,
+            ip: this.state.current.ip,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
             dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
@@ -435,7 +467,7 @@ export default class Atender extends Component {
                     dt_abertura: moment(response.data.dt_abertura, 'DD-MM-YYYY'),
                     ramal: response.data.ramal,
                     setor: response.data.setor,
-                    area: response.data.area,
+                    area: response.data.area,                    
                     descricao: response.data.descricao,
                     responsavel: response.data.responsavel,
                     solucao: response.data.solucao,
@@ -443,6 +475,8 @@ export default class Atender extends Component {
                     dt_previsao: moment(response.data.dt_previsao).format('DD-MM-YYYY'),
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD-MM-YYYY'),
                     foto: response.data.foto,
+                    ip: response.data.ip,
+                    visita: response.data.visita,
                     status: response.data.status,                                      
                     situacao: response.data.situacao,
                     submitted: true,
@@ -543,21 +577,47 @@ export default class Atender extends Component {
                 id="solucao"                                             
                 value={current.solucao} 
                 onChange={this.estadoSolucao} 
-                name="solucao"
-                validations={[required]}  />
+                name="solucao" />
             </div>            
         }
 
-        //Monta um array com o nome dos arquivos
-        const importAll = require =>
-          require.keys().reduce((acc, next) => {
-            acc[next.replace("./", "")] = require(next);
-            return acc;
-          }, {})
+        let ip = null
+        let responsavel = null
+        if(current.area === "TI") {
+            ip = <div>
+                <div className="form-group">
+                    <label htmlFor="ip"> IP </label>
+                    <input 
+                    type="text" 
+                    className="form-control" 
+                    id="ip" 
+                    value={current.ip} 
+                    onChange={this.estadoIP} 
+                    name="ip" />
+                </div>
+            </div>
+        }
 
-        //No array somente aceita as extensões de imagens
-        const images = importAll(require.context('../images', false, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
-        
+        if(current.area === "TI") {
+            responsavel = <div>
+                <div className="form-group">
+                    <label htmlFor="responsavel"> Responsável </label>
+                    <Select 
+                        className="form-control" 
+                        id="responsavel" 
+                        name="responsavel"
+                        value={current.responsavel}                                                                     
+                        onChange={this.estadoResponsavel}
+                        validations={[required, vresponsavel]} >                                    
+                        <option value="" disabled>Selecione</option>
+                        <option value="Claudio">Claudio</option>  
+                        <option value="Ivan">Ivan</option> 
+                        <option value="Thiago"> Thiago </option>
+                    </Select>
+                </div>
+            </div>
+        }
+
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (this.state.url) {
@@ -694,6 +754,16 @@ export default class Atender extends Component {
                                     {equipamento}
                                 </div>
 
+                                <div className="form-group row">                    
+                                    <div className="col-md-6" style={{paddingLeft: 30}}>
+                                        <div className="form-check col-md-6">
+                                            <label className="form-check-label" style={{width: 'max-content', fontSize: 18+'px'}}>
+                                                <input className="form-check-input" type="checkbox" checked={this.state.current.visita === true} onChange={this.estadoVisita}  /> Houve visita?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div> 
+                                {ip}
                                 <div className="form-group">
                                     <label htmlFor="descricao"> Descrição </label>
                                     <input 
@@ -728,23 +798,16 @@ export default class Atender extends Component {
                                 <div>
                                     {agendado}
                                 </div>
-                                
-                                <div className="form-group">
-                                    <label htmlFor="responsavel"> Responsável </label>
-                                    <Input 
-                                    type="text" 
-                                    className="form-control" 
-                                    id="responsavel"                             
-                                    value={current.responsavel} 
-                                    onChange={this.estadoResponsavel} 
-                                    name="responsavel"
-                                    validations={[required, vresponsavel]} />
+
+                                <div>
+                                    {responsavel}
                                 </div>
 
                                 <div>
                                     {solucao}
                                     {reaberto}
                                 </div>
+
                                 <div>
                                     {finalizado}
                                 </div>

@@ -61,6 +61,7 @@ export default class AdicionarChamado extends Component {
             dt_fechamento: moment(),
             foto: "default.jpg",
             imagem: "",
+            visita: false,
             url:"",
             submitted: false
         }
@@ -173,7 +174,7 @@ export default class AdicionarChamado extends Component {
         })
     }
 
-   salvarImagem(e) {
+    salvarImagem(e) {
         e.preventDefault();
 
         this.setState({
@@ -257,6 +258,7 @@ export default class AdicionarChamado extends Component {
             responsavel:this.state.responsavel,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
+            visita: this.state.visita,
             dt_previsao: moment(),
             dt_fechamento: moment(),
             foto: this.state.foto,
@@ -279,6 +281,7 @@ export default class AdicionarChamado extends Component {
                 equipamento: response.data.equipamento,
                 ip: response.data.ip,
                 descricao: response.data.descricao,
+                visita: response.data.visita,
                 foto: response.data.foto,
                 dt_previsao: response.data.dt_previsao,
                 dt_fechamento: response.data.dt_fechamento,
@@ -375,8 +378,7 @@ export default class AdicionarChamado extends Component {
             $imagePreview = 
             <div className="preview">
                 <img alt="upload" src={blocked} />
-            </div>
-            
+            </div>            
         }
 
         //Verifica se é uma imagem
@@ -502,6 +504,8 @@ export default class AdicionarChamado extends Component {
                                     <option value="Cozinha"> Cozinha </option>  
                                     <option value="Enfermaria"> Enfermaria </option>
                                     <option value="Escritório"> Escritório </option> 
+                                    <option value="Laboratório"> Laboratório </option>
+                                    <option value="Medicina Ocupacional"> Medicina Ocupacional </option>
                                     <option value="Recepção"> Recepção </option>  
                                     <option value="Sala de Espera"> Sala de Espera </option>
                                     <option value="Telefonia"> Telefonia </option>
@@ -575,12 +579,7 @@ export default class AdicionarChamado extends Component {
                                 </div>
                             </div>
                             )}
-                            <CheckButton
-                            style={{ display: "none" }}
-                            ref={c => {
-                                this.checkBtn = c;
-                            }}
-                            />
+                            <CheckButton style={{display: "none"}} ref={c => {this.checkBtn = c;}} />
                         </Form>
                     </div>
                 )}

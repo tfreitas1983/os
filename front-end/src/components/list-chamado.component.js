@@ -287,7 +287,7 @@ export default class ChamadosLista extends Component {
                                 if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_abertura).businessAdd(3)._d).format())  ) { 
                                     return ( <tr key={index}>
                                         <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>                                                                
-                                        <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
+                                        <td style={{backgroundColor: '#FF3F3F', color: '#fff', height: 1+'%'}}>{chamado.descricao}</td>
                                         <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
                                         <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                                         <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}</td>
@@ -300,9 +300,10 @@ export default class ChamadosLista extends Component {
                                     </tr> 
                                     )
                                 } else {
-                                    return ( <tr key={index}>
+                                    return ( 
+                                    <tr key={index} style={{height: 1+'%'}}>
                                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>                                                                
-                                        <td>{chamado.descricao}</td>
+                                        <td >{chamado.descricao}</td>
                                         <td>{chamado.area}</td>
                                         <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                                         <td>{chamado.status}</td>
@@ -386,7 +387,7 @@ export default class ChamadosLista extends Component {
                             } else { 
                                 return ( <tr key={index}>
                                     <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>                                                                
-                                    <td>{chamado.descricao}</td>
+                                    <td style={{height: 1+'%'}}>{chamado.descricao}</td>
                                     <td>{chamado.area}</td>
                                     <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                                     <td>{chamado.status}</td>

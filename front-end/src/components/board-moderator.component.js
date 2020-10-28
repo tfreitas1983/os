@@ -340,7 +340,7 @@ export default class BoardModerator extends Component {
                             <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>  
                             <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.unidade}</td>                                                              
                             <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.nome}</td>                                                              
-                            <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
+                            <td style={{backgroundColor: '#FF3F3F', color: '#fff', maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
                             <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                             <td style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}</td>
@@ -357,7 +357,7 @@ export default class BoardModerator extends Component {
                             <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              
                             <td>{chamado.nome}</td>                                                              
-                            <td>{chamado.descricao}</td>
+                            <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td>{chamado.area}</td>
                             <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                             <td>{chamado.status}</td>
@@ -378,7 +378,7 @@ export default class BoardModerator extends Component {
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>  
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.unidade}</td>                                                              
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.nome}</td>                                                              
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.descricao}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff', maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.area}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}  style={{backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.status}</td>
@@ -395,7 +395,7 @@ export default class BoardModerator extends Component {
                             <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.unidade}</td>                                                              
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.nome}</td>                                                              
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.descricao}</td>
+                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                             <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}</td>
@@ -415,7 +415,7 @@ export default class BoardModerator extends Component {
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              
                             <td>{chamado.nome}</td>                                                              
-                            <td>{chamado.descricao}</td>
+                            <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td>{chamado.area}</td>
                         <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                         <td>{chamado.status}</td>
@@ -438,7 +438,7 @@ export default class BoardModerator extends Component {
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              
                             <td>{chamado.nome}</td>                                                              
-                            <td>{chamado.descricao}</td>
+                            <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
                             <td>{chamado.area}</td>
                         <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                         <td>{chamado.status}</td>
@@ -455,7 +455,7 @@ export default class BoardModerator extends Component {
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                         <td>{chamado.unidade}</td>                                                              
                         <td>{chamado.nome}</td>                                                              
-                        <td>{chamado.descricao}</td>
+                        <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
                         <td>{chamado.area}</td>
                         <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
                         <td>{chamado.status}</td>

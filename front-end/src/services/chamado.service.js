@@ -41,6 +41,10 @@ class ChamadoDataService {
         return http.get(`/chamados?dt_abertura=${dt}&page=${page}`)
     }
 
+    buscarPeriodo(dt, dt_fim, page) {
+        return http.get(`/chamados?dt_abertura=${dt}&dt_abertura_fim=${dt_fim}&page=${page}`)
+    }
+
     buscarArea(area, page) {
         return http.get(`/chamados?area=${area}&page=${page}`)
     }

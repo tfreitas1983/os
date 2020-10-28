@@ -1,3 +1,3 @@
 module.exports = {
-    url: "mongodb://chamadosrj.ddns.net:27017/chamados"
+    url: `mongodb://chamados:${encodeURIComponent('@dmCDR!0')}@chamadosrj.ddns.net:27018/?authSource=chamados`
 }

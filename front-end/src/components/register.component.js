@@ -308,9 +308,8 @@ export default class Register extends Component {
                     id="perfil" 
                     name="perfil"
                     value={this.state.perfil}                                    
-                    onChange={this.onChangePerfil}                   
-                    >                                                                            
-                    
+                    onChange={this.onChangePerfil} >                                                                            
+                    <option value="" disabled> -- Selecione -- </option>
                     <option value="user"> Usuário </option>  
                     <option value="admin"> Atendente </option> 
                     <option value="moderator"> Admin </option>

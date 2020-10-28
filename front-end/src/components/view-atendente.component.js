@@ -26,6 +26,8 @@ export default class VisualizarAtendente extends Component {
                 responsavel: "",
                 solucao: "",
                 reaberto: "",
+                ip: "",
+                visita: false,
                 dt_previsao: moment(),
                 dt_fechamento: moment(),
                 foto: "",
@@ -58,6 +60,8 @@ export default class VisualizarAtendente extends Component {
                     setor: response.data.setor,
                     descricao: response.data.descricao,
                     area: response.data.area,
+                    ip: response.data.ip,
+                    visita: response.data.visita,
                     equipamento: response.data.equipamento,
                     responsavel: response.data.responsavel,
                     solucao: response.data.solucao,
@@ -80,15 +84,15 @@ export default class VisualizarAtendente extends Component {
         const { current, currentUser } = this.state
 
         //Monta um array com o nome dos arquivos
-        const importAll = require =>
+        /* const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
             return acc;
           }, {})
 
         //No array somente aceita as extensões de imagens
-        const images = importAll(require.context('../images', true, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
-        
+       // const images = importAll(require.context('../images', true, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
+        */
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (this.state.url) {
@@ -185,7 +189,7 @@ export default class VisualizarAtendente extends Component {
         }
 
         let ip = null
-        if(this.state.area === "TI") {
+        if(current.area === "TI") {
             ip = 
             <div>
                 <div className="form-group">
@@ -195,7 +199,6 @@ export default class VisualizarAtendente extends Component {
                     className="form-control" 
                     id="ip" 
                     value={current.ip} 
-                    onChange={this.estadoIP} 
                     name="ip" 
                     disabled/>
                 </div>
@@ -325,6 +328,16 @@ export default class VisualizarAtendente extends Component {
                         </div>
                         {equipamento} {ip}
                     
+                        <div className="form-group row">                    
+                            <div className="col-md-6" style={{paddingLeft: 30}}>
+                                <div className="form-check col-md-6">
+                                    <label className="form-check-label" style={{width: 'max-content', fontSize: 18+'px'}}>
+                                        <input className="form-check-input" type="checkbox" checked={current.visita === true} disabled  /> Houve visita?
+                                    </label>
+                                </div>
+                            </div>
+                        </div> 
+
                         <div className="form-group">
                             <label htmlFor="descricao"> Descrição </label>
                             <input 
@@ -394,7 +407,7 @@ export default class VisualizarAtendente extends Component {
                     
                         <Link to={"/admin"} className="btn btn-info" style={{marginLeft: 20+'px', marginBottom: 15+'px'}}> Voltar</Link>
                         <div style={{display: 'grid'}}>
-                            <span> <b>Criado por: </b> {currentUser.nome}</span>
+                            <span> <b>Criado por: </b> {current.nome}</span>
                             <span><b>Atendido por: </b>{current.responsavel}</span>
                         </div>
                     </div>

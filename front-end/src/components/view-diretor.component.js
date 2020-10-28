@@ -22,6 +22,7 @@ export default class VisualizarDiretor extends Component {
                 ramal: "",
                 setor: "",
                 area: "",
+                ip: "",
                 equipamento: "",
                 responsavel: "",
                 solucao: "",
@@ -30,6 +31,7 @@ export default class VisualizarDiretor extends Component {
                 dt_fechamento: moment(),
                 foto: "",
                 imagem: "",
+                visita: false,
                 url:"",
                 status: "",
                 situacao: false
@@ -58,6 +60,8 @@ export default class VisualizarDiretor extends Component {
                     setor: response.data.setor,
                     descricao: response.data.descricao,
                     area: response.data.area,
+                    ip: response.data.ip,
+                    visita: response.data.visita,
                     equipamento: response.data.equipamento,
                     responsavel: response.data.responsavel,
                     solucao: response.data.solucao,
@@ -79,14 +83,14 @@ export default class VisualizarDiretor extends Component {
         const { current, currentUser } = this.state
 
         //Monta um array com o nome dos arquivos
-        const importAll = require =>
+       /* const importAll = require =>
           require.keys().reduce((acc, next) => {
             acc[next.replace("./", "")] = require(next);
             return acc;
           }, {});
         //No array somente aceita as extensões de imagens
-        const images = importAll(require.context('../images', true, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
-        
+      //  const images = importAll(require.context('../images', true, /\.(png|gif|tiff|jpeg|jpg|svg|JPG|PNG|GIF|TIFF|JPEG|SVG)$/))
+        */
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (this.state.url) {
@@ -177,7 +181,7 @@ export default class VisualizarDiretor extends Component {
         }
 
         let ip = null
-        if(this.state.area === "TI") {
+        if(current.area === "TI") {
             ip = 
             <div>
                 <div className="form-group">
@@ -187,7 +191,6 @@ export default class VisualizarDiretor extends Component {
                     className="form-control" 
                     id="ip" 
                     value={current.ip} 
-                    onChange={this.estadoIP} 
                     name="ip" 
                     disabled/>
                 </div>
@@ -316,7 +319,17 @@ export default class VisualizarDiretor extends Component {
                             </select>
                         </div>
                         {equipamento} {ip}
-                    
+
+                        <div className="form-group row">                    
+                            <div className="col-md-6" style={{paddingLeft: 30}}>
+                                <div className="form-check col-md-6">
+                                    <label className="form-check-label" style={{width: 'max-content', fontSize: 18+'px'}}>
+                                        <input className="form-check-input" type="checkbox" checked={current.visita === true} disabled  /> Houve visita?
+                                    </label>
+                                </div>
+                            </div>
+                        </div> 
+
                         <div className="form-group">
                             <label htmlFor="descricao"> Descrição </label>
                             <input 

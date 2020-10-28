@@ -14,6 +14,7 @@ import Atender from "./components/solve-chamado.component"
 import VisualizarChamado from "./components/view-chamado.component"
 import VisualizarAtendente from "./components/view-atendente.component"
 import VisualizarDiretor from "./components/view-diretor.component"
+import AdicionarEquipamento from "./components/add-equipamento.component"
 
 import AuthService from "./services/auth.service";
 
@@ -85,6 +86,11 @@ class App extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to={"/equipamentos"} className="nav-link">
+                      Equipamentos
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to={"/resumo"} className="nav-link">
                       Resumo
                     </Link>
@@ -142,7 +148,7 @@ class App extends Component {
             )}
           </nav>
 
-          <div className="container mt-6">
+          <div className="col-md-12">
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
               <Route exact path="/login" component={Login} />
@@ -165,6 +171,7 @@ class App extends Component {
               <Route exact path={"/chamados/editar/:id"} component={EditarChamado} />
               <Route exact path={"/chamados/reabrir/:id"} component={ReabrirChamado} />
               <Route exact path={"/chamados/atender/:id"} component={Atender} />
+              <Route exact path={"/equipamentos/adicionar"} component={AdicionarEquipamento} />
             </Switch>
           </div>
         </div>

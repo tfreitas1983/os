@@ -25,6 +25,7 @@ exports.cadastrar = (req, res) => {
         area: req.body.area,
         equipamento: req.body.equipamento,
         ip: req.body.ip,
+        visita: req.body.visita,
         descricao: req.body.descricao,
         status: req.body.status,
         responsavel: req.body.responsavel,
@@ -42,10 +43,14 @@ exports.cadastrar = (req, res) => {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
             to: chamado.email,
-            from: 'cmedrjchamados@gmail.com',
+            from: {
+                email: 'cmedrjchamados@gmail.com',
+                name: 'Sistema de Chamados'
+            },
             subject: `Novo chamado criado nº ${chamado.numchamado}`,
             text: `O chamado ${chamado.descricao} foi registrado com número ${chamado.numchamado}.`,
-            html: `O chamado <strong>${chamado.descricao}</strong> foi registrado com número <strong>${chamado.numchamado}</strong>.`,
+            html: `O chamado <strong>${chamado.descricao}</strong> foi registrado com número <strong>${chamado.numchamado}</strong>.
+            <p> Chamado solicitado por: ${chamado.nome} </p>`,
         }    
         sgMail.send(msg)
     })
@@ -72,14 +77,20 @@ exports.buscarTodos = (req,res) => {
 
     //Verifica se foi passado a data de abertura do chamado
     let dt_abertura = null
+    let dt_abertura_fim = null
     let dt_final = null
     if(req.query.dt_abertura) {
-        dt_abertura = new Date(req.query.dt_abertura)
+        dt_abertura = new Date(req.query.dt_abertura)        
         dt_final = new Date(moment(dt_abertura).add(1,'days'))
     }
 
+    //Verifica se foi passado o período final da busca dos chamados
+    if (req.query.dt_abertura_fim) {
+        dt_abertura_fim = new Date(moment(req.query.dt_abertura_fim).add(1,'days'))
+    }
+
      //Verifica se não possui filtro
-     if (!nome && !numchamado && !dt_abertura && !area && !status && !unidade) {
+    if (!nome && !numchamado && !dt_abertura && !dt_abertura_fim && !area && !status && !unidade) {
         var query = Chamado.find().sort({dt_abertura: -1})
     }
 
@@ -94,9 +105,13 @@ exports.buscarTodos = (req,res) => {
     }
 
     //Verifica se foi passada a data de abertura do chamado
-    if (dt_abertura) {
+    if (dt_abertura && !dt_abertura_fim) {
         var query = Chamado.find({dt_abertura: {$gte: dt_abertura, $lt: dt_final }})
     } 
+
+    if (dt_abertura && dt_abertura_fim) {
+        var query = Chamado.find({dt_abertura: {$gte: dt_abertura, $lt: dt_abertura_fim }}).sort({dt_abertura: -1})
+    }
     
     if (area) {
         var query = Chamado.find(condArea).sort({dt_abertura: -1})
@@ -109,8 +124,8 @@ exports.buscarTodos = (req,res) => {
     if (status) {
         var query = Chamado.find(condStatus).sort({dt_abertura: -1})
     }
-    
-    Chamado.paginate(query,{page, limit: 50})
+   
+    Chamado.paginate(query,{page, limit: 5000})
         .then(data => {
             res.send(data)
         })
@@ -182,7 +197,10 @@ exports.email = (req, res) => {
         if (data.status !== "Pendente" && data.status !== "Finalizado" && data.status !== "Agendado" && data.status !== "Reaberto") {
             const msgeditar = {
                 to: data.email,
-                from: 'cmedrjchamados@gmail.com',
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
                 subject: `Seu chamado nº ${data.numchamado} foi atualizado`,
                 text: `O chamado ${data.descricao}, sob número ${data.numchamado} mudou o status para ${data.status}.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> mudou o status para <strong>${data.status}</strong>.`,
@@ -193,7 +211,10 @@ exports.email = (req, res) => {
         if (data.status === "Pendente") {
             const msgeditar = {
                 to: data.atendente,
-                from: 'cmedrjchamados@gmail.com',
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },                
                 subject: `Você tem um novo chamado para atender sob nº ${data.numchamado}`,
                 text: `O chamado ${data.descricao}, sob número ${data.numchamado} foi criado e precisa ser analisado.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi criado e precisa ser analisado.
@@ -205,7 +226,10 @@ exports.email = (req, res) => {
         if (data.status === "Reaberto") {
             const msgeditar = {
                 to: data.atendente,
-                from: 'cmedrjchamados@gmail.com',
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
                 subject: `O chamado nº ${data.numchamado} foi reaberto`,
                 text: `O chamado ${data.descricao}, sob número ${data.numchamado} foi reaberto e precisa ser verificado novamente.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong>
@@ -217,7 +241,10 @@ exports.email = (req, res) => {
         if (data.status === "Agendado") {
             const msgeditar = {
                 to: data.email,
-                from: 'cmedrjchamados@gmail.com',
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
                 subject: `Seu chamado nº ${data.numchamado} foi agendado para o dia ${moment(data.dt_previsao).add(1, 'days').format('DD/MM/YYYY')}.`,
                 text: `O chamado ${data.descricao}, sob número ${data.numchamado} foi agendado para ser resolvido em ${moment(data.dt_previsao).add(1, 'days').format('DD/MM/YYYY')}.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi agendado para ser resolvido em <strong>${moment(data.dt_previsao).add(1, 'days').format('DD/MM/YYYY')}</strong>.`,
@@ -228,7 +255,10 @@ exports.email = (req, res) => {
         if (data.status === "Finalizado") {
             const msgeditar = {
                 to: data.email,
-                from: 'cmedrjchamados@gmail.com',
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
                 subject: `Seu chamado nº ${data.numchamado} foi finalizado.`,
                 text: `O chamado ${data.descricao} sob número ${data.numchamado} foi finalizado por ${data.responsavel}.`,
                 html: `O chamado <strong>${data.descricao}</strong>, sob número <strong>${data.numchamado}</strong> foi finalizado por <strong>${data.responsavel}</strong>, que
