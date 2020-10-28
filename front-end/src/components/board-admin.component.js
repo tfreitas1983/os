@@ -17,12 +17,14 @@ export default class BoardAdmin extends Component {
     this.estadoBuscaData = this.estadoBuscaData.bind(this)
     this.estadoBuscaUnidade = this.estadoBuscaUnidade.bind(this)
     this.estadoBuscaStatus = this.estadoBuscaStatus.bind(this)
+    this.estadoFinalizados = this.estadoFinalizados.bind(this)
     this.buscarNome = this.buscarNome.bind(this)
     this.buscarChamado = this.buscarChamado.bind(this)
     this.buscarData = this.buscarData.bind(this)
     this.buscarUnidade = this.buscarUnidade.bind(this)
     this.buscarStatus = this.buscarStatus.bind(this)
     this.toggleFiltro = this.toggleFiltro.bind(this)
+    this.mostrarFinalizados = this.mostrarFinalizados.bind(this)
 
 
     this.state = {
@@ -37,7 +39,9 @@ export default class BoardAdmin extends Component {
       buscaChamado: "",
       buscaUnidade: "",
       buscaStatus: "",
+      finalizados: false,
       mostraFiltro: true,
+      toogleHidden: true,
       className: 'hidden'
     }
   }
@@ -258,8 +262,31 @@ export default class BoardAdmin extends Component {
       }        
   }
 
+  estadoFinalizados(e) {
+    this.setState({
+        finalizados: e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    })
+  }
+
+  mostrarFinalizados() {
+    this.setState(state=> ({
+        toogleHidden: !state.toogleHidden
+      }))
+    
+      if(this.state.finalizados === true) {
+        this.setState({
+            toogleHidden: 'false'
+        })
+    } else {
+        this.setState({
+            toogleHidden: 'true'
+        })
+    }  
+
+  }
+
   render() {
-    const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus} = this.state
+    const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus, finalizados} = this.state
 
     let i = 0
     let paginas = []
@@ -386,7 +413,7 @@ export default class BoardAdmin extends Component {
                 }
 
                 if (chamado.status === "Finalizado") {
-                    return ( <tr key={index}>
+                    return ( <tr key={index} hidden={finalizados}>
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              
                             <td>{chamado.nome}</td>                                                              
@@ -523,6 +550,9 @@ export default class BoardAdmin extends Component {
           </div>       
          </div>     
         <div>
+            <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
+              <input className="form-check-input" type="checkbox" onChange={this.estadoFinalizados}  /> Oculta finalizados?
+            </label>
           {mostrar}
         </div> 
       </div>

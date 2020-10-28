@@ -18,6 +18,7 @@ export default class BoardModerator extends Component {
     this.estadoBuscaUnidade = this.estadoBuscaUnidade.bind(this)
     this.estadoBuscaArea = this.estadoBuscaArea.bind(this)
     this.estadoBuscaStatus = this.estadoBuscaStatus.bind(this)
+    this.estadoFinalizados = this.estadoFinalizados.bind(this)
     this.buscarNome = this.buscarNome.bind(this)
     this.buscarChamado = this.buscarChamado.bind(this)
     this.buscarData = this.buscarData.bind(this)
@@ -25,6 +26,7 @@ export default class BoardModerator extends Component {
     this.buscarStatus = this.buscarStatus.bind(this)
     this.buscarArea = this.buscarArea.bind(this)
     this.toggleFiltro = this.toggleFiltro.bind(this)
+    this.mostrarFinalizados = this.mostrarFinalizados.bind(this)
     this.limpaCurrent = this.limpaCurrent.bind(this)
 
 
@@ -41,7 +43,9 @@ export default class BoardModerator extends Component {
       buscaUnidade: "",
       buscaArea: "",
       buscaStatus: "",
+      finalizados: false,
       mostraFiltro: true,
+      toogleHidden: true,
       className: 'hidden'
     }
   }
@@ -191,6 +195,8 @@ export default class BoardModerator extends Component {
           buscaData: "",
           buscaArea: "",
           buscaUnidade: "",
+          toogleHidden: false,
+          finalizados: false,
           buscaStatus: ""          
       })
       this.inputData.value = ""
@@ -283,7 +289,13 @@ export default class BoardModerator extends Component {
         })
 }
 
-  toggleFiltro() {
+ estadoFinalizados(e) {
+    this.setState({
+        finalizados: e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    })
+ }
+
+ toggleFiltro() {
       this.setState(state=> ({
         mostraFiltro: !state.mostraFiltro
       }))
@@ -299,8 +311,25 @@ export default class BoardModerator extends Component {
       }        
   }
 
+  mostrarFinalizados() {
+    this.setState(state=> ({
+        toogleHidden: !state.toogleHidden
+      }))
+    
+      if(this.state.finalizados === true) {
+        this.setState({
+            toogleHidden: 'false'
+        })
+    } else {
+        this.setState({
+            toogleHidden: 'true'
+        })
+    }  
+
+  }
+
   render() {
-    const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus} = this.state
+    const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus, finalizados} = this.state
 
     let i = 0
     let paginas = []
@@ -410,8 +439,10 @@ export default class BoardModerator extends Component {
                     }
                 }
 
+                
+
                 if (chamado.status === "Finalizado") {
-                    return ( <tr key={index}>
+                    return ( <tr key={index} hidden={finalizados}>
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              
                             <td>{chamado.nome}</td>                                                              
@@ -541,10 +572,14 @@ export default class BoardModerator extends Component {
               </select>
               <button type="button" className="btn btn-danger" onClick={this.limpaCurrent}>
                 Limpar
-              </button>
+              </button>              
           </div>       
+          
          </div>     
         <div>
+            <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
+              <input className="form-check-input" type="checkbox" onChange={this.estadoFinalizados}  /> Oculta finalizados?
+            </label>
           {mostrar}
         </div> 
       </div>
