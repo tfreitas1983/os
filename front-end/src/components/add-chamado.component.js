@@ -525,12 +525,12 @@ export default class AdicionarChamado extends Component {
                                     validations={[required]} >                                    
                                     <option value="" disabled> --Selecione-- </option>
                                     <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
-                                    <option value="Ar Condicionado"> Ar Condicionado </option>
-                                    <option value="Compras"> Compras </option>  
-                                    <option value="Financeiro"> Financeiro </option>  
-                                    <option value="Gráfica"> Gráfica </option>  
-                                    <option value="Manutenção"> Manutenção </option> 
-                                    <option value="Recursos Humanos"> Recursos Humanos </option>                                 
+                                    <option disabled value="Ar Condicionado"> Ar Condicionado (Em Breve)</option>
+                                    <option disabled value="Compras"> Compras (Em Breve) </option>  
+                                    <option disabled value="Financeiro"> Financeiro (Em Breve) </option>  
+                                    <option disabled value="Gráfica"> Gráfica (Em Breve) </option>  
+                                    <option disabled value="Manutenção"> Manutenção (Em Breve) </option> 
+                                    <option disabled value="Recursos Humanos"> Recursos Humanos (Em Breve) </option>                                 
                                     <option value="TI"> TI </option>
                                     <option value="Transporte"> Transporte </option>
                                 </Select>

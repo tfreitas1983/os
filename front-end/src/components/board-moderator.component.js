@@ -43,7 +43,7 @@ export default class BoardModerator extends Component {
       buscaUnidade: "",
       buscaArea: "",
       buscaStatus: "",
-      finalizados: false,
+      finalizados: true,
       mostraFiltro: true,
       toogleHidden: true,
       className: 'hidden'
@@ -52,6 +52,7 @@ export default class BoardModerator extends Component {
 
   componentDidMount() {
     this.pegaChamados() 
+    this.mostrarFinalizados()
   }
 
   pegaChamados(page = 1) {        
@@ -314,9 +315,9 @@ export default class BoardModerator extends Component {
   mostrarFinalizados() {
     this.setState(state=> ({
         toogleHidden: !state.toogleHidden
-      }))
+      })) 
     
-      if(this.state.finalizados === true) {
+    if(this.state.finalizados === true) {
         this.setState({
             toogleHidden: 'false'
         })
@@ -347,18 +348,18 @@ export default class BoardModerator extends Component {
     
     if (chamados) { 
       mostrar = 
-      <div style={{width: 100+'%'}}>
-        <table style={{width: 100+'%'}}>
+      <div>
+        <table>
           <tbody>
             <tr>
-              <th style={{width: 4+'%', textAlign: 'center'}}>#</th>
-              <th style={{width: 13+'%'}}>Unidade</th>
-              <th>Nome</th>
-              <th style={{width: 35+'%'}}>Descrição</th>
-              <th>Área</th>
-              <th>Data</th>
-              <th>Status</th>
-              <th style={{width: 7+'%', textAlign: 'center'}}>Ações</th>                  
+              <th style={{width: 5+'%', textAlign: 'center'}}>#</th>
+              <th style={{width: 10+'%'}}>Unidade</th>
+              <th style={{width: 11+'%'}}>Nome</th>
+              <th style={{width: 28+'%'}}>Descrição</th>
+              <th style={{width: 15+'%'}}>Área</th>
+              <th style={{width: 7+'%'}}>Data</th>
+              <th style={{width: 13+'%'}}>Status</th>
+              <th style={{width: 6+'%', textAlign: 'center'}}>Ações</th>               
             </tr>
             {chamados.map((chamado, index) => {
               
@@ -578,7 +579,7 @@ export default class BoardModerator extends Component {
          </div>     
         <div>
             <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
-              <input className="form-check-input" type="checkbox" onChange={this.estadoFinalizados}  /> Oculta finalizados?
+              <input className="form-check-input" type="checkbox" checked={this.state.finalizados === true} onChange={this.estadoFinalizados}  /> Oculta finalizados?
             </label>
           {mostrar}
         </div> 

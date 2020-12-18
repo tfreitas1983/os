@@ -291,6 +291,12 @@ export default class AdicionarChamadoTerceiros extends Component {
 
     salvarChamado() {
 
+        if (this.state.unidade === "Escritório") {
+            this.setState({
+                email: "ti@clinicariodejaneiro.com.br"
+            })
+        }
+
         if (this.state.unidade === "Caxias") {
             this.setState({
                 email: "caxias@clinicariodejaneiro.com.br"
@@ -496,6 +502,7 @@ export default class AdicionarChamadoTerceiros extends Component {
                     validations={[required]} >                  
                                                                                                 
                     <option value="" disabled> ---Selecione--- </option>
+                    <option value="Escritório">Escritório</option>
                     <option value="Caxias">Caxias</option>  
                     <option value="Nilópolis">Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>

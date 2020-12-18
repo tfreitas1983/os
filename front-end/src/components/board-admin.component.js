@@ -39,7 +39,7 @@ export default class BoardAdmin extends Component {
       buscaChamado: "",
       buscaUnidade: "",
       buscaStatus: "",
-      finalizados: false,
+      finalizados: true,
       mostraFiltro: true,
       toogleHidden: true,
       className: 'hidden'
@@ -48,6 +48,8 @@ export default class BoardAdmin extends Component {
 
   componentDidMount() {
     this.pegaChamados() 
+
+    this.mostrarFinalizados()
   }
 
   pegaChamados(page = 1) {        
@@ -273,7 +275,7 @@ export default class BoardAdmin extends Component {
         toogleHidden: !state.toogleHidden
       }))
     
-      if(this.state.finalizados === true) {
+    if(this.state.finalizados === true) {
         this.setState({
             toogleHidden: 'false'
         })
@@ -316,18 +318,18 @@ export default class BoardAdmin extends Component {
       })        
            
       mostrar = 
-      <div className="list-group" style={{width: 100+'%'}}>
-        <table style={{width: 100+'%'}}>
+      <div className="list-group">
+        <table>
           <tbody>
             <tr>
-              <th style={{width: 5+'%', textAlign: 'center'}}>Número</th>
-              <th style={{width: 15+'%'}}>Unidade</th>
-              <th>Nome</th>
-              <th style={{width: 35+'%'}}>Descrição</th>
-              <th>Área</th>
-              <th>Data</th>
-              <th>Status</th>
-              <th style={{width: 7+'%', textAlign: 'center'}}>Ações</th>                  
+              <th style={{width: 5+'%', textAlign: 'center'}}>#</th>
+              <th style={{width: 12+'%'}}>Unidade</th>
+              <th style={{width: 15+'%'}}>Nome</th>
+              <th style={{width: 25+'%'}}>Descrição</th>
+              <th style={{width: 20+'%'}}>Área</th>
+              <th style={{width: 10+'%'}}>Data</th>
+              <th style={{width: 15+'%'}}>Status</th>
+              <th style={{width: 7+'%', textAlign: 'center'}}>Ações</th>                    
             </tr>
             {filtro.map((chamado, index) => {
                 if (chamado.status === "Pendente") { 
@@ -551,7 +553,7 @@ export default class BoardAdmin extends Component {
          </div>     
         <div>
             <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
-              <input className="form-check-input" type="checkbox" onChange={this.estadoFinalizados}  /> Oculta finalizados?
+              <input className="form-check-input" type="checkbox" checked={finalizados === true } onChange={this.estadoFinalizados}  /> Oculta finalizados?
             </label>
           {mostrar}
         </div> 

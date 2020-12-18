@@ -41,9 +41,9 @@ export default class ListarUsuario extends Component {
             <table style={{width: 100+'%'}}>
                 <tbody>
                     <tr>
-                        <th style={{width: 5+'%', textAlign: 'center'}}> Usuário </th>                                                        
+                        <th style={{width: 10+'%', textAlign: 'center'}}> Usuário </th>                                                        
                         <th style={{width: 15+'%'}}> Nome </th>
-                        <th style={{width: 15+'%'}}> E-mail </th>
+                        <th style={{width: 20+'%'}}> E-mail </th>
                         <th style={{width: 12+'%'}}> Unidade </th>
                         <th style={{width: 25+'%'}}> Área </th>
                         <th style={{width: 8+'%', textAlign: 'center'}}> Ações </th>                            

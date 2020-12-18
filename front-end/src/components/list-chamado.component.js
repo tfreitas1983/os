@@ -272,15 +272,15 @@ export default class ChamadosLista extends Component {
                  
             mostrar = 
             <div className="list-group" style={{width: 100+'%'}}>
-                <table style={{width: 100+'%'}}>
+                <table>
                     <tbody>
                         <tr>
-                            <th style={{width: 5+'%', textAlign: 'center'}}> Número </th>                                                        
-                            <th style={{width: 45+'%'}}> Descrição </th>
-                            <th style={{width: 15+'%'}}> Área </th>
-                            <th style={{width: 5+'%'}}> Data </th>
-                            <th style={{width: 5+'%'}}> Status </th>
-                            <th style={{width: 8+'%', textAlign: 'center'}}> Ações </th>                            
+                            <th style={{width: 5+'%', textAlign: 'center'}}>Número</th>   
+                            <th style={{width: 40+'%'}}>Descrição</th>
+                            <th style={{width: 20+'%'}}>Área</th>
+                            <th style={{width: 7+'%'}}>Data</th>
+                            <th style={{width: 15+'%'}}>Status</th>
+                            <th style={{width: 7+'%', textAlign: 'center'}}>Ações</th>                           
                         </tr>
                         {filtro.map((chamado, index) => {
                             if (chamado.status === "Pendente") { 

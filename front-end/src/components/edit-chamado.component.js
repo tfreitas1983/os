@@ -373,7 +373,7 @@ export default class EditarChamado extends Component {
      //   this.form.validateAll()
 
         var data = {
-            id: this.state.currentUser.id,
+            id: this.state.current.id,
             nome: this.state.current.nome,
             ramal: this.state.current.ramal,
             setor: this.state.current.setor,
