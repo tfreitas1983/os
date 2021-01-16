@@ -329,7 +329,7 @@ exports.buscarAtivos = (req, res) => {
         })
 }
 
-exports.buscarImagem = (req, res) => {
+/*exports.buscarImagem = (req, res) => {
     const id = req.params.id
 
     Files.findById(id)   
@@ -355,6 +355,7 @@ exports.buscarImagens = (req, res) => {
             })
         })
 }
+*/
 
 exports.buscarImagem = (req, res) => {
     const id = req.params.id

@@ -6,6 +6,7 @@ module.exports = {
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             cb(null, path.resolve(__dirname, '..','..','..', '..', '..', '..','..', 'xampp' ,'htdocs', 'chamados', 'static','media'));
+            // cb(null, path.resolve(__dirname, '..','..','..', 'var', 'www','chamadosrj.ddns.net','html', 'static','media')); produção
           }, 
         filename: (req, file, cb) => {
             crypto.randomBytes (16, (err, res) => {

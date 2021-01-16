@@ -442,7 +442,7 @@ export default class BoardModerator extends Component {
 
                 
 
-                if (chamado.status === "Finalizado") {
+                if (chamado.status === "Finalizado" || chamado.status === "Cancelado") {
                     return ( <tr key={index} hidden={finalizados}>
                         <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
                             <td>{chamado.unidade}</td>                                                              

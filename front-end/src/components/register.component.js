@@ -124,7 +124,7 @@ export default class Register extends Component {
       area: Array.from(e.target.selectedOptions, (item) => item.value)
     })
 
-    if (this.state.perfil !== "Usuário") {
+    if (this.state.perfil !== "user") {
       this.setState({
         roles: ["user", this.state.perfil]
       })
