@@ -600,6 +600,26 @@ export default class Atender extends Component {
             </div>
         }
 
+        if(current.area === "Alarme/CFTV/Rede/Telefonia") {
+            responsavel = <div>
+                <div className="form-group">
+                    <label htmlFor="responsavel"> Responsável </label>
+                    <Select 
+                        className="form-control" 
+                        id="responsavel" 
+                        name="responsavel"
+                        value={current.responsavel}                                                                     
+                        onChange={this.estadoResponsavel}
+                        validations={[required, vresponsavel]} >                                    
+                        <option value="" >Selecione</option>
+                        <option value="Max">Max</option>  
+                        <option value="Yuri">Yuri</option> 
+                        <option value="Max / Yuri">Max / Yuri</option>                         
+                    </Select>
+                </div>
+            </div>
+        }
+
         if(current.area === "TI") {
             responsavel = <div>
                 <div className="form-group">
@@ -615,6 +635,7 @@ export default class Atender extends Component {
                         <option value="Claudio">Claudio</option>  
                         <option value="Ivan">Ivan</option> 
                         <option value="Thiago"> Thiago </option>
+                        <option value="Claudio / Ivan"> Claudio / Ivan </option>
                     </Select>
                 </div>
             </div>

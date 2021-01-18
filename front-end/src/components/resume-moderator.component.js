@@ -22,7 +22,7 @@ export default class ResumeModerator extends Component {
         this.totalFinanceiro = this.totalFinanceiro.bind(this)
         this.totalGrafica = this.totalGrafica.bind(this)
         this.totalManutencao = this.totalManutencao.bind(this)
-
+        this.totalAtendente = this.totalAtendente.bind(this)
 
         this.handlerDtAbertura = this.handlerDtAbertura.bind(this)
         this.handlerDtAberturaFim = this.handlerDtAberturaFim.bind(this)
@@ -37,6 +37,7 @@ export default class ResumeModerator extends Component {
             pendentes: "",
             atrasados: "",
             finalizados: "",
+            atendente: "",
             ti: "",
             rh: "",
             ar: "",
@@ -86,15 +87,18 @@ export default class ResumeModerator extends Component {
         this.timerID = setInterval(      
             () => this.totalManutencao(),1000
         )  
+        /*this.timerID = setTimeout(      
+            () => this.totalAtendente(), 3000
+        )*/
     }
   
-    pegaChamados(page = 1) {        
-        ChamadoDataService.buscarTodos(page)
+    async pegaChamados(page = 1) {        
+        await ChamadoDataService.buscarTodos(page)
             .then(response => {
             //REST do response da API em duas constantes: 
             // "docs" com os dados do chamado e "info" com os dados das páginas
                 const { docs, ...info } = response.data 
-                this.setState({
+                  this.setState({
                     chamados: docs,
                     info: info,
                     page: page
@@ -102,7 +106,9 @@ export default class ResumeModerator extends Component {
             })
             .catch(e => {
                 console.log(e)
-            })           
+            }) 
+            
+            this.totalAtendente()
     }
 
     totalPendentes () {
@@ -226,6 +232,15 @@ export default class ResumeModerator extends Component {
         })
     }
 
+    async totalAtendente () {
+        const atendente = (this.state.chamados).map((item) => {
+            return item.responsavel
+        })
+        await this.setState({
+            atendente: atendente
+        })
+    }
+
     handlerDtAbertura(e) {
         this.setState({
             dt_abertura: e.target.value
@@ -243,10 +258,10 @@ export default class ResumeModerator extends Component {
         clearInterval(this.timerID)
     }
 
-    buscarPeriodo (page = 1) {
+    async buscarPeriodo (page = 1) {
         
         this.stop()
-        ChamadoDataService.buscarPeriodo(this.state.dt_abertura, this.state.dt_abertura_fim, page)
+        await ChamadoDataService.buscarPeriodo(this.state.dt_abertura, this.state.dt_abertura_fim, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -257,6 +272,8 @@ export default class ResumeModerator extends Component {
           .catch(e => {
               console.log(e)
           })
+
+          this.totalAtendente()
     }
 
     limpar() {
@@ -265,8 +282,21 @@ export default class ResumeModerator extends Component {
 
     render () {
 
-       const {pendentes, finalizados, atrasados, info, ti, rh, tel, ar, compras, financeiro, manutencao, grafica} = this.state 
-                         
+       const {pendentes, finalizados, atrasados, info, ti, rh, tel, ar, compras, financeiro, manutencao, grafica, atendente} = this.state 
+    
+       
+       let claudio = "", ivan = "", thiago = "", max = "", yuri = "", maxyuri = "", claudioivan = ""
+
+       if (atendente.length > 0) {
+           claudio = atendente.filter(atd => atd === "Claudio").length
+           ivan = atendente.filter(atd => atd === "Ivan").length
+           thiago = atendente.filter(atd => atd === "Thiago").length
+           max = atendente.filter(atd => atd === "Max").length
+           yuri = atendente.filter(atd => atd === "Yuri").length
+           maxyuri = atendente.filter(atd => atd === "Max / Yuri").length
+           claudioivan = atendente.filter(atd => atd === "Claudio / Ivan").length
+       }
+
 
         return (
             <div style={{marginTop: 2+'%'}}>                
@@ -371,6 +401,37 @@ export default class ResumeModerator extends Component {
                         </article>
                     </div>
                 </div>
+                
+                <div style={{display: 'flex', justifyContent: "center", marginTop:2+'%'}}>
+                    <h2>Sintético por atendente</h2>
+                </div>
+
+                <div style={{marginTop: 2+'%', marginBottom: 2+'%', display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}>
+                    <div className="caixaArea">
+                        <h3> Claudio {claudio} </h3>
+                    </div> 
+                    <div className="caixaArea">
+                        <h3> Ivan {ivan}  </h3>
+                    </div>
+                    <div className="caixaArea">
+                        <h3> Thiago {thiago}  </h3>
+                    </div>
+                    <div className="caixaArea">
+                        <h3> Max {max}  </h3>
+                    </div>
+                    <div className="caixaArea">
+                        <h3> Yuri {yuri}  </h3>
+                    </div>
+
+                    <div className="caixaArea">
+                        <h3> Max/Yuri {maxyuri}  </h3>
+                    </div>
+
+                    <div className="caixaArea">
+                        <h3> Claudio/Ivan {claudioivan}  </h3>
+                    </div>
+                </div>
+
             </div>
         )
     }
