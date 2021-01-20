@@ -113,17 +113,11 @@ export default class Register extends Component {
     })
   }
 
-  onChangePerfil(e) {
-    this.setState({
+  async onChangePerfil(e) {
+    await this.setState({
       perfil: e.target.value
-    })    
-  }
-
-  onChangeArea(e) {
-    this.setState({
-      area: Array.from(e.target.selectedOptions, (item) => item.value)
-    })
-
+    })   
+    
     if (this.state.perfil !== "user") {
       this.setState({
         roles: ["user", this.state.perfil]
@@ -133,6 +127,12 @@ export default class Register extends Component {
         roles: ["user"]
       })
     }
+  }
+
+  onChangeArea(e) {
+    this.setState({
+      area: Array.from(e.target.selectedOptions, (item) => item.value)
+    })   
   }
 
  
@@ -287,7 +287,8 @@ export default class Register extends Component {
                     value={this.state.unidade}                                    
                     onChange={this.onChangeUnidade}                   
                     >                                                                            
-                    <option value="0" disabled> -- Selecione -- </option>
+                    <option value="" > -- Selecione -- </option>
+                    <option value="Escritório"> Escritório</option>  
                     <option value="Caxias"> Caxias</option>  
                     <option value="Nilópolis"> Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
@@ -309,7 +310,7 @@ export default class Register extends Component {
                     name="perfil"
                     value={this.state.perfil}                                    
                     onChange={this.onChangePerfil} >                                                                            
-                    <option value="" disabled> -- Selecione -- </option>
+                    <option value="" > -- Selecione -- </option>
                     <option value="user"> Usuário </option>  
                     <option value="admin"> Atendente </option> 
                     <option value="moderator"> Admin </option>
