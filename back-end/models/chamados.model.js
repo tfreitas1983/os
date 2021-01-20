@@ -1,5 +1,6 @@
 module.exports = mongoose => {
     const mongoosePaginate = require('mongoose-paginate')
+    var uniqueValidator = require('mongoose-unique-validator')
     const AutoIncrement = require('mongoose-sequence')(mongoose)
     var schemaChamados = mongoose.Schema ({
         numchamado: Number,
@@ -38,7 +39,7 @@ module.exports = mongoose => {
         return object
     })
 
-    
+    schemaChamados.plugin(uniqueValidator)
     schemaChamados.plugin(mongoosePaginate)
     schemaChamados.plugin(AutoIncrement, {num:'numchamado_seq', inc_field: 'numchamado'})
     const Chamados = mongoose.model("chamados", schemaChamados)    

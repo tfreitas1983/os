@@ -5,6 +5,7 @@ import "./App.css"
 import logo from './images/logo.png'
 
 import ListarUsuario from "./components/user-list.component"
+import EditarUsuario from "./components/edit-user.component"
 import AdicionarChamado from "./components/add-chamado.component"
 import AdicionarChamadoTerceiros from './components/add-chamado-terceiros.component'
 import ChamadosLista from "./components/list-chamado.component"
@@ -161,6 +162,7 @@ class App extends Component {
               <Route exact path="/resumo-atendente" component={ResumeAdmin} />
               <Route exact path="/resumo-usuario" component={ResumeUser} />
               <Route exact path={"/usuarios"} component={ListarUsuario} />
+              <Route exact path={"/usuarios/editar/:username"} component={EditarUsuario} />
               <Route exact path={"/lista"} component={ChamadosLista} />
               <Route exact path={"/chamados"} component={ChamadosLista} />
               <Route exact path={"/chamados/adicionar"} component={AdicionarChamado} />

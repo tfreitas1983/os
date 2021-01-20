@@ -45,6 +45,7 @@ export default class AdicionarChamado extends Component {
             id: null,
             nome: "",
             email: "",
+            identificador: "",
             atendente: "",
             dt_abertura: "",
             unidade: "",
@@ -108,12 +109,16 @@ export default class AdicionarChamado extends Component {
         })
     }
 
-    estadoDescricao(e) {
+    async estadoDescricao(e) {
         this.setState({
             descricao: e.target.value,
             nome: this.state.currentUser.nome,
             email: this.state.currentUser.email,
             unidade: this.state.currentUser.unidade,
+        })
+
+        await this.setState({
+            identificador: moment().valueOf(),
         })
     }
 
@@ -245,6 +250,7 @@ export default class AdicionarChamado extends Component {
         var data = {
             nome: this.state.currentUser.nome,
             username: this.state.currentUser.username,
+            identificador: this.state.identificador,
             email: this.state.currentUser.email,
             atendente: this.state.atendente,
             dt_abertura: moment.now(),
@@ -271,6 +277,7 @@ export default class AdicionarChamado extends Component {
                 id: response.data.id,
                 nome: response.data.nome,
                 username: response.data.username,
+                identificador: response.data.identificador,
                 email: response.data.email,
                 atendente: response.data.atendente,
                 dt_abertura: response.data.dt_abertura,

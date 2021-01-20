@@ -866,7 +866,7 @@ export default class Atender extends Component {
                                 {this.state.message}
                                 </div>
                             </div>
-                            )}
+                        )}
                             <CheckButton
                             style={{ display: "none" }}
                             ref={c => {

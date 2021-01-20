@@ -2,6 +2,7 @@ const db = require("../models")
 const Chamado = db.chamados
 const Users = db.user
 const Files = db.files
+require('dotenv').config()
 const moment = require('moment')
 const sgMail = require('@sendgrid/mail')
 
@@ -15,6 +16,7 @@ exports.cadastrar = (req, res) => {
   
     const chamado = new Chamado ({
         unidade: req.body.unidade,
+        identificador: req.body.identificador,
         dt_abertura: req.body.dt_abertura,
         ramal: req.body.ramal,
         nome: req.body.nome,

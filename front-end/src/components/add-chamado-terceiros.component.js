@@ -45,6 +45,7 @@ export default class AdicionarChamadoTerceiros extends Component {
             currentUser: AuthService.getCurrentUser(),
             id: null,
             nome: "",
+            identificador: "",
             email: "",
             atendente: "",
             dt_abertura: "",
@@ -114,9 +115,13 @@ export default class AdicionarChamadoTerceiros extends Component {
         })
     }
 
-    estadoDescricao(e) {
+    async estadoDescricao(e) {
         this.setState({
             descricao: e.target.value
+        })
+
+        await this.setState({
+            identificador: moment().valueOf(),
         })
 
         if (this.state.unidade === "Caxias") {
@@ -347,6 +352,7 @@ export default class AdicionarChamadoTerceiros extends Component {
 
         var data = {
             nome: this.state.nome,
+            identificador: this.state.identificador,
             username: this.state.username,
             email: this.state.email,
             atendente: this.state.atendente,
@@ -372,6 +378,7 @@ export default class AdicionarChamadoTerceiros extends Component {
         .then(response => {
             this.setState({
                 id: response.data.id,
+                identificador: response.data.identificador,
                 nome: response.data.nome,
                 username: response.data.username,
                 email: response.data.email,
