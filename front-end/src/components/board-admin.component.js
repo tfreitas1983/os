@@ -290,8 +290,8 @@ export default class BoardAdmin extends Component {
   render() {
     const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus, finalizados} = this.state
 
-    let i = 0
-    let paginas = []
+    let i = 0, quantPend = [], quantAg = [], quantAp = [], quantAn = [], quantAt = [], quantForn = [], quantFin = [], quantCanc = [], quantReab = []
+    let paginas = [], mostrar = null, filtro = null
     for ( i = 1; i <= info.pages; i++ ) {
       paginas.push(
           <li className={"page-item " + (page === i ? "active" : "")} key={i}>
@@ -301,8 +301,7 @@ export default class BoardAdmin extends Component {
           </li>
       )            
     } 
-
-    let mostrar = null
+    
     if (current !== null) {
         mostrar =  <div className="autocomplete-items-active">
             {current.numchamado}{current.descricao}{current.status}{current.dt_abertura}
@@ -310,16 +309,17 @@ export default class BoardAdmin extends Component {
         </div>
     }
 
-    //
-    let filtro = null
+
     if (chamados) {      
       filtro = chamados.filter((item) => {
           return (item.area === currentUser.area[0] || item.area === currentUser.area[1] || item.area === currentUser.area[2]  || item.area === currentUser.area[3] || item.area === currentUser.area[4])
       })        
            
       mostrar = 
-      <div className="list-group">
-        <table>
+      <div>
+        
+        <div className="list-group">
+        <table style={{marginBottom: 3+'%'}}>
           <tbody>
             <tr>
               <th style={{width: 5+'%', textAlign: 'center'}}>#</th>
@@ -334,9 +334,7 @@ export default class BoardAdmin extends Component {
             {filtro.map((chamado, index) => {
                 if (chamado.status === "Pendente") { 
                     if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_abertura).businessAdd(3)._d).format())  ) { 
-                        /*console.log("Agora - ",momentjs(new Date()).format())
-                        console.log("três dias - ",momentjs(moment(chamado.dt_abertura).businessAdd(3)._d).format())
-                        console.log("Aberto - ", chamado.dt_abertura)*/
+                        
                         return ( 
                         <tr key={index} style={{height: 1+'%'}}>
                             <td style={{textAlign: 'center', backgroundColor: '#FF3F3F', color: '#fff'}}>{chamado.numchamado}</td>  
@@ -350,24 +348,6 @@ export default class BoardAdmin extends Component {
                                 <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                     {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
                                     {<Link to={`/chamados/atender/${chamado.id}`} id="edit"  aria-label={"Atender"}style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57' }}> <FaSignInAlt /> </Link>}
-                                </IconContext.Provider>
-                            </td>                                
-                        </tr> 
-                        )
-                    } else {
-                        return ( 
-                        <tr key={index} style={{height: 1+'%'}}>
-                            <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
-                            <td>{chamado.unidade}</td>                                                              
-                            <td>{chamado.nome}</td>                                                              
-                            <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
-                            <td>{chamado.area}</td>
-                            <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                            <td>{chamado.status}</td>
-                            <td style={{textAlign: 'center'}}>
-                                <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
-                                    {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
-                                    {<Link to={`/chamados/atender/${chamado.id}`} id="edit" aria-label={"Atender"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57' }}> <FaSignInAlt /> </Link>}
                                 </IconContext.Provider>
                             </td>                                
                         </tr> 
@@ -394,24 +374,58 @@ export default class BoardAdmin extends Component {
                             </td>                                
                         </tr> 
                         )
-                    } else {
-                        return ( <tr key={index}>
-                            <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.unidade}</td>                                                              
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.nome}</td>                                                              
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                            <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}</td>
-                            <td style={{textAlign: 'center'}}>
-                                <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
-                                    {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
-                                    {<Link to={`/chamados/atender/${chamado.id}`} id="edit" aria-label={"Atender"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57' }}> <FaSignInAlt /> </Link>}
-                                </IconContext.Provider>
-                            </td>                                
-                        </tr> 
-                        )
                     }
+                }
+
+            })}
+
+            {filtro.map((chamado, index) => {
+                if (chamado.status === "Pendente") { 
+                    if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_abertura).businessAdd(3)._d).format())  ) { 
+                        return null
+                    } else {
+                        return ( 
+                            <tr key={index} style={{height: 1+'%'}}>
+                                <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
+                                <td>{chamado.unidade}</td>                                                              
+                                <td>{chamado.nome}</td>                                                              
+                                <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
+                                <td>{chamado.area}</td>
+                                <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                                <td>{chamado.status}</td>
+                                <td style={{textAlign: 'center'}}>
+                                    <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
+                                        {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
+                                        {<Link to={`/chamados/atender/${chamado.id}`} id="edit" aria-label={"Atender"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57' }}> <FaSignInAlt /> </Link>}
+                                    </IconContext.Provider>
+                                </td>                                
+                            </tr> 
+                        )  
+                    }                
+                }
+
+                if(chamado.status === "Agendado") {
+                    if ((momentjs(new Date()).format()) > (momentjs(moment(chamado.dt_previsao).businessAdd(1)._d).format())  ) { 
+                        return null
+                    } else {
+                    
+                    return ( 
+                        <tr key={index}>
+                        <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.unidade}</td>                                                              
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.nome}</td>                                                              
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')} style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.area}</td>
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                        <td aria-label={momentjs(chamado.dt_previsao).format('DD/MM/YYYY')}>{chamado.status}</td>
+                        <td style={{textAlign: 'center'}}>
+                            <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
+                                {<Link to={`/chamados/view-atendente/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
+                                {<Link to={`/chamados/atender/${chamado.id}`} id="edit" aria-label={"Atender"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57' }}> <FaSignInAlt /> </Link>}
+                            </IconContext.Provider>
+                        </td>                                
+                    </tr> 
+                    )}                    
                 }
 
                 if (chamado.status === "Finalizado"  || chamado.status === "Cancelado") {
@@ -476,9 +490,67 @@ export default class BoardAdmin extends Component {
             })}
           </tbody>
         </table>
+        </div>
       </div>
-  }
+    }
 
+    quantPend = filtro.filter((item => {
+        if (item.status === "Pendente") {
+            return  item.status
+        }
+    }))
+
+    quantAg = filtro.filter((item => {
+        if (item.status === "Agendado") {
+            return  item.status
+        }
+    }))
+
+    quantAt = filtro.filter((item => {
+        if (item.status === "Em atendimento") {
+            return  item.status
+        }
+    }))
+
+    quantAp = filtro.filter((item => {
+        if (item.status === "Aprovação Glauber") {
+            return  item.status
+        }
+    }))
+
+    quantAn = filtro.filter((item => {
+        if (item.status === "Em análise") {
+            return  item.status
+        }
+    }))
+
+    quantForn = filtro.filter((item => {
+        if (item.status === "Aguardando Fornecedor") {
+            return  item.status
+        }
+    }))
+
+    quantFin = filtro.filter((item => {
+        if (item.status === "Finalizado") {
+            return  item.status
+        }
+    }))
+
+    quantCanc = filtro.filter((item => {
+        if (item.status === "Cancelado") {
+            return  item.status
+        }
+    }))
+
+    quantReab = filtro.filter((item => {
+        if (item.status === "Reaberto") {
+            return  item.status
+        }
+    }))
+
+    
+
+    
     return (
       <div>
         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10+'px'}}>
@@ -552,10 +624,15 @@ export default class BoardAdmin extends Component {
           </div>       
          </div>     
         <div>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+               <pre> {quantPend.length} Pendentes | {quantAg.length} Agendados | {quantAt.length} Em atendimento | {quantAp.length} ag. Aprovação | {quantAn.length} Em análise 
+                | {quantForn.length} ag. Fornecedor | {quantReab.length} Reabertos | {quantCanc.length} Cancelados | {quantFin.length} Finalizados </pre>
+               
+            </div>
             <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
               <input className="form-check-input" type="checkbox" checked={finalizados === true } onChange={this.estadoFinalizados}  /> Oculta finalizados?
             </label>
-          {mostrar}
+          {mostrar} 
         </div> 
       </div>
     )
