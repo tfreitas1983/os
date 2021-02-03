@@ -476,14 +476,14 @@ export default class BoardModerator extends Component {
                 }
 
                 if (chamado.status === "Reaberto") {
-                    return ( <tr key={index}>
-                        <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>  
-                            <td>{chamado.unidade}</td>                                                              
-                            <td>{chamado.nome}</td>                                                              
-                            <td style={{maxHeight: 2+'%'}}>{chamado.descricao}</td>
-                            <td>{chamado.area}</td>
-                        <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
-                        <td>{chamado.status}</td>
+                    return ( <tr key={index} >
+                        <td style={{textAlign: 'center', backgroundColor: '#FFBF00', color: '#000'}}>{chamado.numchamado}</td>  
+                        <td style={{backgroundColor: '#FFBF00', color: '#000'}} >{chamado.unidade}</td>                                                              
+                        <td style={{backgroundColor: '#FFBF00', color: '#000'}} >{chamado.nome}</td>                                                              
+                        <td style={{ backgroundColor: '#FFBF00', color: '#000'}}>{chamado.descricao}</td>
+                        <td style={{ backgroundColor: '#FFBF00', color: '#000'}} >{chamado.area}</td>
+                        <td style={{textAlign: 'center', backgroundColor: '#FFBF00', color: '#000'}} >{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                        <td style={{backgroundColor: '#FFBF00', color: '#000'}} >{chamado.status}</td>
                         <td style={{textAlign: 'center'}}>
                             <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
                                 {<Link to={`/chamados/view-diretor/${chamado.id}`} id="view" aria-label={"Visualizar"} style={{textAlign: 'center', backgroundColor:'#fefefe', color: '#2E8B57', textDecoration: 'none' }}> <FaEye /> </Link>}
