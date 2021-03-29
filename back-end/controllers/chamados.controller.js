@@ -138,6 +138,26 @@ exports.buscarTodos = (req,res) => {
     })
 }
 
+exports.buscarAbertos = (req, res) => {
+    const {page = 1} = req.query
+
+    var query = Chamado.find({ $and: [ 
+        {status: {$ne: "Finalizado"}},
+        {status: {$ne: "Cancelado" }}
+    ]   }).sort({dt_abertura: -1})
+
+    Chamado.paginate(query,{page, limit: 5000})
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+            message: err.message || "um erro ocorreu ao buscar os chamados"
+        })
+    })
+
+}
+
 exports.buscarUm = (req, res) => {
     const id = req.params.id
 

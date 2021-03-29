@@ -24,7 +24,9 @@ const required = value => {
 export default class AdicionarChamadoTerceiros extends Component {
     constructor(props) {
         super(props)
+        this.pegaUsuarios = this.pegaUsuarios.bind(this)
         this.estadoNome = this.estadoNome.bind(this)       
+        this.estadoUserName = this.estadoUserName.bind(this)    
         this.estadoUnidade = this.estadoUnidade.bind(this)
         this.estadoRamal = this.estadoRamal.bind(this)
         this.estadoDescricao = this.estadoDescricao.bind(this)        
@@ -44,6 +46,7 @@ export default class AdicionarChamadoTerceiros extends Component {
         this.state = {
             currentUser: AuthService.getCurrentUser(),
             id: null,
+            username: "",
             nome: "",
             identificador: "",
             email: "",
@@ -65,8 +68,26 @@ export default class AdicionarChamadoTerceiros extends Component {
             foto: "default.jpg",
             imagem: "",
             url:"",
-            submitted: false
+            submitted: false,
+            usuarios: []
         }
+    }
+
+    componentDidMount() {
+        this.pegaUsuarios()
+    }
+
+    pegaUsuarios() {
+        AuthService.buscarTodos()        
+        .then(response => {
+            const usuarios = response.data
+            this.setState({
+                usuarios: usuarios
+            })                
+        })
+        .catch(e => {
+            console.log(e)
+        })   
     }
 
     estadoUpload(e) {
@@ -94,6 +115,12 @@ export default class AdicionarChamadoTerceiros extends Component {
     estadoNome(e) {
         this.setState({
             nome: e.target.value
+        })
+    }
+
+    estadoUserName(e) {
+        this.setState({
+            username: e.target.value
         })
     }
 
@@ -457,7 +484,7 @@ export default class AdicionarChamadoTerceiros extends Component {
 
     render() {
 
-        const {currentUser} = this.state
+        const {currentUser, usuarios} = this.state
      
         //Monta um array com o nome dos arquivos
         const importAll = require =>
@@ -556,6 +583,15 @@ export default class AdicionarChamadoTerceiros extends Component {
             </div>
         }
 
+        let mostrarUsuarios = null
+        if (usuarios.length > 0) {
+            mostrarUsuarios = usuarios.map((membro, index) => (
+                    <option value={membro.username} key={index}>{membro.username}</option>
+            ))
+        }
+
+        console.log(mostrarUsuarios)
+
         return (
             <div className="submit-form">
                 { this.state.submitted ? (
@@ -579,7 +615,21 @@ export default class AdicionarChamadoTerceiros extends Component {
                                 value={this.state.nome} 
                                 onChange={this.estadoNome} 
                                 name="nome"
-                                validations={[required]}  />
+                                validations={[required]} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="responsavel"> Responsável </label>
+                                <Select
+                                className="form-control" 
+                                id="responsavel" 
+                                required 
+                                value={this.state.username} 
+                                onChange={this.estadoUserName} 
+                                name="responsavel"
+                                validations={[required]}>
+                                    <option value=""> --Selecione -- </option>
+                                    {mostrarUsuarios}
+                                </Select>
                             </div>
                         
                             {unidade}

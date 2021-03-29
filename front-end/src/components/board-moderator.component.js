@@ -12,6 +12,7 @@ export default class BoardModerator extends Component {
   constructor(props) {
     super(props)
     this.pegaChamados = this.pegaChamados.bind(this)
+    this.pegaChamadosAbertos = this.pegaChamadosAbertos.bind(this)
     this.estadoBuscaNome = this.estadoBuscaNome.bind(this)
     this.estadoBuscaChamado = this.estadoBuscaChamado.bind(this)
     this.estadoBuscaData = this.estadoBuscaData.bind(this)
@@ -51,8 +52,25 @@ export default class BoardModerator extends Component {
   }
 
   componentDidMount() {
-    this.pegaChamados() 
+    this.pegaChamadosAbertos() 
     this.mostrarFinalizados()
+  }
+
+  pegaChamadosAbertos(page = 1) {        
+    ChamadoDataService.buscarAbertos(page)
+        .then(response => {
+        //REST do response da API em duas constantes: 
+        // "docs" com os dados do chamado e "info" com os dados das páginas
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: docs,
+                info: info,
+                page: page
+            })                
+        })
+        .catch(e => {
+            console.log(e)
+        })
   }
 
   pegaChamados(page = 1) {        
@@ -294,6 +312,8 @@ export default class BoardModerator extends Component {
     this.setState({
         finalizados: e.target.type === 'checkbox' ? e.target.checked : e.target.value
     })
+
+    this.pegaChamados()
  }
 
  toggleFiltro() {

@@ -10,6 +10,7 @@ module.exports = app => {
 
     router.post("/chamados", chamados.cadastrar)
     router.get("/chamados", chamados.buscarTodos)
+    router.get("/chamadosabertos", chamados.buscarAbertos)
     router.get("/chamados/files", chamados.buscarImagens)
     router.get("/chamados/files/:id", chamados.buscarImagem)
     router.get("/chamados/:id", chamados.buscarUm)

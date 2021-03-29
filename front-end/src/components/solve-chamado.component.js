@@ -710,6 +710,7 @@ export default class Atender extends Component {
                                         onChange={this.estadoUnidade} >                                    
                                         <option value="1">Selecione</option>
                                         <option value="Caxias">Caxias</option>  
+                                        <option value="Escritório">Escritório</option> 
                                         <option value="Nilópolis">Nilópolis</option> 
                                         <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                         <option value="Queimados"> Queimados </option>
