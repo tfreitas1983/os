@@ -641,6 +641,27 @@ export default class Atender extends Component {
             </div>
         }
 
+        if(current.area === "Transporte") {
+            responsavel = <div>
+                <div className="form-group">
+                    <label htmlFor="responsavel"> Responsável </label>
+                    <Select 
+                        className="form-control" 
+                        id="responsavel" 
+                        name="responsavel"
+                        value={current.responsavel}                                                                     
+                        onChange={this.estadoResponsavel}
+                        validations={[required, vresponsavel]} >                                    
+                        <option value="" disabled>Selecione</option>
+                        <option value="Camilo Junior"> Camilo Junior</option>  
+                        <option value="Adilson"> Adilson</option> 
+                        <option value="Glauber"> Glauber </option>
+                        <option value="Michele"> Michele </option>
+                    </Select>
+                </div>
+            </div>
+        }
+
         //Modifica o <img src=""> no JSX caso seja o preview da imagem ou a imagem da pasta
         let $imagePreview = null;
         if (this.state.url) {
