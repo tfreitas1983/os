@@ -71,6 +71,7 @@ export default class Atender extends Component {
         this.estadoDtPrevisaoNovo = this.estadoDtPrevisaoNovo.bind(this)
         this.estadoDtFechamento = this.estadoDtFechamento.bind(this)
         this.estadoDtFechamentoNovo = this.estadoDtFechamentoNovo.bind(this)
+        this.estadoDataFechamento = this.estadoDataFechamento.bind(this)
         this.estadoReaberto = this.estadoReaberto.bind(this)
         this.estadoVisita = this.estadoVisita.bind(this)
 
@@ -361,6 +362,16 @@ export default class Atender extends Component {
         }))
     }
 
+    estadoDataFechamento(e){ 
+        const dt_fechamento_novo = moment().format("YYYY-MM-DD")
+        this.setState(prevState => ({
+            current: {
+                ...prevState.current,
+                dt_fechamento: dt_fechamento_novo
+            }
+        }))
+    }
+
     estadoReaberto(e) {
         const reaberto = e.target.value
         this.setState(prevState => ({
@@ -535,7 +546,8 @@ export default class Atender extends Component {
                 value={current.dt_fechamento} 
                 ref={this.inputFechamento}
                 onChange={this.estadoDtFechamentoNovo}
-                validations={[required, vdt_fechamento]} />
+                validations={[required, vdt_fechamento]} 
+                onClick={this.estadoDataFechamento} />
             </div>
         }
 
