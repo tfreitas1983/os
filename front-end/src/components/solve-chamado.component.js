@@ -464,7 +464,7 @@ export default class Atender extends Component {
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
             dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
-            dt_fechamento: moment(this.state.current.dt_fechamento, 'YYYY-MM-DD'),
+            dt_fechamento: this.state.current.dt_fechamento,
             foto: this.state.current.foto,
             status: this.state.current.status
         }
