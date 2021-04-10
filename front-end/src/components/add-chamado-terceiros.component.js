@@ -63,8 +63,8 @@ export default class AdicionarChamadoTerceiros extends Component {
             solucao: "",
             visita: false,
             reaberto: "",
-            dt_previsao: moment(),
-            dt_fechamento: moment(),
+            dt_previsao: "",
+            dt_fechamento: "",
             foto: "default.jpg",
             imagem: "",
             url:"",
@@ -396,8 +396,8 @@ export default class AdicionarChamadoTerceiros extends Component {
             responsavel:this.state.responsavel,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
-            dt_previsao: moment(),
-            dt_fechamento: moment(),
+            dt_previsao: this.state.dt_previsao,
+            dt_fechamento:this.state.dt_fechamento,
             foto: this.state.foto,
             status: "Pendente"
         }
@@ -481,6 +481,14 @@ export default class AdicionarChamadoTerceiros extends Component {
         url:"",
         submitted: false
         })
+    }
+
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
     }
 
     render() {
@@ -703,7 +711,9 @@ export default class AdicionarChamadoTerceiros extends Component {
                                 value={this.state.descricao} 
                                 onChange={this.estadoDescricao} 
                                 name="descricao"
-                                validations={[required]}>
+                                validations={[required]}
+                                onKeyDown={this.autoResize}>
+                                
                                 </Textarea>
                             </div>
                         

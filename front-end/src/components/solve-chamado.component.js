@@ -131,7 +131,7 @@ export default class Atender extends Component {
                     id: response.data.id,
                     numchamado: response.data.numchamado,
                     nome: response.data.nome,
-                    dt_abertura: moment(response.data.dt_abertura).format('DD/MM/YYYY'),
+                    dt_abertura: moment(response.data.dt_abertura).format('YYYY-MM-DD'),
                     username: response.data.username,
                     email: response.data.email,
                     unidade: response.data.unidade,
@@ -145,13 +145,14 @@ export default class Atender extends Component {
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
                     dt_previsao: moment(response.data.dt_previsao).format('YYYY-MM-DD'),
-                    dt_fechamento: moment(response.data.dt_fechamento).format('DD-MM-YYYY'),
+                    dt_fechamento: moment(response.data.dt_fechamento).format('YYYY-MM-DD'),
                     status: response.data.status,
                     foto: response.data.foto,
                     visita: response.data.visita,
                     situacao: response.data.situacao                     
                 }
-            })             
+            }) 
+            this.autoResize()            
         })
         .catch(e => {
             console.log(e)
@@ -414,7 +415,7 @@ export default class Atender extends Component {
                 nome: this.state.current.nome,
                 username: this.state.current.username,
                 email: this.state.current.email,
-                dt_abertura: moment(this.state.current.dt_abertura, 'DD-MM-YYYY'),
+                dt_abertura: this.state.current.dt_abertura,
                 unidade: this.state.current.unidade,
                 ramal: this.state.current.ramal,
                 setor: this.state.current.setor,
@@ -427,8 +428,8 @@ export default class Atender extends Component {
                 solucao: this.state.current.solucao,
                 reaberto: this.state.current.reaberto,
                 responsavel: this.state.current.responsavel, 
-                dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
-                dt_fechamento: moment(this.state.current.dt_fechamento, 'DD-MM-YYYY'),
+                dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
+                dt_fechamento: moment(this.state.current.dt_fechamento, 'YYYY-MM-DD'),
                 situacao: this.state.current.situacao,
                 submitted: true
             })                    
@@ -473,11 +474,12 @@ export default class Atender extends Component {
             ChamadoDataService.editar(this.state.current.id, data)
             .then(response => {
                 this.setState({
+                
                     id: response.data.id,
                     nome: response.data.nome,
                     unidade: response.data.unidade,
                     email: response.data.email,
-                    dt_abertura: moment(response.data.dt_abertura, 'DD-MM-YYYY'),
+                    dt_abertura: moment(response.data.dt_abertura).format('YYYY-MM-DD'),
                     ramal: response.data.ramal,
                     setor: response.data.setor,
                     area: response.data.area,                    
@@ -495,6 +497,7 @@ export default class Atender extends Component {
                     submitted: true,
                     message: response.data.message,           
                     successful: true
+                    
                 })
                 this.enviaEmail()                    
             },
@@ -516,6 +519,19 @@ export default class Atender extends Component {
             })
         }
     }  
+
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
+        const objTextAreaFinalizado = document.getElementById('solucao');
+        while (objTextAreaFinalizado.scrollHeight > objTextAreaFinalizado.offsetHeight)
+        {
+            objTextAreaFinalizado.rows += 1;
+        }
+    }
 
     render() {
 
@@ -549,6 +565,8 @@ export default class Atender extends Component {
                 validations={[required, vdt_fechamento]} 
                 onClick={this.estadoDataFechamento} />
             </div>
+        } else {
+            finalizado = <div></div>
         }
 
         let reaberto = null
@@ -591,7 +609,9 @@ export default class Atender extends Component {
                 id="solucao"                                             
                 value={current.solucao} 
                 onChange={this.estadoSolucao} 
-                name="solucao" />
+                onKeyDown={this.autoResize}
+                name="solucao"
+                 />
             </div>            
         }
 
@@ -680,7 +700,7 @@ export default class Atender extends Component {
             $imagePreview = <img alt="" src={this.state.url} />
         }
 
-        if(current.foto.length > 30) {
+        if(current.foto && current.foto.length > 30) {
             $imagePreview = <div style={{display: 'grid', marginBottom: 2+'%'}}>                
                     <img alt="" src={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} style={{height: 200+'px'}}/>
                     <a href={`http://chamadosrj.ddns.net:8089/files/${current.foto}`} target="_blank" rel="noopener noreferrer">Visualizar</a>
@@ -823,8 +843,7 @@ export default class Atender extends Component {
                                 {ip}
                                 <div className="form-group">
                                     <label htmlFor="descricao"> Descrição </label>
-                                    <input 
-                                    type="text" 
+                                    <textarea 
                                     className="form-control" 
                                     id="descricao"                             
                                     value={current.descricao} 

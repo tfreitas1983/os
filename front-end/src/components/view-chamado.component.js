@@ -70,10 +70,24 @@ export default class VisualizarChamado extends Component {
                     situacao: response.data.situacao                     
                 }
             })
+            this.autoResize()
         })
         .catch(e => {
             console.log(e)
         })    
+    }
+
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
+        const objTextAreaFinalizado = document.getElementById('solucao');
+        while (objTextAreaFinalizado.scrollHeight > objTextAreaFinalizado.offsetHeight)
+        {
+            objTextAreaFinalizado.rows += 1;
+        }
     }
 
     render() {
@@ -145,9 +159,10 @@ export default class VisualizarChamado extends Component {
                     disabled 
                     hidden>                                                                            
                     <option value="1">Selecione</option>
+                    <option value="Escritório">Escritório</option>  
                     <option value="Caxias">Caxias</option>  
                     <option value="Nilópolis">Nilópolis</option> 
-                    <option value="Nova Iguacu"> Nova Iguaçu </option>
+                    <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
                     <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles">Vilar dos Teles</option>
@@ -260,9 +275,10 @@ export default class VisualizarChamado extends Component {
                                 disabled                                     
                                 onChange={this.estadoUnidade} >                                    
                                 <option value="1">Selecione</option>
+                                <option value="Escritório">Escritório</option>
                                 <option value="Caxias">Caxias</option>  
                                 <option value="Nilópolis">Nilópolis</option> 
-                                <option value="Nova Iguacu"> Nova Iguaçu </option>
+                                <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                 <option value="Queimados"> Queimados </option>
                                 <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                 <option value="Vilar dos Teles">Vilar dos Teles</option>
@@ -321,8 +337,7 @@ export default class VisualizarChamado extends Component {
                     
                         <div className="form-group">
                             <label htmlFor="descricao"> Descrição </label>
-                            <input 
-                            type="text" 
+                            <textarea 
                             className="form-control" 
                             id="descricao"
                             disabled 

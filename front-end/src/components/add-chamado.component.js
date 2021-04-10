@@ -58,8 +58,8 @@ export default class AdicionarChamado extends Component {
             responsavel:"",
             solucao: "",
             reaberto: "",
-            dt_previsao: moment(),
-            dt_fechamento: moment(),
+            dt_previsao: "",
+            dt_fechamento: "",
             foto: "default.jpg",
             imagem: "",
             visita: false,
@@ -354,6 +354,14 @@ export default class AdicionarChamado extends Component {
         })
     }
 
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
+    }
+
     render() {
 
         const {currentUser} = this.state
@@ -407,6 +415,7 @@ export default class AdicionarChamado extends Component {
                     disabled 
                     hidden>                                                                            
                     <option value="1">Selecione</option>
+                    <option value="Escritório">Escritório</option>  
                     <option value="Caxias">Caxias</option>  
                     <option value="Nilópolis">Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
@@ -552,7 +561,8 @@ export default class AdicionarChamado extends Component {
                                 value={this.state.descricao} 
                                 onChange={this.estadoDescricao} 
                                 name="descricao"
-                                validations={[required]}>
+                                validations={[required]}
+                                onKeyDown={this.autoResize}>
 
                                 </Textarea>
                                 

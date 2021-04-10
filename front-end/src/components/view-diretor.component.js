@@ -43,6 +43,7 @@ export default class VisualizarDiretor extends Component {
 
     componentDidMount() {
         this.buscaChamado(this.props.match.params.id)
+        
     }
 
     buscaChamado(id) {
@@ -73,11 +74,26 @@ export default class VisualizarDiretor extends Component {
                     situacao: response.data.situacao                     
                 }
             })
+            this.autoResize()
         })
         .catch(e => {
             console.log(e)
         })    
     }
+
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
+        const objTextAreaFinalizado = document.getElementById('solucao');
+        while (objTextAreaFinalizado.scrollHeight > objTextAreaFinalizado.offsetHeight)
+        {
+            objTextAreaFinalizado.rows += 1;
+        }
+    }
+
 
     render() {
         const { current, currentUser } = this.state
@@ -150,9 +166,10 @@ export default class VisualizarDiretor extends Component {
                     disabled 
                     hidden>                                                                            
                     <option value="1">Selecione</option>
+                    <option value="Escritório">Escritório</option>  
                     <option value="Caxias">Caxias</option>  
                     <option value="Nilópolis">Nilópolis</option> 
-                    <option value="Nova Iguacu"> Nova Iguaçu </option>
+                    <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
                     <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles">Vilar dos Teles</option>
@@ -224,6 +241,24 @@ export default class VisualizarDiretor extends Component {
             </div>
         }
 
+        
+
+
+
+       /* const objTextArea =  document.getElementById('descricao');
+        
+        if (objTextArea > 0) {
+            while (objTextArea.scrollHeight > objTextArea.offsetHeight) {
+                objTextArea.rows += 1;
+            }
+            while (objTextArea.scrollHeight < objTextArea.offsetHeight) {
+                objTextArea.rows -= 1;
+            }
+        } else {
+            return null
+        }
+        */
+
         return (
             <div className="submit-form">
                 { this.state.submitted ? (
@@ -261,9 +296,10 @@ export default class VisualizarDiretor extends Component {
                                 disabled                                     
                                 onChange={this.estadoUnidade} >                                    
                                 <option value="1">Selecione</option>
+                                <option value="Escritório">Escritório</option> 
                                 <option value="Caxias">Caxias</option>  
                                 <option value="Nilópolis">Nilópolis</option> 
-                                <option value="Nova Iguacu"> Nova Iguaçu </option>
+                                <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                 <option value="Queimados"> Queimados </option>
                                 <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                 <option value="Vilar dos Teles">Vilar dos Teles</option>
@@ -332,8 +368,7 @@ export default class VisualizarDiretor extends Component {
 
                         <div className="form-group">
                             <label htmlFor="descricao"> Descrição </label>
-                            <input 
-                            type="text" 
+                            <textarea 
                             className="form-control" 
                             id="descricao"
                             disabled 

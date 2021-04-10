@@ -128,6 +128,7 @@ export default class EditarChamado extends Component {
                     situacao: response.data.situacao                     
                 }
             })
+            this.autoResize()
             })
             .catch(e => {
                 console.log(e)
@@ -452,6 +453,14 @@ export default class EditarChamado extends Component {
             })        
     }  
 
+    autoResize = () => {
+        const objTextArea = document.getElementById('descricao');
+        while (objTextArea.scrollHeight > objTextArea.offsetHeight)
+        {
+            objTextArea.rows += 1;
+        }
+    }
+
     render() {
 
         const { current } = this.state
@@ -626,9 +635,10 @@ export default class EditarChamado extends Component {
                                         onChange={this.estadoUnidade}
                                         disabled >                                    
                                         <option value="1">Selecione</option>
+                                        <option value="Escritório">Escritório</option>  
                                         <option value="Caxias">Caxias</option>  
                                         <option value="Nilópolis">Nilópolis</option> 
-                                        <option value="Nova Iguacu"> Nova Iguaçu </option>
+                                        <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                         <option value="Queimados"> Queimados </option>
                                         <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                         <option value="Vilar dos Teles">Vilar dos Teles</option>
