@@ -428,8 +428,6 @@ export default class Atender extends Component {
                 solucao: this.state.current.solucao,
                 reaberto: this.state.current.reaberto,
                 responsavel: this.state.current.responsavel, 
-                dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
-                dt_fechamento: moment(this.state.current.dt_fechamento, 'YYYY-MM-DD'),
                 situacao: this.state.current.situacao,
                 submitted: true
             })                    
@@ -443,6 +441,26 @@ export default class Atender extends Component {
 
         
         e.preventDefault()
+
+        if (this.state.current.status !== "Finalizado") {
+            this.setState(prevState => ({
+                current: {
+                    ...prevState.current,
+                    dt_fechamento: moment().format('YYYY-MM-DD')
+                }
+            }))
+        }
+
+        if (this.state.current.status !== "Agendado") {
+            this.setState(prevState => ({
+                current: {
+                    ...prevState.current,
+                    dt_previsao: moment().format('YYYY-MM-DD')
+                }
+            }))
+        }
+
+
 
         this.setState({
             message: "",
@@ -464,7 +482,7 @@ export default class Atender extends Component {
             ip: this.state.current.ip,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
-            dt_previsao: moment(this.state.current.dt_previsao, 'YYYY-MM-DD'),
+            dt_previsao: this.state.current.dt_previsao,
             dt_fechamento: this.state.current.dt_fechamento,
             foto: this.state.current.foto,
             status: this.state.current.status
@@ -526,10 +544,12 @@ export default class Atender extends Component {
         {
             objTextArea.rows += 1;
         }
-        const objTextAreaFinalizado = document.getElementById('solucao');
-        while (objTextAreaFinalizado.scrollHeight > objTextAreaFinalizado.offsetHeight)
-        {
-            objTextAreaFinalizado.rows += 1;
+        if (this.state.current.solucao !== "" || this.state.current.solucao !== undefined) {
+            const objTextAreaFinalizado = document.getElementById('solucao');
+            while (objTextAreaFinalizado.scrollHeight > objTextAreaFinalizado.offsetHeight)
+            {
+                objTextAreaFinalizado.rows += 1;
+            }
         }
     }
 

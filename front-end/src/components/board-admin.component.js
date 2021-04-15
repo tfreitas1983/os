@@ -572,7 +572,7 @@ export default class BoardAdmin extends Component {
     return (
       <div>
         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10+'px'}}>
-          <h1> Chamados a atender </h1>
+          <h1 style={{fontFamily: 'Open-Sans'}}> Chamados a atender </h1>
           <div>
             <div style={{
                 backgroundColor: '#339b44', 

@@ -285,9 +285,11 @@ Link:hover {
 }
 
 table, th, td {
-  border: 1px solid black;
+  
   margin-top: 10px;
   width: max-content;
+  border-color: #AFAFAF;
+ 
 }
 
 .preview{
@@ -459,6 +461,11 @@ label {
   text-decoration: none;
 }
 
+.nav-item:hover {
+  background-color: #0f4f33;
+  padding: 10px;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -523,3 +530,16 @@ label {
       word-wrap:break-word;
   }
   
+  tr:hover {
+    box-shadow: 10px 10px 8px rgb(181, 192, 181);
+    border-bottom: 3px solid #3a7424;
+  }
+
+  th {
+    border-bottom: 3px solid #afafaf;
+    border-top: 3px solid #afafaf;
+  }
+
+  tr {
+    border-top: 2px solid #afafaf;  
+  }

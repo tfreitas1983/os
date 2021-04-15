@@ -6,6 +6,7 @@ import * as momentjs from 'moment'
 import moment from "moment-business-days"
 import {FaSignInAlt, FaEye, FaRedo, FaCheckCircle} from 'react-icons/fa'
 import { IconContext } from "react-icons"
+import loading from '../images/loading.gif'
 
 
 export default class BoardModerator extends Component {
@@ -47,7 +48,9 @@ export default class BoardModerator extends Component {
       finalizados: true,
       mostraFiltro: true,
       toogleHidden: true,
-      className: 'hidden'
+      className: 'hidden',
+      mostraLoading: false,
+      classNameLoading: 'hidden',
     }
   }
 
@@ -82,9 +85,13 @@ export default class BoardModerator extends Component {
             this.setState({
                 chamados: docs,
                 info: info,
-                page: page
+                page: page,
+                mostraLoading: true
             })                
         })
+        this.setState({
+            toogleLoading: false
+        })  
         .catch(e => {
             console.log(e)
         })
@@ -294,18 +301,27 @@ export default class BoardModerator extends Component {
           })
   }
 
-  buscarArea(page = 1) {
-    ChamadoDataService.buscarArea(this.state.buscaArea, page)
+  async buscarArea(page = 1) {
+    this.setState({                
+        mostraLoading: true
+                               
+    }) 
+    this.toogleLoading()
+    await ChamadoDataService.buscarArea(this.state.buscaArea, page)
         .then(response => {
             const { docs, ...info } = response.data 
-            this.setState({
+            this.setState({                
                 chamados: response.data.docs,
-                info: info                                 
-            })    
+                info: info                
+            })                        
         })
         .catch(e => {
             console.log(e)
         })
+        this.setState({                
+            mostraLoading: false               
+        })
+        await this.toogleLoading() 
 }
 
  estadoFinalizados(e) {
@@ -332,6 +348,22 @@ export default class BoardModerator extends Component {
       }        
   }
 
+  toogleLoading = () => {
+   /* this.setState(state=> ({
+        mostraLoading: !state.mostraLoading
+      }))
+    */
+      if(this.state.mostraLoading === true) {
+        this.setState({
+            classNameLoading: 'show'
+        })
+    } else {
+        this.setState({
+            classNameLoading: 'hidden'
+        })
+    }   
+  }
+
   mostrarFinalizados() {
     this.setState(state=> ({
         toogleHidden: !state.toogleHidden
@@ -350,9 +382,9 @@ export default class BoardModerator extends Component {
   }
 
   render() {
-    const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus, finalizados} = this.state
+    const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus, finalizados, mostraFiltro, classNameLoading, mostraLoading} = this.state
 
-    let i = 0
+    let i = 0, filtros = null
     let paginas = [], mostrar = null, quantPend = [], quantAg = [], quantAp = [], quantAn = [], quantAt = [], quantForn = [], quantFin = [], quantCanc = [], quantReab = []
     for ( i = 1; i <= info.pages; i++ ) {
       paginas.push(
@@ -364,8 +396,78 @@ export default class BoardModerator extends Component {
       )            
     } 
 
+    if (chamados && mostraFiltro === false ) {
+        filtros = <div className={className}>
+          <div className="form-group" style={{display: 'flex', justifyContent: 'space-around', marginTop: 15+'px'}}>
+              <input type="number" min="1" className="form-control" placeholder="Busque pelo número" onChange={this.estadoBuscaChamado} onKeyUp={this.buscarChamado} ref={el => this.inputNum = el}/>
+              <input type="text" pattern="[a-zA-Z]*" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} onKeyUp={this.buscarNome} ref={el => this.inputNome = el}/>
+              <input type="date" className="form-control" placeholder="Busque pela Data" onChange={this.estadoBuscaData} ref={el => this.inputData = el} onKeyUp={this.buscarData} />
+              <select 
+                  className="form-control" 
+                  id="unidade" 
+                  name="unidade"                        
+                  value={buscaUnidade}                                    
+                  onChange={this.estadoBuscaUnidade}
+                  ref={el => this.inputUnidade = el} >                              
+                  <option value="" disabled> --- Selecione a unidade --- </option>
+                  <option value="Caxias">Caxias</option>  
+                  <option value="Nilópolis">Nilópolis</option> 
+                  <option value="Nova Iguaçu"> Nova Iguaçu </option>
+                  <option value="Queimados"> Queimados </option>
+                  <option value="Rio de Janeiro"> Rio de Janeiro </option>
+                  <option value="Vilar dos Teles">Vilar dos Teles</option>
+                  <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
+                  <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
+              </select>
+              <select 
+                className="form-control" 
+                id="area" 
+                name="area"                        
+                value={buscaArea}                                    
+                onChange={this.estadoBuscaArea} >                    
+                <option value="">Filtre por área</option>
+                <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
+                <option value="Ar Condicionado"> Ar Condicionado </option>
+                <option value="Compras"> Compras </option>  
+                <option value="Financeiro"> Financeiro </option>  
+                <option value="Gráfica"> Gráfica </option>  
+                <option value="Manutenção"> Manutenção </option> 
+                <option value="Recursos Humanos"> Recursos Humanos </option>                                                                
+                <option value="TI"> TI </option>
+                <option value="Transporte"> Transporte </option>
+              </select>
+              <select 
+                  className="form-control" 
+                  id="status" 
+                  name="status"                        
+                  value={buscaStatus}                                    
+                  onChange={this.estadoBuscaStatus} > 
+                  <option value="" disabled> --- Filtre por status --- </option>                                
+                  <option value="Pendente"> Pendente </option>
+                  <option value="Em análise"> Em análise </option>  
+                  <option value="Aprovação Glauber"> Aprovação Glauber </option>  
+                  <option value="Agendado"> Agendado </option>  
+                  <option value="Em atendimento"> Em atendimento  </option> 
+                  <option value="Finalizado"> Finalizado </option>                                
+                  <option value="Cancelado"> Cancelado </option>
+                  <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
+              </select>
+              <button type="button" className="btn btn-danger" onClick={this.limpaCurrent}>
+                Limpar
+              </button>              
+          </div>       
+          
+         </div> 
+    }
+
+    if (chamados && mostraLoading === true) {
+        mostrar = <div  style={{display: 'flex', justifyContent: 'center', height: 200+'px'}}>
+        <img src={loading} className={classNameLoading}/>
+        </div>
+    }
+
     
-    if (chamados) { 
+    if (chamados  && mostraLoading === false) { 
       mostrar = 
       <div>
         <table style={{marginBottom: 3+'%'}}>
@@ -592,75 +694,18 @@ export default class BoardModerator extends Component {
 
     return (
       <div>
+        
         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 1+'%'}}>
-          <h1> Lista de Chamados </h1>
+          <h1 style={{fontFamily: 'Open-Sans'}}> Lista de Chamados </h1>
+          
           <div>
             <button type="button" onClick={this.toggleFiltro} className="btn btn-info">
                 {this.state.mostraFiltro ?  'Filtros': 'Esconder' }
             </button>
           </div>
-        </div>      
-        <div className={className}>
-          <div className="form-group" style={{display: 'flex', justifyContent: 'space-around', marginTop: 15+'px'}}>
-              <input type="number" min="1" className="form-control" placeholder="Busque pelo número" onChange={this.estadoBuscaChamado} onKeyUp={this.buscarChamado} ref={el => this.inputNum = el}/>
-              <input type="text" pattern="[a-zA-Z]*" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} onKeyUp={this.buscarNome} ref={el => this.inputNome = el}/>
-              <input type="date" className="form-control" placeholder="Busque pela Data" onChange={this.estadoBuscaData} ref={el => this.inputData = el} onKeyUp={this.buscarData} />
-              <select 
-                  className="form-control" 
-                  id="unidade" 
-                  name="unidade"                        
-                  value={buscaUnidade}                                    
-                  onChange={this.estadoBuscaUnidade}
-                  ref={el => this.inputUnidade = el} >                              
-                  <option value="" disabled> --- Selecione a unidade --- </option>
-                  <option value="Caxias">Caxias</option>  
-                  <option value="Nilópolis">Nilópolis</option> 
-                  <option value="Nova Iguaçu"> Nova Iguaçu </option>
-                  <option value="Queimados"> Queimados </option>
-                  <option value="Rio de Janeiro"> Rio de Janeiro </option>
-                  <option value="Vilar dos Teles">Vilar dos Teles</option>
-                  <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                  <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
-              </select>
-              <select 
-                className="form-control" 
-                id="area" 
-                name="area"                        
-                value={buscaArea}                                    
-                onChange={this.estadoBuscaArea} >                    
-                <option value="">Filtre por área</option>
-                <option value="Alarme/CFTV/Rede/Telefonia"> Alarme/CFTV/Rede/Telefonia </option>
-                <option value="Ar Condicionado"> Ar Condicionado </option>
-                <option value="Compras"> Compras </option>  
-                <option value="Financeiro"> Financeiro </option>  
-                <option value="Gráfica"> Gráfica </option>  
-                <option value="Manutenção"> Manutenção </option> 
-                <option value="Recursos Humanos"> Recursos Humanos </option>                                                                
-                <option value="TI"> TI </option>
-                <option value="Transporte"> Transporte </option>
-              </select>
-              <select 
-                  className="form-control" 
-                  id="status" 
-                  name="status"                        
-                  value={buscaStatus}                                    
-                  onChange={this.estadoBuscaStatus} > 
-                  <option value="" disabled> --- Filtre por status --- </option>                                
-                  <option value="Pendente"> Pendente </option>
-                  <option value="Em análise"> Em análise </option>  
-                  <option value="Aprovação Glauber"> Aprovação Glauber </option>  
-                  <option value="Agendado"> Agendado </option>  
-                  <option value="Em atendimento"> Em atendimento  </option> 
-                  <option value="Finalizado"> Finalizado </option>                                
-                  <option value="Cancelado"> Cancelado </option>
-                  <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
-              </select>
-              <button type="button" className="btn btn-danger" onClick={this.limpaCurrent}>
-                Limpar
-              </button>              
-          </div>       
           
-         </div>     
+        </div>      
+        {filtros}    
         <div>
         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                <pre> {quantPend.length} Pendentes | {quantAg.length} Agendados | {quantAt.length} Em atendimento | {quantAp.length} ag. Aprovação | {quantAn.length} Em análise 
