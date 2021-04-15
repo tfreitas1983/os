@@ -76,8 +76,13 @@ export default class BoardModerator extends Component {
         })
   }
 
-  pegaChamados(page = 1) {        
-    ChamadoDataService.buscarTodos(page)
+  async pegaChamados(page = 1) {
+    this.setState({                
+        mostraLoading: true
+                               
+    }) 
+    //this.toogleLoading()        
+    await ChamadoDataService.buscarTodos(page)
         .then(response => {
         //REST do response da API em duas constantes: 
         // "docs" com os dados do chamado e "info" com os dados das páginas
@@ -85,16 +90,16 @@ export default class BoardModerator extends Component {
             this.setState({
                 chamados: docs,
                 info: info,
-                page: page,
-                mostraLoading: true
+                page: page
             })                
-        })
-        this.setState({
-            toogleLoading: false
-        })  
+        })        
         .catch(e => {
             console.log(e)
         })
+        this.setState({                
+            mostraLoading: false               
+        })
+       // await this.toogleLoading()
   }
 
   ativaChamado(chamado, index) {
@@ -306,7 +311,7 @@ export default class BoardModerator extends Component {
         mostraLoading: true
                                
     }) 
-    this.toogleLoading()
+    //this.toogleLoading()
     await ChamadoDataService.buscarArea(this.state.buscaArea, page)
         .then(response => {
             const { docs, ...info } = response.data 
@@ -321,7 +326,7 @@ export default class BoardModerator extends Component {
         this.setState({                
             mostraLoading: false               
         })
-        await this.toogleLoading() 
+       // await this.toogleLoading() 
 }
 
  estadoFinalizados(e) {
@@ -348,12 +353,9 @@ export default class BoardModerator extends Component {
       }        
   }
 
-  toogleLoading = () => {
-   /* this.setState(state=> ({
-        mostraLoading: !state.mostraLoading
-      }))
-    */
-      if(this.state.mostraLoading === true) {
+  /*toogleLoading = () => {
+   
+    if(this.state.mostraLoading === true) {
         this.setState({
             classNameLoading: 'show'
         })
@@ -362,7 +364,7 @@ export default class BoardModerator extends Component {
             classNameLoading: 'hidden'
         })
     }   
-  }
+  }*/
 
   mostrarFinalizados() {
     this.setState(state=> ({
@@ -460,9 +462,9 @@ export default class BoardModerator extends Component {
          </div> 
     }
 
-    if (chamados && mostraLoading === true) {
+    if (mostraLoading === true) {
         mostrar = <div  style={{display: 'flex', justifyContent: 'center', height: 200+'px'}}>
-        <img src={loading} className={classNameLoading}/>
+        <img src={loading}/>
         </div>
     }
 
