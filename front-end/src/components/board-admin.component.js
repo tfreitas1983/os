@@ -6,6 +6,7 @@ import * as momentjs from 'moment'
 import moment from "moment-business-days"
 import {FaSignInAlt, FaEye, FaRedo, FaCheckCircle} from 'react-icons/fa'
 import { IconContext } from "react-icons"
+import loading from '../images/loading.gif'
 
 
 export default class BoardAdmin extends Component {
@@ -43,7 +44,8 @@ export default class BoardAdmin extends Component {
       finalizados: true,
       mostraFiltro: true,
       toogleHidden: true,
-      className: 'hidden'
+      className: 'hidden',
+      mostraLoading: false
     }
   }
 
@@ -52,8 +54,11 @@ export default class BoardAdmin extends Component {
     this.mostrarFinalizados()
   }
 
-  pegaChamadosAbertos(page = 1) {        
-    ChamadoDataService.buscarAbertos(page)
+  async pegaChamadosAbertos(page = 1) {        
+    this.setState({                
+        mostraLoading: true                               
+    }) 
+    await ChamadoDataService.buscarAbertos(page)
         .then(response => {
         //REST do response da API em duas constantes: 
         // "docs" com os dados do chamado e "info" com os dados das páginas
@@ -67,10 +72,17 @@ export default class BoardAdmin extends Component {
         .catch(e => {
             console.log(e)
         })
+        this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
-  pegaChamados(page = 1) {        
-    ChamadoDataService.buscarTodos(page)
+  async pegaChamados(page = 1) {        
+    this.setState({                
+        mostraLoading: true
+                               
+    }) 
+    await ChamadoDataService.buscarTodos(page)
         .then(response => {
         //REST do response da API em duas constantes: 
         // "docs" com os dados do chamado e "info" com os dados das páginas
@@ -84,6 +96,10 @@ export default class BoardAdmin extends Component {
         .catch(e => {
             console.log(e)
         })
+        this.setState({                
+            mostraLoading: false
+                                   
+        }) 
   }
 
   ativaChamado(chamado, index) {
@@ -93,22 +109,23 @@ export default class BoardAdmin extends Component {
     })
   }
 
-  estadoBuscaNome(e) {
+  async estadoBuscaNome(e) {
     const buscaNome = e.target.value.replace(/\d+/g, "")
     this.inputNome.value = this.inputNome.value.replace(/\d+/g, "")
-    this.setState({
+    await this.setState({
         buscaNome: buscaNome, 
         buscaChamado : "",           
         buscaData: "",
         buscaStatus: "",
         buscaArea: "",
-        buscaUnidade: ""
+        buscaUnidade: "",
+        chamados: []
         })
         this.inputData.value = ""
         this.inputNum.value = ""
-        this.timerID = setTimeout(      
-            () => this.buscarNome(),1000
-        )        
+        if (buscaNome.length > 3) {
+            this.buscarNome()
+        }      
   }
 
   estadoBuscaChamado(e) {
@@ -195,22 +212,33 @@ export default class BoardAdmin extends Component {
       })
   }
 
-  buscarNome(page = 1) {
-      ChamadoDataService.buscarNome(this.state.buscaNome, page)
+  async buscarNome(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                   
+    }) 
+    await ChamadoDataService.buscarNome(this.state.buscaNome, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
-                  chamados: response.data.docs,
-                  info: info                                 
+                chamados: response.data.docs,
+                info: info                                 
               })    
           })
           .catch(e => {
               console.log(e)
           })
+        this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
-  buscarChamado(page = 1) {
-      ChamadoDataService.buscarChamado(this.state.buscaChamado, page)
+  async buscarChamado(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                               
+    }) 
+    await  ChamadoDataService.buscarChamado(this.state.buscaChamado, page)
       .then(response => {
           const { docs, ...info } = response.data 
           this.setState({
@@ -221,10 +249,17 @@ export default class BoardAdmin extends Component {
       .catch(e => {
           console.log(e)
       })
+      this.setState({                
+        mostraLoading: false                               
+    }) 
   }
 
-  buscarData(page = 1) {
-      ChamadoDataService.buscarData(this.state.buscaData, page)
+  async buscarData(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                             
+    }) 
+    await  ChamadoDataService.buscarData(this.state.buscaData, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -235,10 +270,17 @@ export default class BoardAdmin extends Component {
           .catch(e => {
               console.log(e)
           })
+          this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
-  buscarUnidade(page = 1) {
-      ChamadoDataService.buscarUnidade(this.state.buscaUnidade, page)
+  async buscarUnidade(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                
+    }) 
+    await  ChamadoDataService.buscarUnidade(this.state.buscaUnidade, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -249,10 +291,17 @@ export default class BoardAdmin extends Component {
           .catch(e => {
               console.log(e)
           })
+          this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
-  buscarStatus(page = 1) {
-      ChamadoDataService.buscarStatus(this.state.buscaStatus, page)
+  async buscarStatus(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                
+    }) 
+    await  ChamadoDataService.buscarStatus(this.state.buscaStatus, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -263,6 +312,9 @@ export default class BoardAdmin extends Component {
           .catch(e => {
               console.log(e)
           })
+          this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
   toggleFiltro() {
@@ -306,10 +358,10 @@ export default class BoardAdmin extends Component {
   }
 
   render() {
-    const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus, finalizados} = this.state
+    const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus, finalizados, mostraLoading, mostraFiltro} = this.state
 
     let i = 0, quantPend = [], quantAg = [], quantAp = [], quantAn = [], quantAt = [], quantForn = [], quantFin = [], quantCanc = [], quantReab = []
-    let paginas = [], mostrar = null, filtro = null
+    let paginas = [], mostrar = null, filtro = null, filtros = null
     for ( i = 1; i <= info.pages; i++ ) {
       paginas.push(
           <li className={"page-item " + (page === i ? "active" : "")} key={i}>
@@ -327,15 +379,63 @@ export default class BoardAdmin extends Component {
         </div>
     }
 
+    if (chamados && mostraFiltro === false) {
+       filtros = <div className={className}>
+          <div className="form-group" style={{display: 'flex', justifyContent: 'space-around', marginTop: 15+'px'}}>
+              <input type="number" min="1" className="form-control" placeholder="Busque pelo número" onChange={this.estadoBuscaChamado} onKeyUp={this.buscarChamado} ref={el => this.inputNum = el}/>
+              <input type="text" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} ref={el => this.inputNome = el}/>
+              <input type="date" className="form-control" placeholder="Busque pela Data" onChange={this.estadoBuscaData} ref={el => this.inputData = el} onKeyUp={this.buscarData} />
+              <select 
+                  className="form-control" 
+                  id="unidade" 
+                  name="unidade"                        
+                  value={buscaUnidade}                                    
+                  onChange={this.estadoBuscaUnidade}
+                  ref={el => this.inputUnidade = el} >                              
+                  <option value="" disabled> --- Selecione a unidade --- </option>
+                  <option value="Escritório">Escritório</option>  
+                  <option value="Caxias">Caxias</option>  
+                  <option value="Nilópolis">Nilópolis</option> 
+                  <option value="Nova Iguaçu"> Nova Iguaçu </option>
+                  <option value="Queimados"> Queimados </option>
+                  <option value="Rio de Janeiro"> Rio de Janeiro </option>
+                  <option value="Vilar dos Teles">Vilar dos Teles</option>
+                  <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
+                  <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
+              </select>
+              <select 
+                  className="form-control" 
+                  id="status" 
+                  name="status"                        
+                  value={buscaStatus}                                    
+                  onChange={this.estadoBuscaStatus} > 
+                  <option value="" disabled> --- Filtre por status --- </option>                                
+                  <option value="Pendente"> Pendente </option>
+                  <option value="Em análise"> Em análise </option>  
+                  <option value="Aprovação Glauber"> Aprovação Glauber </option>  
+                  <option value="Agendado"> Agendado </option>  
+                  <option value="Em atendimento"> Em atendimento  </option> 
+                  <option value="Finalizado"> Finalizado </option>                                
+                  <option value="Cancelado"> Cancelado </option>
+                  <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
+              </select>
+          </div>       
+         </div>  
+    }
 
-    if (chamados) {      
-      filtro = chamados.filter((item) => {
-          return (item.area === currentUser.area[0] || item.area === currentUser.area[1] || item.area === currentUser.area[2]  || item.area === currentUser.area[3] || item.area === currentUser.area[4])
-      })        
-           
-      mostrar = 
-      <div>
-        
+    if (mostraLoading === true) {
+        mostrar = <div  style={{display: 'flex', justifyContent: 'center', height: 200+'px'}}>
+        <img src={loading}/>
+        </div>
+    }
+
+       
+    filtro = chamados.filter((item) => {
+        return (item.area === currentUser.area[0] || item.area === currentUser.area[1] || item.area === currentUser.area[2]  || item.area === currentUser.area[3] || item.area === currentUser.area[4])
+    })        
+    
+    if (chamados && mostraLoading === false) {   
+        mostrar = <div>        
         <div className="list-group">
         <table style={{marginBottom: 3+'%'}}>
           <tbody>
@@ -601,46 +701,7 @@ export default class BoardAdmin extends Component {
             </button>
           </div>
         </div>      
-        <div className={className}>
-          <div className="form-group" style={{display: 'flex', justifyContent: 'space-around', marginTop: 15+'px'}}>
-              <input type="number" min="1" className="form-control" placeholder="Busque pelo número" onChange={this.estadoBuscaChamado} onKeyUp={this.buscarChamado} ref={el => this.inputNum = el}/>
-              <input type="text" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} onKeyUp={this.buscarNome} ref={el => this.inputNome = el}/>
-              <input type="date" className="form-control" placeholder="Busque pela Data" onChange={this.estadoBuscaData} ref={el => this.inputData = el} onKeyUp={this.buscarData} />
-              <select 
-                  className="form-control" 
-                  id="unidade" 
-                  name="unidade"                        
-                  value={buscaUnidade}                                    
-                  onChange={this.estadoBuscaUnidade}
-                  ref={el => this.inputUnidade = el} >                              
-                  <option value="" disabled> --- Selecione a unidade --- </option>
-                  <option value="Caxias">Caxias</option>  
-                  <option value="Nilópolis">Nilópolis</option> 
-                  <option value="Nova Iguaçu"> Nova Iguaçu </option>
-                  <option value="Queimados"> Queimados </option>
-                  <option value="Rio de Janeiro"> Rio de Janeiro </option>
-                  <option value="Vilar dos Teles">Vilar dos Teles</option>
-                  <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                  <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
-              </select>
-              <select 
-                  className="form-control" 
-                  id="status" 
-                  name="status"                        
-                  value={buscaStatus}                                    
-                  onChange={this.estadoBuscaStatus} > 
-                  <option value="" disabled> --- Filtre por status --- </option>                                
-                  <option value="Pendente"> Pendente </option>
-                  <option value="Em análise"> Em análise </option>  
-                  <option value="Aprovação Glauber"> Aprovação Glauber </option>  
-                  <option value="Agendado"> Agendado </option>  
-                  <option value="Em atendimento"> Em atendimento  </option> 
-                  <option value="Finalizado"> Finalizado </option>                                
-                  <option value="Cancelado"> Cancelado </option>
-                  <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
-              </select>
-          </div>       
-         </div>     
+        {filtros}   
         <div>
             <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                <pre> {quantPend.length} Pendentes | {quantAg.length} Agendados | {quantAt.length} Em atendimento | {quantAp.length} ag. Aprovação | {quantAn.length} Em análise 

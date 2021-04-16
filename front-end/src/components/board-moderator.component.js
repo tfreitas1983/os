@@ -81,7 +81,7 @@ export default class BoardModerator extends Component {
         mostraLoading: true
                                
     }) 
-    //this.toogleLoading()        
+       
     await ChamadoDataService.buscarTodos(page)
         .then(response => {
         //REST do response da API em duas constantes: 
@@ -99,7 +99,7 @@ export default class BoardModerator extends Component {
         this.setState({                
             mostraLoading: false               
         })
-       // await this.toogleLoading()
+       
   }
 
   ativaChamado(chamado, index) {
@@ -109,22 +109,23 @@ export default class BoardModerator extends Component {
     })
   }
 
-  estadoBuscaNome(e) {
+  async estadoBuscaNome(e) {
     const buscaNome = e.target.value.replace(/\d+/g, "")
     this.inputNome.value = this.inputNome.value.replace(/\d+/g, "")            
-    this.setState({
+    await this.setState({
         buscaNome: buscaNome, 
         buscaChamado : "",           
         buscaData: "",
         buscaStatus: "",
         buscaArea: "",
-        buscaUnidade: ""
+        buscaUnidade: "",
+        chamados: []
         })
         this.inputData.value = ""
         this.inputNum.value = ""
-        this.timerID = setTimeout(      
-            () => this.buscarNome(),1000
-        )        
+        if (buscaNome.length > 3) {
+            this.buscarNome()
+        }        
   }
 
   estadoBuscaChamado(e) {
@@ -236,22 +237,35 @@ export default class BoardModerator extends Component {
       this.pegaChamados()
   }
 
-  buscarNome(page = 1) {
-      ChamadoDataService.buscarNome(this.state.buscaNome, page)
-          .then(response => {
-              const { docs, ...info } = response.data 
-              this.setState({
-                  chamados: response.data.docs,
-                  info: info                                 
-              })    
-          })
-          .catch(e => {
-              console.log(e)
-          })
+  async buscarNome(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                
+    }) 
+    await ChamadoDataService.buscarNome(this.state.buscaNome, page)
+        .then(response => {
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: response.data.docs,
+                info: info                                 
+            })    
+        })
+        .catch(e => {
+            console.log(e)
+        })
+        this.setState({                
+            mostraLoading: false
+                                   
+        }) 
   }
 
-  buscarChamado(page = 1) {
-      ChamadoDataService.buscarChamado(this.state.buscaChamado, page)
+  async buscarChamado(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false 
+                               
+    }) 
+    await  ChamadoDataService.buscarChamado(this.state.buscaChamado, page)
       .then(response => {
           const { docs, ...info } = response.data 
           this.setState({
@@ -262,10 +276,19 @@ export default class BoardModerator extends Component {
       .catch(e => {
           console.log(e)
       })
+      this.setState({                
+        mostraLoading: false
+                               
+    }) 
   }
 
-  buscarData(page = 1) {
-      ChamadoDataService.buscarData(this.state.buscaData, page)
+  async buscarData(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false 
+                               
+    }) 
+    await  ChamadoDataService.buscarData(this.state.buscaData, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -276,10 +299,17 @@ export default class BoardModerator extends Component {
           .catch(e => {
               console.log(e)
           })
+          this.setState({                
+            mostraLoading: false                                   
+        }) 
   }
 
-  buscarUnidade(page = 1) {
-      ChamadoDataService.buscarUnidade(this.state.buscaUnidade, page)
+  async buscarUnidade(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                
+    }) 
+    await  ChamadoDataService.buscarUnidade(this.state.buscaUnidade, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -290,10 +320,17 @@ export default class BoardModerator extends Component {
           .catch(e => {
               console.log(e)
           })
+          this.setState({                
+            mostraLoading: false                                   
+        }) 
   }
 
-  buscarStatus(page = 1) {
-      ChamadoDataService.buscarStatus(this.state.buscaStatus, page)
+  async buscarStatus(page = 1) {
+    this.setState({                
+        mostraLoading: true,
+        finalizados: false                                
+    }) 
+    await  ChamadoDataService.buscarStatus(this.state.buscaStatus, page)
           .then(response => {
               const { docs, ...info } = response.data 
               this.setState({
@@ -304,14 +341,17 @@ export default class BoardModerator extends Component {
           .catch(e => {
               console.log(e)
           })
+        this.setState({                
+            mostraLoading: false                               
+        }) 
   }
 
   async buscarArea(page = 1) {
     this.setState({                
-        mostraLoading: true
-                               
+        mostraLoading: true,
+        finalizados: false                                
     }) 
-    //this.toogleLoading()
+    
     await ChamadoDataService.buscarArea(this.state.buscaArea, page)
         .then(response => {
             const { docs, ...info } = response.data 
@@ -326,7 +366,7 @@ export default class BoardModerator extends Component {
         this.setState({                
             mostraLoading: false               
         })
-       // await this.toogleLoading() 
+       
 }
 
  estadoFinalizados(e) {
@@ -352,19 +392,6 @@ export default class BoardModerator extends Component {
           })
       }        
   }
-
-  /*toogleLoading = () => {
-   
-    if(this.state.mostraLoading === true) {
-        this.setState({
-            classNameLoading: 'show'
-        })
-    } else {
-        this.setState({
-            classNameLoading: 'hidden'
-        })
-    }   
-  }*/
 
   mostrarFinalizados() {
     this.setState(state=> ({
@@ -402,7 +429,7 @@ export default class BoardModerator extends Component {
         filtros = <div className={className}>
           <div className="form-group" style={{display: 'flex', justifyContent: 'space-around', marginTop: 15+'px'}}>
               <input type="number" min="1" className="form-control" placeholder="Busque pelo número" onChange={this.estadoBuscaChamado} onKeyUp={this.buscarChamado} ref={el => this.inputNum = el}/>
-              <input type="text" pattern="[a-zA-Z]*" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} onKeyUp={this.buscarNome} ref={el => this.inputNome = el}/>
+              <input type="text" pattern="[a-zA-Z]*" className="form-control" placeholder="Busque pelo nome" onChange={this.estadoBuscaNome} ref={el => this.inputNome = el}/>
               <input type="date" className="form-control" placeholder="Busque pela Data" onChange={this.estadoBuscaData} ref={el => this.inputData = el} onKeyUp={this.buscarData} />
               <select 
                   className="form-control" 
@@ -412,6 +439,7 @@ export default class BoardModerator extends Component {
                   onChange={this.estadoBuscaUnidade}
                   ref={el => this.inputUnidade = el} >                              
                   <option value="" disabled> --- Selecione a unidade --- </option>
+                  <option value="Escritório">Escritório</option>  
                   <option value="Caxias">Caxias</option>  
                   <option value="Nilópolis">Nilópolis</option> 
                   <option value="Nova Iguaçu"> Nova Iguaçu </option>
