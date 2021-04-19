@@ -437,13 +437,13 @@ export default class Atender extends Component {
         })
     }
 
-    salvarChamado(e) {
+    async salvarChamado(e) {
 
         
         e.preventDefault()
 
         if (this.state.current.status !== "Finalizado") {
-            this.setState(prevState => ({
+            await this.setState(prevState => ({
                 current: {
                     ...prevState.current,
                     dt_fechamento: moment().format('YYYY-MM-DD')
@@ -452,7 +452,7 @@ export default class Atender extends Component {
         }
 
         if (this.state.current.status !== "Agendado") {
-            this.setState(prevState => ({
+            await this.setState(prevState => ({
                 current: {
                     ...prevState.current,
                     dt_previsao: moment().format('YYYY-MM-DD')
