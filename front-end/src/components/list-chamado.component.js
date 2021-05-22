@@ -25,6 +25,11 @@ export default class ChamadosLista extends Component {
         this.buscarStatus = this.buscarStatus.bind(this)
         this.toggleFiltro = this.toggleFiltro.bind(this)
 
+        this.prevPage = this.prevPage.bind(this)
+        this.nextPage = this.nextPage.bind(this) 
+        this.limpaCurrent = this.limpaCurrent.bind(this)
+        this.selecionaPagina = this.selecionaPagina.bind(this)
+
         this.state = {
             chamados: [],
             info: {},
@@ -38,16 +43,40 @@ export default class ChamadosLista extends Component {
             buscaArea: "",
             buscaStatus: "",
             mostraFiltro: true,
-            className: 'hidden'
+            className: 'hidden'            
         }
     }
 
     componentDidMount() {
-        this.pegaChamados()        
+        if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+            this.pegaChamados()        
+        }
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+            this.pegaChamadosUsuario()        
+        }
+        
     }
 
     pegaChamados(page = 1) {        
         ChamadoDataService.buscarTodos(page)
+            .then(response => {
+            //REST do response da API em duas constantes: 
+            // "docs" com os dados do chamado e "info" com os dados das páginas
+                const { docs, ...info } = response.data 
+                this.setState({
+                    chamados: docs,
+                    info: info,
+                    page: page
+                })                
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
+    pegaChamadosUsuario(page = 1) {        
+        ChamadoDataService.buscarUsuario(this.state.currentUser.username ,page)
             .then(response => {
             //REST do response da API em duas constantes: 
             // "docs" com os dados do chamado e "info" com os dados das páginas
@@ -151,18 +180,69 @@ export default class ChamadosLista extends Component {
         })
     }
 
+    prevPage = () => {
+        const { page } = this.state;
+        if (page === 1) return;
+        const pageNumber = page - 1;
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+            this.pegaChamados(pageNumber)        
+        }
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+            this.pegaChamadosUsuario(pageNumber)        
+        }
+        
+        this.limpaCurrent()
+    }
+
+    nextPage = () => {
+        const { page, info } = this.state;
+        if (page === info.pages) return; //.pages é a última pagina e o return não faz nada
+        const pageNumber = page + 1;
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+            this.pegaChamados(pageNumber)        
+        }
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+            this.pegaChamadosUsuario(pageNumber)        
+        }
+        this.limpaCurrent()     
+    }
+
+    selecionaPagina(e) {
+        const i = e.target.id
+        const selectedPage = e.target.id
+         this.setState({
+            selectedPage: i,
+            page: parseInt(selectedPage)
+        })
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+            this.pegaChamados(parseInt(selectedPage))        
+        }
+
+        if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+            this.pegaChamadosUsuario(parseInt(selectedPage))        
+        }   
+        
+        this.limpaCurrent()
+        
+    }   
+
     buscarNome(page = 1) {
         ChamadoDataService.buscarNome(this.state.buscaNome, page)
-            .then(response => {
-                const { docs, ...info } = response.data 
-                this.setState({
-                    chamados: response.data.docs,
-                    info: info                                 
-                })    
-            })
-            .catch(e => {
-                console.log(e)
-            })
+        .then(response => {
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: response.data.docs,
+                info: info                                 
+            })    
+        })
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     buscarChamado(page = 1) {
@@ -181,30 +261,30 @@ export default class ChamadosLista extends Component {
 
     buscarData(page = 1) {
         ChamadoDataService.buscarData(this.state.buscaData, page)
-            .then(response => {
-                const { docs, ...info } = response.data 
-                this.setState({
-                    chamados: response.data.docs,
-                    info: info                                 
-                })    
-            })
-            .catch(e => {
-                console.log(e)
-            })
+        .then(response => {
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: response.data.docs,
+                info: info                                 
+            })    
+        })
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     buscarArea(page = 1) {
         ChamadoDataService.buscarArea(this.state.buscaArea, page)
-            .then(response => {
-                const { docs, ...info } = response.data 
-                this.setState({
-                    chamados: response.data.docs,
-                    info: info                                 
-                })    
-            })
-            .catch(e => {
-                console.log(e)
-            })
+        .then(response => {
+            const { docs, ...info } = response.data 
+            this.setState({
+                chamados: response.data.docs,
+                info: info                                 
+            })    
+        })
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     buscarStatus(page = 1) {
@@ -247,7 +327,7 @@ export default class ChamadosLista extends Component {
         let paginas = []
         for ( i = 1; i <= info.pages; i++ ) {
             paginas.push(
-                <li className={"page-item " + (page === i ? "active" : "")} key={i}>
+                <li className={"page-item" + (page === i ? " active" : "")} key={i}>
                     <span className="page-link" key={i} id={i} onClick={this.selecionaPagina} >
                         {i}
                     </span>
@@ -255,6 +335,7 @@ export default class ChamadosLista extends Component {
             )            
         } 
 
+        
      
         let mostrar = null
         if (current !== null) {
@@ -479,6 +560,11 @@ export default class ChamadosLista extends Component {
                     </div>       
                 </div>     
                 {mostrar}
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: 5+'%'}}>
+                    <ul className="pagination">
+                        { paginas }
+                    </ul>
+                </div>
             </div>
         )
     }

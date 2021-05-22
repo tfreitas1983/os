@@ -1,3 +1,4 @@
+//import { user } from "../../../../carteirinha/back-end/models"
 import http from "../http-common"
 
 class ChamadoDataService {
@@ -59,6 +60,10 @@ class ChamadoDataService {
 
     buscarStatus(status, page) {
         return http.get(`/chamados?status=${status}&page=${page}`)
+    }
+
+    buscarUsuario(username, page) {
+        return http.get(`/chamados?username=${username}&page=${page}`)
     }
 
     cadastrarImagem(file) {

@@ -28,6 +28,12 @@ export default class BoardAdmin extends Component {
     this.toggleFiltro = this.toggleFiltro.bind(this)
     this.mostrarFinalizados = this.mostrarFinalizados.bind(this)
 
+    
+    this.prevPage = this.prevPage.bind(this)
+    this.nextPage = this.nextPage.bind(this) 
+    this.limpaCurrent = this.limpaCurrent.bind(this)
+    this.selecionaPagina = this.selecionaPagina.bind(this)
+
 
     this.state = {
       chamados: [],
@@ -357,14 +363,69 @@ export default class BoardAdmin extends Component {
 
   }
 
+
+  
+
+prevPage = () => {
+    const { page } = this.state;
+    if (page === 1) return;
+    const pageNumber = page - 1;
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+        this.pegaChamados(pageNumber)        
+    }
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+        this.pegaChamadosAbertos(pageNumber)        
+    }
+    
+    this.limpaCurrent()
+}
+
+nextPage = () => {
+    const { page, info } = this.state;
+    if (page === info.pages) return; //.pages é a última pagina e o return não faz nada
+    const pageNumber = page + 1;
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+        this.pegaChamados(pageNumber)        
+    }
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+        this.pegaChamadosUsuario(pageNumber)        
+    }
+    this.limpaCurrent()     
+}
+
+selecionaPagina(e) {
+    const i = e.target.id
+    const selectedPage = e.target.id
+     this.setState({
+        selectedPage: i,
+        page: parseInt(selectedPage)
+    })
+
+    if (this.state.finalizados === false) {
+        this.pegaChamados(parseInt(selectedPage))        
+    }
+
+    if (this.state.finalizados === true ) {
+        this.pegaChamadosAbertos(parseInt(selectedPage))        
+    }   
+    
+    this.limpaCurrent()
+    
+}   
+
   render() {
     const { chamados, current, currentUser, page, info, className, buscaUnidade, buscaStatus, finalizados, mostraLoading, mostraFiltro} = this.state
 
     let i = 0, quantPend = [], quantAg = [], quantAp = [], quantAn = [], quantAt = [], quantForn = [], quantFin = [], quantCanc = [], quantReab = []
     let paginas = [], mostrar = null, filtro = null, filtros = null
+
     for ( i = 1; i <= info.pages; i++ ) {
       paginas.push(
-          <li className={"page-item " + (page === i ? "active" : "")} key={i}>
+          <li className={"page-item" + (page === i ? " active" : "")} key={i}>
               <span className="page-link" key={i} id={i} onClick={this.selecionaPagina} >
                   {i}
               </span>
@@ -711,7 +772,15 @@ export default class BoardAdmin extends Component {
             <label className="form-check-label"  style={{marginLeft: 3+'%',marginRight: 3+'%'}}>
               <input className="form-check-input" type="checkbox" checked={finalizados === true } onChange={this.estadoFinalizados}  /> Oculta finalizados?
             </label>
-          {mostrar} 
+            {mostrar} 
+
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: 5+'%'}}>
+                <nav class="HORIZONTAL_SCROLL_NAV">
+                    <ul className="pagination">
+                        { paginas }
+                    </ul>
+                </nav>
+            </div>
         </div> 
       </div>
     )

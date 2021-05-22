@@ -70,12 +70,14 @@ exports.buscarTodos = (req,res) => {
     const area = req.query.area
     const unidade = req.query.unidade
     const status = req.query.status
+    const username = req.query.username
 
     var condition = nome ? { nome: { $regex: new RegExp(nome), $options: "i" } } : {}
     var condnumero = numchamado ? { numchamado: numchamado } : {}
     var condArea = area ? {area: area } : {}
     var condUnidade = unidade ? {unidade: unidade } : {}
     var condStatus = status ? {status: status } : {}
+    var condUsername = username ? {username: username } : {}
 
     //Verifica se foi passado a data de abertura do chamado
     let dt_abertura = null
@@ -125,6 +127,10 @@ exports.buscarTodos = (req,res) => {
 
     if (status) {
         var query = Chamado.find(condStatus).sort({dt_abertura: -1})
+    }
+
+    if (username) {
+        var query = Chamado.find(condUsername).sort({dt_abertura: -1})
     }
    
     Chamado.paginate(query,{page, limit: 5000})

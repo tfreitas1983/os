@@ -29,7 +29,13 @@ export default class BoardModerator extends Component {
     this.buscarArea = this.buscarArea.bind(this)
     this.toggleFiltro = this.toggleFiltro.bind(this)
     this.mostrarFinalizados = this.mostrarFinalizados.bind(this)
+
+
+        
+    this.prevPage = this.prevPage.bind(this)
+    this.nextPage = this.nextPage.bind(this) 
     this.limpaCurrent = this.limpaCurrent.bind(this)
+    this.selecionaPagina = this.selecionaPagina.bind(this)
 
 
     this.state = {
@@ -217,7 +223,7 @@ export default class BoardModerator extends Component {
 }
 
   limpaCurrent() {
-      this.setState({
+    this.setState({
           current: null,
           currentIndex: -1,
           selectedPage: null,          
@@ -231,10 +237,7 @@ export default class BoardModerator extends Component {
           finalizados: false,
           buscaStatus: ""          
       })
-      this.inputData.value = ""
-      this.inputNum.value = ""
-      this.inputNome.value = ""
-      this.pegaChamados()
+      this.pegaChamadosAbertos()
   }
 
   async buscarNome(page = 1) {
@@ -410,6 +413,58 @@ export default class BoardModerator extends Component {
 
   }
 
+  
+prevPage = () => {
+    const { page } = this.state;
+    if (page === 1) return;
+    const pageNumber = page - 1;
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+        this.pegaChamados(pageNumber)        
+    }
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+        this.pegaChamadosAbertos(pageNumber)        
+    }
+    
+    this.limpaCurrent()
+}
+
+nextPage = () => {
+    const { page, info } = this.state;
+    if (page === info.pages) return; //.pages é a última pagina e o return não faz nada
+    const pageNumber = page + 1;
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] === 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] === 'ROLE_ADMIN') ) {
+        this.pegaChamados(pageNumber)        
+    }
+
+    if (this.state.currentUser && (this.state.currentUser.roles[1] !== 'ROLE_MODERATOR' ||  this.state.currentUser.roles[0] !== 'ROLE_ADMIN') ) {
+        this.pegaChamadosUsuario(pageNumber)        
+    }
+    this.limpaCurrent()     
+}
+
+selecionaPagina(e) {
+    const i = e.target.id
+    const selectedPage = e.target.id
+     this.setState({
+        selectedPage: i,
+        page: parseInt(selectedPage)
+    })
+
+    if (this.state.finalizados === false) {
+        this.pegaChamados(parseInt(selectedPage))        
+    }
+
+    if (this.state.finalizados === true ) {
+        this.pegaChamadosAbertos(parseInt(selectedPage))        
+    }   
+    
+    this.limpaCurrent()
+    
+}   
+
   render() {
     const { chamados, page, info, className, buscaUnidade, buscaArea,buscaStatus, finalizados, mostraFiltro, classNameLoading, mostraLoading} = this.state
 
@@ -417,7 +472,7 @@ export default class BoardModerator extends Component {
     let paginas = [], mostrar = null, quantPend = [], quantAg = [], quantAp = [], quantAn = [], quantAt = [], quantForn = [], quantFin = [], quantCanc = [], quantReab = []
     for ( i = 1; i <= info.pages; i++ ) {
       paginas.push(
-          <li className={"page-item " + (page === i ? "active" : "")} key={i}>
+          <li className={"page-item" + (page === i ? " active" : "")} key={i}>
               <span className="page-link" key={i} id={i} onClick={this.selecionaPagina} >
                   {i}
               </span>
@@ -746,6 +801,14 @@ export default class BoardModerator extends Component {
               <input className="form-check-input" type="checkbox" checked={this.state.finalizados === true} onChange={this.estadoFinalizados}  /> Oculta finalizados?
             </label>
           {mostrar}
+
+          <div style={{display: 'flex', justifyContent: 'center', marginTop: 5+'%'}}>
+            <nav class="HORIZONTAL_SCROLL_NAV">
+                <ul className="pagination">
+                    { paginas }
+                </ul>
+            </nav>
+          </div>
         </div> 
       </div>
     )
