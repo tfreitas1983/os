@@ -63,6 +63,8 @@ export default class AdicionarChamadoTerceiros extends Component {
             solucao: "",
             visita: false,
             reaberto: "",
+            triagem: "",
+            resptriagem: "",
             dt_previsao: "",
             dt_fechamento: "",
             foto: "default.jpg",
@@ -80,10 +82,10 @@ export default class AdicionarChamadoTerceiros extends Component {
     pegaUsuarios() {
         AuthService.buscarTodos()        
         .then(response => {
-            const usuarios = response.data
+            const usuarios = response.data.filter((item) => {return item.status === true})
             this.setState({
                 usuarios: usuarios
-            })                
+            })           
         })
         .catch(e => {
             console.log(e)
@@ -396,6 +398,8 @@ export default class AdicionarChamadoTerceiros extends Component {
             responsavel:this.state.responsavel,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
+            triagem: this.state.triagem,
+            resptriagem: this.state.resptriagem,
             dt_previsao: this.state.dt_previsao,
             dt_fechamento:this.state.dt_fechamento,
             foto: this.state.foto,
@@ -420,6 +424,8 @@ export default class AdicionarChamadoTerceiros extends Component {
                 ip: response.data.ip,
                 visita: response.data.visita,
                 descricao: response.data.descricao,
+                triagem: response.data.triagem,
+                resptriagem: response.data.resptriagem,
                 foto: response.data.foto,
                 status: response.data.status,
                 situacao: response.data.situacao,
@@ -452,6 +458,8 @@ export default class AdicionarChamadoTerceiros extends Component {
                 foto: response.data.foto,
                 status: response.data.status,
                 solucao: response.data.solucao,
+                triagem: response.data.triagem,
+                resptriagem: response.data.resptriagem,
                 responsavel: response.data.responsavel, 
                 dt_previsao: response.data.dt_previsao,
                 dt_fechamento: response.data.dt_fechamento,
@@ -476,6 +484,7 @@ export default class AdicionarChamadoTerceiros extends Component {
         setor: "",
         area: "",
         equipamento: "",
+        triagem: "",
         foto: "default.jpg",
         imagem: "",
         url:"",
@@ -550,10 +559,8 @@ export default class AdicionarChamadoTerceiros extends Component {
                     <option value="Nilópolis">Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
-                    <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles">Vilar dos Teles</option>
                     <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                    <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                 </Select>
             </div>
         }

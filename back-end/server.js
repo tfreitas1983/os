@@ -9,7 +9,7 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-    origin: ["http://localhost","http://chamadosrj.ddns.net","http://chamadosrj.ddns.net:8089","http://186.215.238.145:3002", "http://10.1.1.26:3001","http://10.1.1.26:3002"]
+    origin: ["http://localhost:3002","http://chamadosrj.ddns.net","http://chamadosrj.ddns.net:8089","http://186.215.238.145:3002", "http://10.1.1.26:3001","http://10.1.1.26:3002"]
 }
 /*
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -38,6 +38,7 @@ db.mongoose
 })
 .then(() => {
     console.log("Conectado à base de dados")
+
     initial();
 })
 .catch(err => {
@@ -76,10 +77,14 @@ function initial() {
           }
   
           console.log("Adicionado 'admin' à collection roles");
-        });
+        });        
       }
     });
+
+   
 }
+
+
 
 
 app.use("/files", express.static(path.resolve(__dirname, '..', '..', '..', '..','..', '..','..', 'xampp' ,'htdocs', 'chamados', 'static','media')))

@@ -74,6 +74,7 @@ export default class Atender extends Component {
         this.estadoDataFechamento = this.estadoDataFechamento.bind(this)
         this.estadoReaberto = this.estadoReaberto.bind(this)
         this.estadoVisita = this.estadoVisita.bind(this)
+        this.estadoTriagem = this.estadoTriagem.bind(this)
 
         this.inputPrevisao = React.createRef()
         this.inputFechamento = React.createRef()
@@ -100,6 +101,8 @@ export default class Atender extends Component {
                 equipamento: "",
                 visita: false,
                 responsavel: "",
+                triagem: "",
+                resptriagem: "",
                 solucao: "",
                 dt_previsao: "",
                 dt_previsao_novo: "",
@@ -149,6 +152,8 @@ export default class Atender extends Component {
                     status: response.data.status,
                     foto: response.data.foto,
                     visita: response.data.visita,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     situacao: response.data.situacao                     
                 }
             }) 
@@ -383,6 +388,16 @@ export default class Atender extends Component {
         }))
     }
 
+    estadoTriagem(e) {
+        const triagem = e.target.value
+        this.setState(prevState => ({
+            current: {
+                ...prevState.current,
+                triagem: triagem
+            }
+        }))
+    }
+
    salvarImagem() {
     
         if(this.state.foto === "default.jpg") {
@@ -427,6 +442,8 @@ export default class Atender extends Component {
                 visita: this.state.current.visita,
                 solucao: this.state.current.solucao,
                 reaberto: this.state.current.reaberto,
+                triagem: this.state.current.triagem,
+                resptriagem: this.state.current.resptriagem,
                 responsavel: this.state.current.responsavel, 
                 situacao: this.state.current.situacao,
                 submitted: true
@@ -482,6 +499,8 @@ export default class Atender extends Component {
             ip: this.state.current.ip,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
+            triagem: this.state.current.triagem,
+            resptriagem: this.state.current.resptriagem,
             dt_previsao: this.state.current.dt_previsao,
             dt_fechamento: this.state.current.dt_fechamento,
             foto: this.state.current.foto,
@@ -510,6 +529,8 @@ export default class Atender extends Component {
                     foto: response.data.foto,
                     ip: response.data.ip,
                     visita: response.data.visita,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     status: response.data.status,                                      
                     situacao: response.data.situacao,
                     submitted: true,
@@ -634,6 +655,42 @@ export default class Atender extends Component {
                  />
             </div>            
         }
+
+        let triagem = null
+        if (current.status === "Triagem") {
+           triagem =  
+           <div className="form-group">
+                <label htmlFor="solucao"> Pergunta ao solicitante </label>
+                <Textarea 
+                validations={[required]}                            
+                className="form-control" 
+                id="solucao"                                             
+                value={current.triagem} 
+                onChange={this.estadoTriagem} 
+                onKeyDown={this.autoResize}
+                name="triagem"
+                 />
+            </div>            
+        }
+
+
+
+        let resptriagem = null
+        if (current.status === "Resposta") {
+           resptriagem =  
+           <div className="form-group">
+                <label htmlFor="resptriagem"> Resposta ao Solucionador </label>
+                <textarea 
+                validations={[required]}                            
+                className="form-control" 
+                id="solucao"                                             
+                value={current.resptriagem} 
+                onKeyDown={this.autoResize}
+                name="resptriagem"
+                disabled />
+            </div>            
+        }
+
 
         let ip = null
         let responsavel = null
@@ -787,10 +844,8 @@ export default class Atender extends Component {
                                         <option value="Nilópolis">Nilópolis</option> 
                                         <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                         <option value="Queimados"> Queimados </option>
-                                        <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                         <option value="Vilar dos Teles">Vilar dos Teles</option>
                                         <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                                        <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                                     </select>
                                 </div>
 
@@ -820,6 +875,7 @@ export default class Atender extends Component {
                                         <option value="Cozinha"> Cozinha </option>  
                                         <option value="Enfermaria"> Enfermaria </option>
                                         <option value="Escritório"> Escritório </option> 
+                                        <option value="Laboratório"> Laboratório </option>
                                         <option value="Recepção"> Recepção </option>  
                                         <option value="Sala de Espera"> Sala de Espera </option>
                                         <option value="Telefonia"> Telefonia </option>
@@ -885,9 +941,12 @@ export default class Atender extends Component {
                                         <option value="Agendado"> Agendado </option>                                          
                                         <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
                                         <option value="Em atendimento"> Em atendimento  </option> 
+                                        <option value="Triagem"> Pergunta ao Solicitante </option> 
+                                        <option value="Resposta"> Resposta ao Solucionador </option>  
                                         <option value="Finalizado"> Finalizado </option>                                
                                         <option value="Cancelado"> Cancelado </option>                                        
                                         <option value="Reaberto"> Reaberto </option>
+                                        
                                     </select>
                                 </div>
 
@@ -896,12 +955,15 @@ export default class Atender extends Component {
                                 </div>
 
                                 <div>
+                                    {triagem}
+                                    {resptriagem}
                                     {responsavel}
                                 </div>
 
                                 <div>
                                     {solucao}
                                     {reaberto}
+                                    
                                 </div>
 
                                 <div>

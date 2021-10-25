@@ -9,7 +9,7 @@ import Textarea from "react-validation/build/textarea"
 import Input from "react-validation/build/input"
 import CheckButton from "react-validation/build/button"
 
-
+*/
 
 const required = value => {
     if (!value) {
@@ -19,18 +19,9 @@ const required = value => {
         </div>
       )
     }
-  }
-
-const vreaberto = value => {
-    if (value.length < 6) {
-        return (
-        <div className="alert alert-danger" role="alert">
-            O motivo da reabertura deve possuir no mínimo 6 caracteres.
-        </div>
-        )
-    }
 }
-*/
+
+
 
 export default class EditarChamado extends Component {
     constructor(props) {
@@ -46,6 +37,7 @@ export default class EditarChamado extends Component {
         this.estadoEquipamento = this.estadoEquipamento.bind(this)
         this.estadoSelectArea = this.estadoSelectArea.bind(this)
         this.estadoResponsavel = this.estadoResponsavel.bind(this)
+        this.estadoResposta = this.estadoResposta.bind(this)
         this.estadoSolucao = this.estadoSolucao.bind(this)
         this.estadoReaberto = this.estadoReaberto.bind(this)
         this.estadoStatus = this.estadoStatus.bind(this)
@@ -76,6 +68,8 @@ export default class EditarChamado extends Component {
                 selectedArea: "",
                 equipamento: "",    
                 responsavel: "",
+                triagem: "",
+                resptriagem: "",
                 solucao: "",
                 reaberto: "",
                 dt_previsao: "",
@@ -118,6 +112,8 @@ export default class EditarChamado extends Component {
                     area: response.data.area,
                     equipamento: response.data.equipamento,
                     responsavel: response.data.responsavel,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
                     dt_previsao: moment(response.data.dt_previsao).format('DD/MM/YYYY'),
@@ -268,6 +264,16 @@ export default class EditarChamado extends Component {
         }))
     }
 
+    estadoResposta(e) {
+        const resptriagem = e.target.value
+        this.setState(prevState => ({
+            current: {
+                ...prevState.current,
+                resptriagem: resptriagem
+            }
+        }))
+    }
+
     estadoStatus(e) {
         const status = e.target.value
         this.setState(prevState => ({
@@ -340,12 +346,12 @@ export default class EditarChamado extends Component {
 
    async salvarImagem() {
         
-        if (this.state.current.foto === "default.jpg") {
+        if (this.state.current.foto === "default.jpg" || !this.state.upload) {
             this.salvarChamado()  
             return false
         } 
         
-        if (this.state.current.foto !== "default.jpg") {
+        if (this.state.current.foto !== "default.jpg" && this.state.upload) {
         
             const img = new FormData()
             img.append('file', this.state.upload)
@@ -381,6 +387,8 @@ export default class EditarChamado extends Component {
             area: this.state.current.area,
             descricao: this.state.current.descricao,
             responsavel: this.state.current.responsavel,
+            triagem: this.state.current.triagem,
+            resptriagem: this.state.current.resptriagem,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
             dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
@@ -408,6 +416,8 @@ export default class EditarChamado extends Component {
                     foto: response.data.foto,
                     url: response.data.url,
                     status: response.data.status,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
                     responsavel: response.data.responsavel, 
@@ -438,7 +448,9 @@ export default class EditarChamado extends Component {
                     descricao: response.data.descricao,
                     foto: response.data.foto,
                     url: response.data.url,
-                    status: response.data.status,
+                    status: response.data.status,                    
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
                     responsavel: response.data.responsavel, 
@@ -506,6 +518,36 @@ export default class EditarChamado extends Component {
                     name="equipamento" />
                 </div>
             </div>
+        }
+
+        let triagem = null
+        if (current.status === "Triagem") {
+           triagem =  
+           <div className="form-group">
+                <label htmlFor="triagem"> Pergunta ao Solicitante </label>
+                <textarea                           
+                className="form-control" 
+                id="triagem"                                             
+                value={current.triagem}
+                name="triagem"
+                disabled />
+            </div>            
+        }
+
+        let resptriagem = null
+        if (current.status === "Resposta" || current.status === "Triagem") {
+           resptriagem =  
+           <div className="form-group">
+                <label htmlFor="resptriagem"> Resposta ao Solucionador </label>
+                <textarea                           
+                className="form-control" 
+                id="solucao"                                             
+                value={current.resptriagem} 
+                onChange={this.estadoResposta} 
+                onKeyDown={this.autoResize}
+                name="resptriagem"
+                 />
+            </div>            
         }
 
         let solucao = null
@@ -640,10 +682,8 @@ export default class EditarChamado extends Component {
                                         <option value="Nilópolis">Nilópolis</option> 
                                         <option value="Nova Iguaçu"> Nova Iguaçu </option>
                                         <option value="Queimados"> Queimados </option>
-                                        <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                         <option value="Vilar dos Teles">Vilar dos Teles</option>
                                         <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                                        <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                                     </select>
                                 </div>
 
@@ -673,6 +713,7 @@ export default class EditarChamado extends Component {
                                         <option value="Cozinha"> Cozinha </option>  
                                         <option value="Enfermaria"> Enfermaria </option>
                                         <option value="Escritório"> Escritório </option> 
+                                        <option value="Laboratório"> Laboratório </option> 
                                         <option value="Recepção"> Recepção </option>  
                                         <option value="Sala de Espera"> Sala de Espera </option>
                                         <option value="Telefonia"> Telefonia </option>
@@ -725,17 +766,19 @@ export default class EditarChamado extends Component {
                                         name="status"                                
                                         value={current.status}                                    
                                         onChange={this.estadoSelectStatus} 
-                                        disabled
+                                        
                                         >                                 
-                                        <option value="Pendente"> Pendente </option>
+                                        <option value="Pendente" disabled> Pendente </option>
                                         <option value="Cancelado"> Cancelado </option>
                                         <option value="Em análise" disabled> Em análise </option>  
                                         <option value="Aprovação Glauber" disabled> Aprovação Glauber </option>  
                                         <option value="Agendado" disabled> Agendado </option>  
                                         <option value="Em atendimento" disabled> Em atendimento  </option> 
+                                        <option value="Triagem" disabled> Triagem </option>
                                         <option value="Finalizado"disabled> Finalizado </option>
                                         <option value="Aguardando Fornecedor" disabled> Aguardando Fornecedor </option>
                                         <option value="Reaberto"> Reaberto </option>
+                                        <option value="Resposta"> Resposta ao Solucionador </option>
                                     </select>
                                 </div>
 
@@ -754,6 +797,8 @@ export default class EditarChamado extends Component {
                                 </div>
 
                                 <div>
+                                    {triagem}
+                                    {resptriagem}
                                     {solucao}
                                     {reaberto}
                                 </div>

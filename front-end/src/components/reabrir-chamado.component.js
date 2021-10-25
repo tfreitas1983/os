@@ -77,6 +77,8 @@ export default class ReabrirChamado extends Component {
                 dt_previsao_novo: "",
                 dt_fechamento: "",
                 dt_fechamento_novo: "",
+                triagem: "",
+                resptriagem:"",
                 foto: "",
                 imagem: "",
                 url:"",
@@ -112,6 +114,8 @@ export default class ReabrirChamado extends Component {
                     area: response.data.area,
                     equipamento: response.data.equipamento,
                     responsavel: response.data.responsavel,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     solucao: response.data.solucao,
                     reaberto: response.data.reaberto,
                     dt_previsao: moment(response.data.dt_previsao).format('DD/MM/YYYY'),
@@ -322,10 +326,12 @@ export default class ReabrirChamado extends Component {
 
    salvarImagem() {
     
-        if(this.state.foto === "default.jpg") {
+        if(this.state.foto === "default.jpg" || !this.state.upload) {
             this.salvarChamado()  
             return false
-        } if(this.state.foto !== "default.jpg") {
+        }
+        
+        if(this.state.foto !== "default.jpg" && this.state.upload) {
         
             var data = new FormData()
             data.append('file', this.state.imagem)
@@ -357,6 +363,8 @@ export default class ReabrirChamado extends Component {
                     area: this.state.current.area,
                     descricao: this.state.current.descricao,
                     responsavel: this.state.current.responsavel,
+                    triagem: this.state.current.triagem,
+                    resptriagem: this.state.current.resptriagem,
                     solucao: this.state.current.solucao,
                     reaberto: this.state.current.reaberto,
                     dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
@@ -393,6 +401,8 @@ export default class ReabrirChamado extends Component {
             area: this.state.current.area,
             descricao: this.state.current.descricao,
             responsavel: this.state.current.responsavel,
+            triagem: this.state.current.triagem,
+            resptriagem: this.state.current.resptriagem,
             solucao: this.state.current.solucao,
             reaberto: this.state.current.reaberto,
             dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
@@ -414,6 +424,8 @@ export default class ReabrirChamado extends Component {
                     area: this.state.current.area,
                     descricao: this.state.current.descricao,
                     responsavel: this.state.current.responsavel,
+                    triagem: this.state.current.triagem,
+                    resptriagem: this.state.current.resptriagem,
                     solucao: this.state.current.solucao,
                     reaberto: this.state.current.reaberto,
                     dt_previsao: moment(this.state.current.dt_previsao, 'DD-MM-YYYY'),
@@ -595,10 +607,8 @@ export default class ReabrirChamado extends Component {
                                         <option value="Nilópolis">Nilópolis</option> 
                                         <option value="Nova Iguacu"> Nova Iguaçu </option>
                                         <option value="Queimados"> Queimados </option>
-                                        <option value="Rio de Janeiro"> Rio de Janeiro </option>
                                         <option value="Vilar dos Teles">Vilar dos Teles</option>
                                         <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                                        <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                                     </select>
                                 </div>
 
@@ -629,6 +639,7 @@ export default class ReabrirChamado extends Component {
                                         <option value="Cozinha"> Cozinha </option>  
                                         <option value="Enfermaria"> Enfermaria </option>
                                         <option value="Escritório"> Escritório </option> 
+                                        <option value="Laboratório"> Laboratório </option> 
                                         <option value="Recepção"> Recepção </option>  
                                         <option value="Sala de Espera"> Sala de Espera </option>
                                         <option value="Telefonia"> Telefonia </option>

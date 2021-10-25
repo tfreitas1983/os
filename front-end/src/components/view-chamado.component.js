@@ -28,6 +28,7 @@ export default class VisualizarChamado extends Component {
                 reaberto: "",
                 dt_previsao: moment(),
                 dt_fechamento: moment(),
+                triagem: "",
                 foto: "",
                 imagem: "",
                 url:"",
@@ -64,6 +65,8 @@ export default class VisualizarChamado extends Component {
                     reaberto: response.data.reaberto,
                     dt_previsao: moment(response.data.dt_previsao).format('DD/MM/YYYY'),
                     dt_fechamento: moment(response.data.dt_fechamento).format('DD/MM/YYYY'),
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     status: response.data.status,
                     foto: response.data.foto,
                     url: response.data.url,
@@ -235,6 +238,36 @@ export default class VisualizarChamado extends Component {
             </div>
         }
 
+        let triagem = null
+        if (current.status === "Triagem") {
+           triagem =  
+           <div className="form-group">
+                <label htmlFor="solucao"> Pergunta ao solicitante </label>
+                <textarea                           
+                className="form-control" 
+                id="triagem"                                             
+                value={current.triagem} 
+                onChange={this.estadoTriagem} 
+                onKeyDown={this.autoResize}
+                name="triagem"
+                disabled />
+            </div>            
+        }
+
+        let resptriagem = null
+        if (current.status === "Resposta") {
+           resptriagem =  
+           <div className="form-group">
+                <label htmlFor="resptriagem"> Resposta ao Solucionador </label>
+                <textarea                           
+                className="form-control" 
+                id="solucao"                                             
+                value={current.resptriagem} 
+                name="resptriagem"
+                disabled />
+            </div>            
+        }
+
 
 
         return (
@@ -360,12 +393,14 @@ export default class VisualizarChamado extends Component {
                                 <option value="Aprovação Glauber"> Aprovação Glauber </option>  
                                 <option value="Agendado"> Agendado </option>  
                                 <option value="Em atendimento"> Em atendimento  </option> 
+                                <option value="Triagem"> Triagem </option>
+                                <option value="Resposta"> Resposta ao Solucionador</option>
                                 <option value="Finalizado"> Finalizado </option>                                
                                 <option value="Cancelado"> Cancelado </option>
                                 <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
                             </select>
                         </div>
-                        {agendado} {finalizado}
+                        {agendado} {triagem} {resptriagem} {finalizado}
                         
                         {solucao} {reaberto}
                         

@@ -4,7 +4,7 @@ import ChamadoDataService from "../services/chamado.service"
 import AuthService from "../services/auth.service"
 import * as momentjs from 'moment'
 import moment from "moment-business-days"
-import {FaEdit, FaEye, FaCheckCircle, FaRedo} from 'react-icons/fa'
+import {FaEdit, FaEye, FaCheckCircle, FaRedo, FaQuestionCircle} from 'react-icons/fa'
 import { IconContext } from "react-icons"
 
 
@@ -444,6 +444,23 @@ export default class ChamadosLista extends Component {
                                         <IconContext.Provider value={{ size: "1.9em", className: "global-class-name" }}>
                                             {<Link to={`/chamados/visualizar/${chamado.id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaCheckCircle /> </Link>}
                                             {<Link to={`/chamados/reabrir/${chamado.id}`} aria-label={"Reabrir"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="edit"> <FaRedo /> </Link>}
+                                        </IconContext.Provider>
+                                    </td>                                
+                                </tr> 
+                                )
+                            }
+
+                            if (chamado.status === "Triagem") {
+                                return ( <tr key={index}>
+                                    <td style={{textAlign: 'center'}}>{chamado.numchamado}</td>                                                                
+                                    <td>{chamado.descricao}</td>
+                                    <td>{chamado.area}</td>
+                                    <td>{momentjs(chamado.dt_abertura).format('DD/MM/YYYY')}</td>
+                                    <td>{chamado.status}</td>
+                                    <td style={{textAlign: 'center'}}>
+                                        <IconContext.Provider value={{ size: "1.9em", className: "global-class-name" }}>
+                                            {<Link to={`/chamados/visualizar/${chamado.id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaCheckCircle /> </Link>}
+                                            {<Link to={`/chamados/editar/${chamado.id}`} aria-label={"Responder"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="edit"> <FaQuestionCircle /> </Link>}
                                         </IconContext.Provider>
                                     </td>                                
                                 </tr> 

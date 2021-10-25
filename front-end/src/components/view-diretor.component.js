@@ -29,6 +29,7 @@ export default class VisualizarDiretor extends Component {
                 reaberto: "",
                 dt_previsao: moment(),
                 dt_fechamento: moment(),
+                triagem: "",
                 foto: "",
                 imagem: "",
                 visita: false,
@@ -70,6 +71,8 @@ export default class VisualizarDiretor extends Component {
                     dt_previsao: moment(response.data.dt_previsao).format("DD/MM/YYYY"),
                     dt_fechamento: moment(response.data.dt_fechamento).format("DD/MM/YYYY"),
                     status: response.data.status,
+                    triagem: response.data.triagem,
+                    resptriagem: response.data.resptriagem,
                     foto: response.data.foto,
                     situacao: response.data.situacao                     
                 }
@@ -241,8 +244,34 @@ export default class VisualizarDiretor extends Component {
             </div>
         }
 
-        
+        let triagem = null
+        if (current.status === "Triagem") {
+            triagem =  
+           <div className="form-group">
+                <label htmlFor="solucao"> Pergunta ao solicitante </label>
+                <textarea                           
+                className="form-control" 
+                id="triagem"                                             
+                value={current.triagem} 
+                onChange={this.estadoTriagem} 
+                name="triagem"
+                disabled />
+            </div>            
+        }
 
+        let resptriagem = null
+        if (current.status === "Resposta") {
+           resptriagem =  
+           <div className="form-group">
+                <label htmlFor="resptriagem"> Resposta ao Solucionador </label>
+                <textarea                            
+                className="form-control" 
+                id="resptriagem"                                             
+                value={current.resptriagem}
+                name="resptriagem"
+                disabled />
+            </div>            
+        }
 
 
        /* const objTextArea =  document.getElementById('descricao');
@@ -390,13 +419,15 @@ export default class VisualizarDiretor extends Component {
                                 <option value="Em análise"> Em análise </option>  
                                 <option value="Aprovação Glauber"> Aprovação Glauber </option>  
                                 <option value="Agendado"> Agendado </option>  
-                                <option value="Em atendimento"> Em atendimento  </option> 
+                                <option value="Em atendimento"> Em atendimento  </option>                                 
+                                <option value="Triagem"> Triagem </option>
+                                <option value="Resposta"> Resposta ao Solucionador</option>
                                 <option value="Finalizado"> Finalizado </option>                                
                                 <option value="Cancelado"> Cancelado </option>
                                 <option value="Aguardando Fornecedor"> Aguardando Fornecedor </option>
                             </select>
                         </div>
-                        {agendado} {finalizado}
+                        {agendado} {triagem} {resptriagem} {finalizado}
                         
                         <div className="form-group">
                             <label htmlFor="responsavel"> Responsável </label>

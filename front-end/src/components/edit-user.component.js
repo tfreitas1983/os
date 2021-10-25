@@ -9,6 +9,7 @@ export default class EditarUsuario extends Component {
         super(props)
         this.pegaUsuario = this.pegaUsuario.bind(this)
         this.handlerPassword = this.handlerPassword.bind(this)
+        this.changeStatus = this.changeStatus.bind(this)
         this.salvar = this.salvar.bind(this)
 
         this.state = {
@@ -18,7 +19,8 @@ export default class EditarUsuario extends Component {
                 nome: "",
                 password: "",
                 area: [],
-                email: ""
+                email: "",
+                status: ""
             },
             message: "",
             successful: false
@@ -39,6 +41,7 @@ export default class EditarUsuario extends Component {
                     nome: response.data[0].nome,
                     email: response.data[0].email,
                     password: response.data[0].password,
+                    status: response.data[0].status,
                     area: response.data[0].area
                 }
             })
@@ -56,6 +59,28 @@ export default class EditarUsuario extends Component {
                  password: password
             }
         }))
+    }
+
+    changeStatus (status) {
+
+        var data = {
+            status: this.state.current.status
+        }
+
+
+        AuthService.editar (this.state.current.username, data)
+        .then(response => {
+            this.setState(prevState => ({
+                current: {
+                    ...prevState.current,
+                    status: status
+                }
+            }))
+
+        })
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     async salvar() {
@@ -79,6 +104,18 @@ export default class EditarUsuario extends Component {
     render () {
 
         const {current} = this.state
+
+        let status = null
+        
+        if (current.status === true) {
+            status = <div style= {{color: "#494"}}>
+                <h3> Ativo </h3>
+            </div>
+        } else {
+            status = <div style= {{color: "red"}}>
+                <h3> Inativo </h3>
+            </div>
+        }
 
         
         return (
@@ -141,7 +178,21 @@ export default class EditarUsuario extends Component {
                                             <button type="submit" onClick={this.salvar} className="btn btn-success"> Alterar </button>
                                         </div>
                                     </div>
-                                </div>    
+                                </div>  
+
+
+                                {current.status ? (
+                                    <button className="badge badge-danger mr-2" onClick={() => this.changeStatus(false)}>
+                                        Inativar
+                                    </button>
+                                ) : (
+                                    <button className="badge badge-primary mr-2" onClick={() => this.changeStatus(true)}>
+                                        Ativar
+                                    </button>
+                                )}
+
+                                {status}
+
                             </div>
                         )}
                         {this.state.message && (

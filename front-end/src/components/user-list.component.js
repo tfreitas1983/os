@@ -48,21 +48,41 @@ export default class ListarUsuario extends Component {
                         <th style={{width: 25+'%'}}> Área </th>
                         <th style={{width: 8+'%', textAlign: 'center'}}> Ações </th>                            
                     </tr>
-                    {usuarios.map((usuario, index) => {            
-                        return ( <tr key={index}>
-                            <td style={{textAlign: 'center'}}>{usuario.username}</td>                                                                
-                            <td>{usuario.nome}</td>
-                            <td>{usuario.email}</td>
-                            <td>{usuario.unidade}</td>
-                            <td>{usuario.area}</td>
-                            <td style={{textAlign: 'center'}}>
-                                <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
-                                    {<Link to={`/usuarios/visualizar/${usuario._id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}
-                                    {<Link to={`/usuarios/editar/${usuario.username}`} aria-label={"Editar"} id="edit" style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}}> <FaEdit /> </Link>}
-                                </IconContext.Provider>
-                            </td>                                
-                        </tr> 
-                        )
+                    {usuarios.map((usuario, index) => {  
+                        
+                        if (usuario.status === true) {
+                            return ( <tr key={index}>
+                                <td style={{textAlign: 'center'}}>{usuario.username}</td>                                                                
+                                <td>{usuario.nome}</td>
+                                <td>{usuario.email}</td>
+                                <td>{usuario.unidade}</td>
+                                <td>{usuario.area}</td>
+                                <td style={{textAlign: 'center'}}>
+                                    <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
+                                        {<Link to={`/usuarios/visualizar/${usuario._id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}
+                                        {<Link to={`/usuarios/editar/${usuario.username}`} aria-label={"Editar"} id="edit" style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}}> <FaEdit /> </Link>}
+                                    </IconContext.Provider>
+                                </td>                                
+                            </tr> 
+                            )
+                        }
+
+                        if (usuario.status === false) {
+                            return ( <tr key={index} style={{color: "red"}}>
+                                <td style={{textAlign: 'center'}}>{usuario.username}</td>                                                                
+                                <td>{usuario.nome}</td>
+                                <td>{usuario.email}</td>
+                                <td>{usuario.unidade}</td>
+                                <td>{usuario.area}</td>
+                                <td style={{textAlign: 'center'}}>
+                                    <IconContext.Provider value={{ size: "2em", className: "global-class-name" }}>
+                                        {<Link to={`/usuarios/visualizar/${usuario._id}`} aria-label={"Visualizar"} style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}} id="view"> <FaEye /> </Link>}
+                                        {<Link to={`/usuarios/editar/${usuario.username}`} aria-label={"Editar"} id="edit" style={{textDecoration: 'none', backgroundColor:'#fefefe', color: '#2E8B57'}}> <FaEdit /> </Link>}
+                                    </IconContext.Provider>
+                                </td>                                
+                            </tr> 
+                            )
+                        }
                     })}
                 </tbody>
             </table>

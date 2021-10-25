@@ -10,6 +10,10 @@ class ChamadoDataService {
         return http.get(`/chamadosabertos?page=${page}`)
     }
 
+    todosResumo() {
+        return http.get(`/chamadosresumo`)
+    }
+
     buscarUm(id) {
         return http.get(`/chamados/${id}`)
     }

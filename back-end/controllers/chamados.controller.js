@@ -33,7 +33,9 @@ exports.cadastrar = (req, res) => {
         responsavel: req.body.responsavel,
         setor: req.body.setor,
         dt_previsao: req.body.dt_previsao,    
-        dt_fechamento: req.body.dt_fechamento,        
+        dt_fechamento: req.body.dt_fechamento,   
+        triagem: req.body.triagem,
+        resptriagem: req.body.resptriagem,
         situacao: req.body.situacao ? req.body.situacao: true,
         foto: req.body.foto
     })
@@ -144,6 +146,87 @@ exports.buscarTodos = (req,res) => {
     })
 }
 
+exports.todosResumo = (req,res) => {
+    
+    const nome = req.query.nome
+    const numchamado = req.query.numchamado
+    const area = req.query.area
+    const unidade = req.query.unidade
+    const status = req.query.status
+    const username = req.query.username
+
+    var condition = nome ? { nome: { $regex: new RegExp(nome), $options: "i" } } : {}
+    var condnumero = numchamado ? { numchamado: numchamado } : {}
+    var condArea = area ? {area: area } : {}
+    var condUnidade = unidade ? {unidade: unidade } : {}
+    var condStatus = status ? {status: status } : {}
+    var condUsername = username ? {username: username } : {}
+
+    //Verifica se foi passado a data de abertura do chamado
+    let dt_abertura = null
+    let dt_abertura_fim = null
+    let dt_final = null
+    if(req.query.dt_abertura) {
+        dt_abertura = new Date(req.query.dt_abertura)        
+        dt_final = new Date(moment(dt_abertura).add(1,'days'))
+    }
+
+    //Verifica se foi passado o período final da busca dos chamados
+    if (req.query.dt_abertura_fim) {
+        dt_abertura_fim = new Date(moment(req.query.dt_abertura_fim).add(1,'days'))
+    }
+
+     //Verifica se não possui filtro
+    if (!nome && !numchamado && !dt_abertura && !dt_abertura_fim && !area && !status && !unidade) {
+        var query = Chamado.find().sort({dt_abertura: -1})
+    }
+
+    //Verifica se foi passado o nome na busca
+    if (nome) {
+        var query = Chamado.find(condition).sort({dt_abertura: -1})
+    }
+
+    //Verifica se foi passado o número do chamado na busca
+    if (numchamado) {
+        var query = Chamado.find(condnumero)
+    }
+
+    //Verifica se foi passada a data de abertura do chamado
+    if (dt_abertura && !dt_abertura_fim) {
+        var query = Chamado.find({dt_abertura: {$gte: dt_abertura, $lt: dt_final }})
+    } 
+
+    if (dt_abertura && dt_abertura_fim) {
+        var query = Chamado.find({dt_abertura: {$gte: dt_abertura, $lt: dt_abertura_fim }}).sort({dt_abertura: -1})
+    }
+    
+    if (area) {
+        var query = Chamado.find(condArea).sort({dt_abertura: -1})
+    }
+
+    if (unidade) {
+        var query = Chamado.find(condUnidade).sort({dt_abertura: -1})
+    }
+
+    if (status) {
+        var query = Chamado.find(condStatus).sort({dt_abertura: -1})
+    }
+
+    if (username) {
+        var query = Chamado.find(condUsername).sort({dt_abertura: -1})
+    }
+   
+    Chamado.find(query)
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+            message: err.message || "um erro ocorreu ao buscar os chamados"
+        })
+    })
+}
+
 exports.buscarAbertos = (req, res) => {
     const {page = 1} = req.query
 
@@ -222,7 +305,7 @@ exports.email = (req, res) => {
     .then(data => {    
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         
-        if (data.status !== "Pendente" && data.status !== "Finalizado" && data.status !== "Agendado" && data.status !== "Reaberto") {
+        if (data.status !== "Pendente" && data.status !== "Finalizado" && data.status !== "Agendado" && data.status !== "Reaberto" && data.status !== "Triagem" && data.status !== "Resposta") {
             const msgeditar = {
                 to: data.email,
                 from: {
@@ -279,6 +362,36 @@ exports.email = (req, res) => {
             } 
             sgMail.send(msgeditar)             
         }
+
+        if (data.status === "Triagem") {
+            const msgeditar = {
+                to: data.email,
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
+                subject: `${data.responsavel}, tem uma pergunta para o término da solução do seu chamado nº ${data.numchamado} `,
+                text: `O chamado ${data.descricao}, sob número ${data.numchamado} tem uma pergunta do responsável para solucioná-lo:  <strong>${data.triagem}</strong>. Por favor, responda no sistema de de OS, para que seja atendido de forma correta.`,
+                html: `O chamado ${data.descricao}, sob número ${data.numchamado} tem uma pergunta do responsável para solucioná-lo:  <strong>${data.triagem}</strong>. Por favor, responda no sistema de de OS, para que seja atendido de forma correta.`,
+            } 
+            sgMail.send(msgeditar)             
+        }
+
+        if (data.status === "Resposta") {
+            const msgeditar = {
+                to: data.email,
+                from: {
+                    email: 'cmedrjchamados@gmail.com',
+                    name: 'Sistema de Chamados'
+                },
+                subject: `${data.nome}, respondeu sua pergunta para o término da solução do chamado nº ${data.numchamado} `,
+                text: `O chamado ${data.descricao}, sob número ${data.numchamado} tem uma resposta do(a) solicitante para solucioná-lo:  <strong>${data.resptriagem}</strong>.`,
+                html: `O chamado ${data.descricao}, sob número ${data.numchamado} tem uma resposta do(a) solicitante para solucioná-lo:  <strong>${data.resptriagem}</strong>.`,
+            } 
+            sgMail.send(msgeditar)             
+        }
+
+
 
         if (data.status === "Finalizado") {
             const msgeditar = {

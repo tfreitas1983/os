@@ -21,6 +21,8 @@ module.exports = mongoose => {
         responsavel: String,
         solucao: String,
         reaberto: String,
+        triagem: String,
+        resptriagem: String,
         dt_previsao: { type: Date } ,
         dt_fechamento: { type: Date },
         url: String,

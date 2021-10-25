@@ -14,7 +14,8 @@ exports.signup = (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
     area: req.body.area,
     nome: req.body.nome,
-    unidade: req.body.unidade
+    unidade: req.body.unidade,
+    status: req.body.status,
   });
 
   user.save((err, user) => {
@@ -41,7 +42,7 @@ exports.signup = (req, res) => {
               return;
             }
 
-            res.send({ message: "Usuário registrado com successo!" });
+            res.send({ message: "Usuário registrado com sucesso!" });
           });
         }
       );
@@ -59,7 +60,7 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "Usuário registrado com successo!" });
+          res.send({ message: "Usuário registrado com sucesso!" });
         });
       });
     }
@@ -108,6 +109,7 @@ exports.signin = (req, res) => {
         nome: user.nome,
         email: user.email,
         unidade: user.unidade,
+        status: user.status,
         area: user.area,
         roles: authorities,
         accessToken: token
@@ -166,7 +168,7 @@ exports.buscarUm = (req, res) => {
 exports.editar = (req, res) => {   
   const username = {username: req.params.username}
 
-  User.findOneAndUpdateind(username, req.body)   
+  User.findOneAndUpdate(username, req.body)   
   .then(data => {
     if (!data) {
         res.status(404).send({

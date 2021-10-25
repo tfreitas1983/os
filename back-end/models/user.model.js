@@ -8,11 +8,13 @@ const User = mongoose.model(
     email: String,
     password: String,
     unidade: String,
+    status: Boolean,
     area: { type: [String], index: true },    
     roles: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Role" }
     ]
   })
 );
+
 
 module.exports = User;

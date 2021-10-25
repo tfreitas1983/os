@@ -56,6 +56,8 @@ export default class AdicionarChamado extends Component {
             equipamento: "",
             ip: "",
             responsavel:"",
+            triagem: "",
+            resptriagem: "",
             solucao: "",
             reaberto: "",
             dt_previsao: "",
@@ -262,6 +264,8 @@ export default class AdicionarChamado extends Component {
             ip: this.state.ip,
             descricao: this.state.descricao,
             responsavel:this.state.responsavel,
+            triagem: this.state.triagem,
+            resptriagem: this.state.resptriagem,
             solucao: this.state.solucao,
             reaberto: this.state.reaberto,
             visita: this.state.visita,
@@ -293,6 +297,8 @@ export default class AdicionarChamado extends Component {
                 dt_previsao: response.data.dt_previsao,
                 dt_fechamento: response.data.dt_fechamento,
                 status: response.data.status,
+                triagem: response.data.triagem,
+                resptriagem: response.data.resptriagem,
                 situacao: response.data.situacao,
                 submitted: true
             })  
@@ -322,7 +328,9 @@ export default class AdicionarChamado extends Component {
                 descricao: response.data.descricao,
                 foto: response.data.foto,
                 status: response.data.status,
-                solucao: response.data.solucao,
+                solucao: response.data.solucao,                
+                triagem: response.data.triagem,
+                resptriagem: response.data.resptriagem,
                 responsavel: response.data.responsavel, 
                 dt_previsao: response.data.dt_previsao,
                 dt_fechamento: response.data.dt_fechamento,
@@ -420,10 +428,8 @@ export default class AdicionarChamado extends Component {
                     <option value="Nilópolis">Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
-                    <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles">Vilar dos Teles</option>
                     <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                    <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                 </select>
             </div>
         }

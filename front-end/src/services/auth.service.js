@@ -1,8 +1,8 @@
 import axios from "axios"
 import http from "../http-common"
 
-const API_URL = "http://chamadosrj.ddns.net:8089/api/auth/";
-//const API_URL = "http://10.1.1.26:8089/api/auth/";
+ const API_URL = "http://chamadosrj.ddns.net:8089/api/auth/";
+// const API_URL = "http://10.1.1.26:8089/api/auth/";
 
 class AuthService {
   login(username, password) {
@@ -24,13 +24,14 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  register(nome, username, email, password, unidade, roles, area ) {
+  register(nome, username, email, password, unidade, status, roles, area ) {
     return axios.post(API_URL + "signup", {
       nome,
       username,
       email,
       password,     
       unidade,
+      status,
       roles,
       area
     })

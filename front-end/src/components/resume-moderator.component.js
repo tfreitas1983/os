@@ -92,16 +92,14 @@ export default class ResumeModerator extends Component {
         )*/
     }
   
-    async pegaChamados(page = 1) {        
-        await ChamadoDataService.buscarTodos(page)
+    async pegaChamados() {        
+        await ChamadoDataService.todosResumo()
             .then(response => {
             //REST do response da API em duas constantes: 
             // "docs" com os dados do chamado e "info" com os dados das páginas
-                const { docs, ...info } = response.data 
+                const docs = response.data 
                   this.setState({
-                    chamados: docs,
-                    info: info,
-                    page: page
+                    chamados: docs
                 })                
             })
             .catch(e => {
@@ -282,7 +280,7 @@ export default class ResumeModerator extends Component {
 
     render () {
 
-       const {pendentes, finalizados, atrasados, info, ti, rh, tel, ar, compras, financeiro, manutencao, grafica, atendente} = this.state 
+       const {pendentes, finalizados, atrasados, info, ti, rh, tel, ar, compras, financeiro, manutencao, grafica, atendente, chamados} = this.state 
     
        
        let claudio = "", ivan = "", thiago = "", max = "", yuri = "", maxyuri = "", claudioivan = ""
@@ -322,7 +320,7 @@ export default class ResumeModerator extends Component {
                     <img src={imgchamados} alt="Chamados" className="resumo"/>
                         <article>                        
                             <h2 style={{textAlign: 'center', marginTop: 1+'%'}}>Total</h2>
-                            <h2 style={{textAlign: 'center'}}>{info.total}</h2>
+                            <h2 style={{textAlign: 'center'}}>{chamados.length}</h2>
                         </article>
                     </div>
                     <div  className="caixa">

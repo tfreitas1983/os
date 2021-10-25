@@ -76,6 +76,7 @@ export default class Register extends Component {
       unidade: "",
       area: [],
       perfil: "",
+      status: 1,
       roles: [],
       successful: false,
       message: ""
@@ -156,6 +157,7 @@ export default class Register extends Component {
         this.state.email,
         this.state.password,
         this.state.unidade,
+        this.state.status,
         this.state.roles,
         this.state.area
       ).then(response => {
@@ -293,10 +295,8 @@ export default class Register extends Component {
                     <option value="Nilópolis"> Nilópolis</option> 
                     <option value="Nova Iguaçu"> Nova Iguaçu </option>
                     <option value="Queimados"> Queimados </option>
-                    <option value="Rio de Janeiro"> Rio de Janeiro </option>
                     <option value="Vilar dos Teles"> Vilar dos Teles</option>
                     <option value="CDRio Nova Iguaçu"> CDRio Nova Iguaçu </option>
-                    <option value="CDRio São Gonçalo"> CDRio São Gonçalo </option>
                   </select>
                 </div>
 
