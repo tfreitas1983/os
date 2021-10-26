@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "chamado-secret-key"
+    secret: "secret-key"
   };
