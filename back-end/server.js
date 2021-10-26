@@ -9,13 +9,13 @@ const cors = require ('cors')
 const app = express()
 
 var corsOptions = {
-    origin: ["http://localhost:3002","http://chamadosrj.ddns.net","http://chamadosrj.ddns.net:8089","http://186.215.238.145:3002", "http://10.1.1.26:3001","http://10.1.1.26:3002"]
+    origin: ["http://localhost:3002","http://10.1.1.26:3002"]
 }
 /*
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const msg = {
-  to: 'ti@clinicariodejaneiro.com.br',
-  from: 'cmedrjchamados@gmail.com',
+  to: 'xxx@xxx.com.br',
+  from: 'xxs@gmail.com',
   subject: 'Sending with SendGrid is Fun',
   text: 'and easy to do anywhere, even with Node.js',
   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
